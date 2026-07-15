@@ -9,139 +9,302 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.time.Duration;
 import java.util.Set;
 
 public class RumRatingsParser implements RumParser {
 
     private static final String FIRECRAWL_API_KEY = "API_KEY";
     private static final String FIRECRAWL_SCRAPE_URL = "https://api.firecrawl.dev/v1/scrape";
-    private static final String TARGET_URL = "https://rumratings.com/brands";
+    private static final String BASE_TARGET_URL = "https://rumratings.com/rum";
 
     @Override
     public void parse(Set<RumProduct> rumSet) {
-        System.out.println("\n[2/2] Scanning second source (RumRatings) via Firecrawl API...");
+        System.out.println("\n[2/2] Scanning RumRatings via Firecrawl API...");
 
+        if (FIRECRAWL_API_KEY == null || FIRECRAWL_API_KEY.isBlank()) {
+            System.err.println("ERROR: FIRECRAWL_API_KEY environment variable is not set.");
+            return;
+        }
 
-        try {
-            JsonObject jsonBody = new JsonObject();
-            jsonBody.addProperty("url", TARGET_URL);
+        HttpClient client = HttpClient.newBuilder()
+                .connectTimeout(Duration.ofSeconds(120))
+                .build();
 
-            JsonArray formatsArray = new JsonArray();
-            formatsArray.add("json");
-            jsonBody.add("formats", formatsArray);
+        int totalIntegrated = 0;
+        int maxPages = 3;
 
-            JsonObject extractOptions = new JsonObject();
-            JsonObject schema = new JsonObject();
-            schema.addProperty("type", "object");
-
-            JsonObject properties = new JsonObject();
-
-            JsonObject rumsList = new JsonObject();
-            rumsList.addProperty("type", "array");
-
-            JsonObject items = new JsonObject();
-            items.addProperty("type", "object");
-
-            JsonObject itemProperties = new JsonObject();
-
-            JsonObject nameProp = new JsonObject(); nameProp.addProperty("type", "string");
-            JsonObject ratingProp = new JsonObject(); ratingProp.addProperty("type", "number");
-            JsonObject descProp = new JsonObject(); descProp.addProperty("type", "string");
-            JsonObject imgProp = new JsonObject(); imgProp.addProperty("type", "string");
-            JsonObject urlProp = new JsonObject(); urlProp.addProperty("type", "string");
-
-            itemProperties.add("name", nameProp);
-            itemProperties.add("rating", ratingProp);
-            itemProperties.add("description", descProp);
-            itemProperties.add("imgUrl", imgProp);
-            itemProperties.add("productUrl", urlProp);
-
-            items.add("properties", itemProperties);
-            JsonArray requiredItems = new JsonArray(); requiredItems.add("name");
-            items.add("required", requiredItems);
-
-            rumsList.add("items", items);
-            properties.add("rums", rumsList);
-            schema.add("properties", properties);
-
-            extractOptions.add("schema", schema);
-            jsonBody.add("extract", extractOptions);
-
-            HttpClient client = HttpClient.newHttpClient();
-            HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create(FIRECRAWL_SCRAPE_URL))
-                    .header("Content-Type", "application/json")
-                    .header("Authorization", "Bearer " + FIRECRAWL_API_KEY)
-                    .POST(HttpRequest.BodyPublishers.ofString(jsonBody.toString()))
-                    .build();
-
-            System.out.println("Sending request to Firecrawl. Waiting for browser rendering and AI extraction...");
-            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-
-            if (response.statusCode() == 200) {
-                JsonObject responseJson = JsonParser.parseString(response.body()).getAsJsonObject();
-
-                if (responseJson.has("data") && responseJson.getAsJsonObject("data").has("json")) {
-                    JsonObject extractedData = responseJson.getAsJsonObject("data").getAsJsonObject("json");
-                    JsonArray rumsArray = extractedData.getAsJsonArray("rums");
-
-                    System.out.println("Firecrawl successfully extracted " + rumsArray.size() + " products.");
-
-                    int count = 0;
-                    for (JsonElement element : rumsArray) {
-                        JsonObject rumJson = element.getAsJsonObject();
-
-                        String name = rumJson.has("name") ? rumJson.get("name").getAsString() : "";
-                        if (name.isEmpty()) continue;
-
-                        RumProduct rum = new RumProduct();
-                        rum.setName(name);
-                        rum.setCategory("Rum");
-
-                        if (rumJson.has("description")) rum.setDescription(rumJson.get("description").getAsString());
-                        if (rumJson.has("imgUrl")) rum.setImgUrl(rumJson.get("imgUrl").getAsString());
-                        if (rumJson.has("productUrl")) rum.setProductUrl(rumJson.get("productUrl").getAsString());
-
-                        if (rumJson.has("rating") && !rumJson.get("rating").isJsonNull()) {
-                            double score = rumJson.get("rating").getAsDouble();
-                            rum.getRatings().add(new RumProduct.Rating("RumRatings", score));
-                        }
-
-                        boolean isNew = rumSet.add(rum);
-                        if (!isNew) {
-                            System.out.println("🔄 Duplicate found via Firecrawl. Merging rating for: " + name);
-                            for (RumProduct existingRum : rumSet) {
-                                if (existingRum.equals(rum)) {
-                                    existingRum.getRatings().addAll(rum.getRatings());
-                                    if ((existingRum.getDescription() == null || existingRum.getDescription().isEmpty()) && rum.getDescription() != null) {
-                                        existingRum.setDescription(rum.getDescription());
-                                    }
-                                    if ((existingRum.getImgUrl() == null || existingRum.getImgUrl().isEmpty()) && rum.getImgUrl() != null) {
-                                        existingRum.setImgUrl(rum.getImgUrl());
-                                    }
-                                    break;
-                                }
-                            }
-                        } else {
-                            count++;
-                        }
-
-                        if (count >= 250) {
-                            System.out.println("Target count reached for RumRatings.");
-                            break;
-                        }
-                    }
-                    System.out.println("Successfully integrated " + count + " new products from RumRatings.");
-                } else {
-                    System.err.println("Firecrawl response did not contain expected structured data. Response body: " + response.body());
-                }
-            } else {
-                System.err.println("Firecrawl API error. Status Code: " + response.statusCode() + " | Response: " + response.body());
+        for (int page = 1; page <= maxPages; page++) {
+            if (page > 1 && !waitBeforeNextRequest()) {
+                return;
             }
 
-        } catch (Exception e) {
-            System.err.println("Error communicating with Firecrawl API: " + e.getMessage());
-            e.printStackTrace();
+            System.out.println("\n>>> Fetching RumRatings page " + page + "...");
+
+            try {
+                JsonObject extractedData = scrapePage(client, page);
+                if (extractedData == null) {
+                    continue;
+                }
+
+                JsonArray rumsArray = getArray(extractedData, "rums");
+                if (rumsArray == null || rumsArray.isEmpty()) {
+                    System.out.println("No rum products returned. Stopping.");
+                    break;
+                }
+
+                int newItemsThisPage = 0;
+                for (JsonElement element : rumsArray) {
+                    if (!element.isJsonObject()) {
+                        continue;
+                    }
+
+                    RumProduct rum = toRumProduct(element.getAsJsonObject());
+                    if (rum == null) {
+                        continue;
+                    }
+
+                    if (mergeIntoSet(rumSet, rum)) {
+                        newItemsThisPage++;
+                        totalIntegrated++;
+                    }
+                }
+
+                System.out.println("Page " + page + " finished. Added "
+                        + newItemsThisPage + " new unique rums.");
+
+            } catch (Exception e) {
+                System.err.println("Error parsing RumRatings page " + page + ": " + e.getMessage());
+            }
+        }
+
+        System.out.println("Finished RumRatings. Total integrated: " + totalIntegrated);
+    }
+
+    private JsonObject scrapePage(HttpClient client, int page) throws Exception {
+        String currentUrl = BASE_TARGET_URL + "?page=" + page;
+        JsonObject requestBody = buildRequestBody(currentUrl);
+
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(FIRECRAWL_SCRAPE_URL))
+                .timeout(Duration.ofSeconds(120))
+                .header("Content-Type", "application/json")
+                .header("Authorization", "Bearer " + FIRECRAWL_API_KEY)
+                .POST(HttpRequest.BodyPublishers.ofString(requestBody.toString()))
+                .build();
+
+        int maxRetries = 3;
+        int attempt = 0;
+
+        while (attempt < maxRetries) {
+            try {
+                attempt++;
+
+                HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+                if (response.statusCode() == 200) {
+                    JsonObject responseJson = JsonParser.parseString(response.body()).getAsJsonObject();
+                    if (responseJson.has("success") && !responseJson.get("success").getAsBoolean()) {
+                        System.err.println("Firecrawl returned an unsuccessful response: " + response.body());
+                        return null;
+                    }
+
+                    JsonObject data = getObject(responseJson, "data");
+                    JsonObject extractedData = data == null ? null : getObject(data, "json");
+
+                    if (extractedData == null) {
+                        System.err.println("Firecrawl response has no data.json: " + response.body());
+                    }
+
+                    return extractedData;
+
+                } else {
+                    System.out.println("Помилка API (статус " + response.statusCode() + ") на сторінці " + page + ". Спроба " + attempt + " з " + maxRetries);
+                    if (attempt < maxRetries) Thread.sleep(5000);
+                }
+
+            } catch (java.net.http.HttpTimeoutException e) {
+                System.out.println("⏳ Таймаут на сторінці " + page + ". Спроба " + attempt + " з " + maxRetries);
+                if (attempt < maxRetries) Thread.sleep(5000);
+
+            } catch (Exception e) {
+                System.out.println("Критична помилка на сторінці " + page + ": " + e.getMessage());
+                break;
+            }
+        }
+
+        return null;
+    }
+
+    private JsonObject buildRequestBody(String url) {
+        JsonObject requestBody = new JsonObject();
+        requestBody.addProperty("url", url);
+        requestBody.addProperty("waitFor", 2000);
+        requestBody.addProperty("timeout", 30000);
+        requestBody.addProperty("onlyMainContent", true);
+
+        JsonArray formats = new JsonArray();
+        formats.add("json");
+        requestBody.add("formats", formats);
+
+        JsonObject jsonOptions = new JsonObject();
+        jsonOptions.addProperty("prompt", """
+                Extract every rum product visible on this exact RumRatings listing page.
+                For each product return every available field from this list: exact name,
+                description, brand, rating on the 0-10 scale, product URL, image URL,
+                rum type, category, region/country of origin, ABV percentage, age in years,
+                volume as text (for example "700 ml"), and product code. Use only information
+                shown on the page. Do not invent values. Return absolute URLs when available.
+                """);
+        jsonOptions.add("schema", createRumSchema());
+        requestBody.add("jsonOptions", jsonOptions);
+
+        return requestBody;
+    }
+
+    private JsonObject createRumSchema() {
+        JsonObject itemProperties = new JsonObject();
+        itemProperties.add("name", stringSchema());
+        itemProperties.add("description", stringSchema());
+        itemProperties.add("brand", stringSchema());
+        itemProperties.add("rating", numberSchema());
+        itemProperties.add("imgUrl", stringSchema());
+        itemProperties.add("productUrl", stringSchema());
+        itemProperties.add("type", stringSchema());
+        itemProperties.add("category", stringSchema());
+        itemProperties.add("region", stringSchema());
+        itemProperties.add("abv", numberSchema());
+        itemProperties.add("age", numberSchema());
+        itemProperties.add("volumeWeight", stringSchema());
+        itemProperties.add("code", stringSchema());
+
+        JsonObject item = new JsonObject();
+        item.addProperty("type", "object");
+        item.add("properties", itemProperties);
+
+        JsonArray requiredItemFields = new JsonArray();
+        requiredItemFields.add("name");
+        item.add("required", requiredItemFields);
+
+        JsonObject rums = new JsonObject();
+        rums.addProperty("type", "array");
+        rums.add("items", item);
+
+        JsonObject properties = new JsonObject();
+        properties.add("rums", rums);
+
+        JsonObject schema = new JsonObject();
+        schema.addProperty("type", "object");
+        schema.add("properties", properties);
+
+        JsonArray requiredRootFields = new JsonArray();
+        requiredRootFields.add("rums");
+        schema.add("required", requiredRootFields);
+
+        return schema;
+    }
+
+    private RumProduct toRumProduct(JsonObject rumJson) {
+        String name = getString(rumJson, "name");
+        if (name.isBlank()) {
+            return null;
+        }
+
+        RumProduct rum = new RumProduct();
+        rum.setName(name);
+        rum.setDescription(getStringOrNull(rumJson, "description"));
+        rum.setBrand(getStringOrNull(rumJson, "brand"));
+        rum.setType(getStringOrNull(rumJson, "type"));
+        rum.setCategory(getStringOrNull(rumJson, "category"));
+        rum.setRegion(getStringOrNull(rumJson, "region"));
+        rum.setAbv(getDoubleOrNull(rumJson, "abv"));
+        rum.setAge(getDoubleOrNull(rumJson, "age"));
+        rum.setVolumeWeight(getStringOrNull(rumJson, "volumeWeight"));
+        rum.setCode(getStringOrNull(rumJson, "code"));
+        rum.setImgUrl(getStringOrNull(rumJson, "imgUrl"));
+        rum.setProductUrl(getStringOrNull(rumJson, "productUrl"));
+
+        Double rating = getDoubleOrNull(rumJson, "rating");
+        if (rating != null && rating >= 0.0 && rating <= 10.0) {
+            rum.getRatings().add(new RumProduct.Rating("RumRatings", rating));
+        }
+        rum.enrichDerivedFields();
+
+        return rum;
+    }
+
+    private boolean mergeIntoSet(Set<RumProduct> rumSet, RumProduct incomingRum) {
+        if (rumSet.add(incomingRum)) {
+            return true;
+        }
+
+        for (RumProduct existingRum : rumSet) {
+            if (!existingRum.equals(incomingRum)) {
+                continue;
+            }
+
+            existingRum.mergeFrom(incomingRum);
+            return false;
+        }
+
+        return false;
+    }
+
+    private boolean waitBeforeNextRequest() {
+        try {
+            Thread.sleep(2000);
+            return true;
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            System.err.println("Interrupted while waiting before the next request.");
+            return false;
+        }
+    }
+
+    private JsonObject stringSchema() {
+        JsonObject schema = new JsonObject();
+        schema.addProperty("type", "string");
+        return schema;
+    }
+
+    private JsonObject numberSchema() {
+        JsonObject schema = new JsonObject();
+        schema.addProperty("type", "number");
+        return schema;
+    }
+
+    private JsonObject getObject(JsonObject parent, String field) {
+        JsonElement element = parent.get(field);
+        return element != null && element.isJsonObject() ? element.getAsJsonObject() : null;
+    }
+
+    private JsonArray getArray(JsonObject parent, String field) {
+        JsonElement element = parent.get(field);
+        return element != null && element.isJsonArray() ? element.getAsJsonArray() : null;
+    }
+
+    private String getString(JsonObject object, String field) {
+        String value = getStringOrNull(object, field);
+        return value == null ? "" : value;
+    }
+
+    private String getStringOrNull(JsonObject object, String field) {
+        JsonElement element = object.get(field);
+        if (element == null || element.isJsonNull() || !element.isJsonPrimitive()) {
+            return null;
+        }
+        return element.getAsString().trim();
+    }
+
+    private Double getDoubleOrNull(JsonObject object, String field) {
+        JsonElement element = object.get(field);
+        if (element == null || element.isJsonNull()) {
+            return null;
+        }
+        try {
+            return element.getAsDouble();
+        } catch (RuntimeException e) {
+            return null;
         }
     }
 }
