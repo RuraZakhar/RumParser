@@ -1,0 +1,180 @@
+[
+  {
+    "name": "Captain Morgan Apple Smash",
+    "category": "rum",
+    "productUrl": "https://therumhowlerblog.com/rum-reviews/flavoured-spiced-rums/captain-morgan-apple-smash/",
+    "silpoMatch": {
+      "silpo_title": "Напій на основі ромu Captain Morgan Tiki Mango & Pineapple",
+      "similarity_score": 0.75,
+      "price": 489.0,
+      "url": "https://silpo.ua/product/napii-na-osnovi-romu-captain-morgan-tiki-mango-pineapple-873720"
+    },
+    "ratings": [
+      {
+        "provider": "The Rum Howler Blog",
+        "rating": 10.0
+      }
+    ],
+    "reviews": []
+  },
+  {
+    "name": "Chairman’s Reserve",
+    "category": "rum",
+    "productUrl": "https://therumhowlerblog.com/rum-reviews/dark-rums/chairmans-reserve/",
+    "silpoMatch": {
+      "silpo_title": "Ром Chairman's Reserve Original Rum",
+      "similarity_score": 1.0,
+      "price": 849.0,
+      "in_stock": true,
+      "url": "https://silpo.ua/product/rom-chairman-s-reserve-original-rum-704963"
+    },
+    "ratings": [
+      {
+        "provider": "The Rum Howler Blog",
+        "rating": 8.6
+      }
+    ],
+    "reviews": []
+  },
+  {
+    "name": "Proof Rum",
+    "category": "rum",
+    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/white-rums/proof-rum/",
+    "silpoMatch": {
+      "silpo_title": "Ром Takamaka white overproof 69 rum",
+      "similarity_score": 1.0,
+      "price": 999.0,
+      "in_stock": true,
+      "url": "https://silpo.ua/product/rom-takamaka-white-overproof-69-rum-871949"
+    },
+    "ratings": [
+      {
+        "provider": "The Rum Howler Blog",
+        "rating": 8.3
+      }
+    ],
+    "reviews": []
+  },
+  {
+    "name": "Appleton Estate Signature Blend VX Rum",
+    "category": "rum",
+    "productUrl": "https://therumhowlerblog.com/rum-reviews/dark-rums/appleton-estate-signature-blend-vx-jamaican-rum/",
+    "silpoMatch": {
+      "silpo_title": "Ром Appleton Estate Signature Blend",
+      "similarity_score": 0.8,
+      "price": 929.0,
+      "url": "https://silpo.ua/product/rom-appleton-estate-signature-blend-759526"
+    },
+    "ratings": [
+      {
+        "provider": "The Rum Howler Blog",
+        "rating": 8.3
+      }
+    ],
+    "reviews": []
+  },
+  {
+    "name": "Santiago de Cuba Ron Carta Blanca",
+    "category": "rum",
+    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/white-rums/rum-review-santiago-de-cuba-ron-carta-blanca/",
+    "silpoMatch": {
+      "silpo_title": "Ром Santiago de Cuba Carta Blanca",
+      "similarity_score": 0.8787878787878788,
+      "price": 599.0,
+      "in_stock": true,
+      "url": "https://silpo.ua/product/rom-santiago-de-cuba-carta-blanca-504544"
+    },
+    "ratings": [
+      {
+        "provider": "The Rum Howler Blog",
+        "rating": 8.25
+      }
+    ],
+    "reviews": []
+  },
+  {
+    "name": "Santiago De Cuba Ron Anejo",
+    "category": "rum",
+    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/dark-rums/rum-review-santiago-de-cuba-ron-anejo/",
+    "silpoMatch": {
+      "silpo_title": "Ром Santiago de Cuba Anejo 8 років",
+      "similarity_score": 0.75,
+      "price": 929.0,
+      "url": "https://silpo.ua/product/rom-santiago-de-cuba-anejo-8-rokiv-923555"
+    },
+    "ratings": [
+      {
+        "provider": "The Rum Howler Blog",
+        "rating": 8.25
+      }
+    ],
+    "reviews": []
+  },
+  {
+    "name": "Captain Morgan White Rum",
+    "category": "rum",
+    "productUrl": "https://therumhowlerblog.com/rum-reviews/white-rums/captain-morgan-white-rum/",
+    "silpoMatch": {
+      "silpo_title": "Ром Captain Morgan White",
+      "similarity_score": 0.8333333333333334,
+      "price": 499.0,
+      "in_stock": true,
+      "url": "https://silpo.ua/product/rom-captain-morgan-white-646277"
+    },
+    "ratings": [
+      {
+        "provider": "The Rum Howler Blog",
+        "rating": 8.2
+      }
+    ],
+    "reviews": []
+  },
+  {
+    "name": "Captain Morgan Black Spiced Rum",
+    "abv": 0.0,
+    "age": 0.0,
+    "region": "Puerto Rico",
+    "brand": "Captain Morgan",
+    "type": "Spiced",
+    "category": "rum",
+    "volumeWeight": "359",
+    "imgUrl": "https://images.rumratings.com/uploads/brand/image/166/small_Captain_Morgan_Black_Spiced_rum.webp?v=1741230379",
+    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/flavoured-spiced-rums/captain-morgan-black-spiced-rum/",
+    "silpoMatch": {
+      "silpo_title": "Напій на основі ромu Captain Morgan Black Spiced",
+      "similarity_score": 0.8,
+      "price": 879.0,
+      "url": "https://silpo.ua/product/napii-na-osnovi-romu-captain-morgan-black-spiced-830173"
+    },
+    "ratings": [
+      {
+        "provider": "The Rum Howler Blog",
+        "rating": 8.15
+      },
+      {
+        "provider": "RumRatings",
+        "rating": 5.9
+      }
+    ],
+    "reviews": []
+  },
+  {
+    "name": "Matusalem Platino",
+    "category": "rum",
+    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/white-rums/review-matusalem-platino/",
+    "silpoMatch": {
+      "silpo_title": "Ром Matusalem Platino",
+      "similarity_score": 1.0,
+      "price": 649.0,
+      "in_stock": true,
+      "url": "https://silpo.ua/product/rom-matusalem-platino-887418"
+    },
+    "ratings": [
+      {
+        "provider": "The Rum Howler Blog",
+        "rating": 7.95
+      }
+    ],
+    "reviews": []
+  }
+]

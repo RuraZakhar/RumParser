@@ -1,0 +1,62 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Product",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["name"],
+  "properties": {
+    "name": { "type": "string" },
+    "description": { "type": "string" },
+    "abv": { "type": "number", "maximum": 100 },
+    "age": { "type": "number" },
+    "region": { "type": "string" },
+    "brand": { "type": "string" },
+    "type": { "type": "string" },
+    "category": { "type": "string" },
+    "price": { "type": "number" },
+    "volumeWeight": { "type": "string" },
+    "imgUrl": { "type": "string", "format": "uri" },
+    "productUrl": { "type": "string", "format": "uri" },
+    "code": { "type": "string" },
+    "offer": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "id": { "type": "string" },
+        "category": { "type": "string" },
+        "price": { "type": "number" },
+        "discount": { "type": "number" },
+        "stock": { "type": "integer", "minimum": 0 },
+        "url": { "type": "string", "format": "uri" },
+        "source": { "type": "string" }
+      }
+    },
+    "ratings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["provider", "rating"],
+        "properties": {
+          "provider": { "type": "string" },
+          "rating": { "type": "number", "minimum": 0 }
+        }
+      }
+    },
+    "reviews": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["text"],
+        "properties": {
+          "date": { "type": "string", "format": "date" },
+          "text": { "type": "string" },
+          "rating": { "type": "number", "minimum": 0 },
+          "author": { "type": "string" },
+          "source": { "type": "string" }
+        }
+      }
+    }
+  }
+}
