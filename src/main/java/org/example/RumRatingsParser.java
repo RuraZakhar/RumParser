@@ -14,7 +14,7 @@ import java.util.Set;
 
 public class RumRatingsParser implements RumParser {
 
-    private static final String FIRECRAWL_API_KEY = "API_KEY";
+    private static final String FIRECRAWL_API_KEY = "fc-e61c2ab5344641e6952f05f314cba080";
     private static final String FIRECRAWL_SCRAPE_URL = "https://api.firecrawl.dev/v1/scrape";
     private static final String BASE_TARGET_URL = "https://rumratings.com/rum";
 
@@ -151,10 +151,11 @@ public class RumRatingsParser implements RumParser {
         jsonOptions.addProperty("prompt", """
                 Extract every rum product visible on this exact RumRatings listing page.
                 For each product return every available field from this list: exact name,
-                description, brand, rating on the 0-10 scale, product URL, image URL,
-                rum type, category, region/country of origin, ABV percentage, age in years,
-                volume as text (for example "700 ml"), and product code. Use only information
-                shown on the page. Do not invent values. Return absolute URLs when available.
+                description, brand (company), rating on the 0-10 scale, product URL, image URL,
+                rum type, category, region/country of origin, ABV percentage, age in years (years aged),
+                year distilled, raw material, process, distillation method (e.g., Column Still),
+                whether it is women led (boolean true/false), volume as text, and product code.
+                If a field is missing, return null. Do not invent values.
                 """);
         jsonOptions.add("schema", createRumSchema());
         requestBody.add("jsonOptions", jsonOptions);
@@ -177,6 +178,14 @@ public class RumRatingsParser implements RumParser {
         itemProperties.add("age", numberSchema());
         itemProperties.add("volumeWeight", stringSchema());
         itemProperties.add("code", stringSchema());
+        itemProperties.add("yearDistilled", numberSchema());
+        itemProperties.add("rawMaterial", stringSchema());
+        itemProperties.add("process", stringSchema());
+        itemProperties.add("distillationMethod", stringSchema());
+
+        JsonObject booleanSchema = new JsonObject();
+        booleanSchema.addProperty("type", "boolean");
+        itemProperties.add("womenLed", booleanSchema);
 
         JsonObject item = new JsonObject();
         item.addProperty("type", "object");
@@ -201,6 +210,9 @@ public class RumRatingsParser implements RumParser {
         requiredRootFields.add("rums");
         schema.add("required", requiredRootFields);
 
+        itemProperties.add("volumeWeight", stringSchema());
+        itemProperties.add("code", stringSchema());
+
         return schema;
     }
 
@@ -223,6 +235,17 @@ public class RumRatingsParser implements RumParser {
         rum.setCode(getStringOrNull(rumJson, "code"));
         rum.setImgUrl(getStringOrNull(rumJson, "imgUrl"));
         rum.setProductUrl(getStringOrNull(rumJson, "productUrl"));
+
+        rum.setYearDistilled(getIntegerOrNull(rumJson, "yearDistilled"));
+        rum.setRawMaterial(getStringOrNull(rumJson, "rawMaterial"));
+        rum.setProcess(getStringOrNull(rumJson, "process"));
+        rum.setDistillationMethod(getStringOrNull(rumJson, "distillationMethod"));
+
+        if (rumJson.has("womenLed") && !rumJson.get("womenLed").isJsonNull()) {
+            rum.setWomenLed(rumJson.get("womenLed").getAsBoolean());
+        } else {
+            rum.setWomenLed(null);
+        }
 
         Double rating = getDoubleOrNull(rumJson, "rating");
         if (rating != null && rating >= 0.0 && rating <= 10.0) {
@@ -302,7 +325,19 @@ public class RumRatingsParser implements RumParser {
             return null;
         }
         try {
-            return element.getAsDouble();
+            double value = element.getAsDouble();
+            return value == 0.0 ? null : value;
+        } catch (RuntimeException e) {
+            return null;
+        }
+    }
+
+    private Integer getIntegerOrNull(JsonObject object, String field) {
+        JsonElement element = object.get(field);
+        if (element == null || element.isJsonNull()) return null;
+        try {
+            int value = element.getAsInt();
+            return value == 0 ? null : value;
         } catch (RuntimeException e) {
             return null;
         }

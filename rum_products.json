@@ -12,16 +12,21 @@
     "reviews": []
   },
   {
-    "name": "Captain Morgan White Rum",
+    "name": "Flor de Caña 4 Extra Seco",
     "category": "rum",
-    "productUrl": "https://therumhowlerblog.com/rum-reviews/white-rums/captain-morgan-white-rum/",
-    "silpoMatch": {
-      "silpo_title": "Ром Captain Morgan White",
-      "similarity_score": 0.8333333333333334,
-      "price": 499.0,
-      "in_stock": true,
-      "url": "https://silpo.ua/product/rom-captain-morgan-white-646277"
-    },
+    "productUrl": "https://therumhowlerblog.com/rum-reviews/white-rums/flor-de-cana-4-extra-seco/",
+    "ratings": [
+      {
+        "provider": "The Rum Howler Blog",
+        "rating": 8.55
+      }
+    ],
+    "reviews": []
+  },
+  {
+    "name": "Flor de Caña 7 Blanco Reserva",
+    "category": "rum",
+    "productUrl": "https://therumhowlerblog.com/rum-reviews/white-rums/flor-de-cana-7-blanco-reserva/",
     "ratings": [
       {
         "provider": "The Rum Howler Blog",
@@ -43,13 +48,20 @@
     "reviews": []
   },
   {
-    "name": "Flor de Caña 4 Extra Seco",
+    "name": "Captain Morgan White Rum",
     "category": "rum",
-    "productUrl": "https://therumhowlerblog.com/rum-reviews/white-rums/flor-de-cana-4-extra-seco/",
+    "productUrl": "https://therumhowlerblog.com/rum-reviews/white-rums/captain-morgan-white-rum/",
+    "silpoMatch": {
+      "silpo_title": "Ром Captain Morgan White",
+      "similarity_score": 0.8333333333333334,
+      "price": 499.0,
+      "in_stock": true,
+      "url": "https://silpo.ua/product/rom-captain-morgan-white-646277"
+    },
     "ratings": [
       {
         "provider": "The Rum Howler Blog",
-        "rating": 8.55
+        "rating": 8.2
       }
     ],
     "reviews": []
@@ -62,18 +74,6 @@
       {
         "provider": "The Rum Howler Blog",
         "rating": 8.6
-      }
-    ],
-    "reviews": []
-  },
-  {
-    "name": "Flor de Caña 7 Blanco Reserva",
-    "category": "rum",
-    "productUrl": "https://therumhowlerblog.com/rum-reviews/white-rums/flor-de-cana-7-blanco-reserva/",
-    "ratings": [
-      {
-        "provider": "The Rum Howler Blog",
-        "rating": 8.2
       }
     ],
     "reviews": []
@@ -116,43 +116,6 @@
     "reviews": []
   },
   {
-    "name": "DownSlope White Rum",
-    "category": "rum",
-    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/white-rums/downslope-distilling-white-rum/",
-    "ratings": [
-      {
-        "provider": "The Rum Howler Blog",
-        "rating": 7.65
-      }
-    ],
-    "reviews": []
-  },
-  {
-    "name": "El Dorado Deluxe Silver 6 Year Aged Rum",
-    "age": 6.0,
-    "category": "rum",
-    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/white-rums/el-dorado-deluxe-silver-6-year-aged-rum/",
-    "ratings": [
-      {
-        "provider": "The Rum Howler Blog",
-        "rating": 8.7
-      }
-    ],
-    "reviews": []
-  },
-  {
-    "name": "Bermudez Ron Viejo Blanco",
-    "category": "rum",
-    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/white-rums/review-bermudez-ron-viejo-blanco/",
-    "ratings": [
-      {
-        "provider": "The Rum Howler Blog",
-        "rating": 8.8
-      }
-    ],
-    "reviews": []
-  },
-  {
     "name": "Diplomatico Blanco Reserva",
     "category": "rum",
     "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/white-rums/diplomatico-blanco-reserva/",
@@ -160,42 +123,6 @@
       {
         "provider": "The Rum Howler Blog",
         "rating": 8.5
-      }
-    ],
-    "reviews": []
-  },
-  {
-    "name": "Cristal Parrot Lite Rum (Traveller’s)",
-    "category": "rum",
-    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/white-rums/cristal-parrot-lite-rum/",
-    "ratings": [
-      {
-        "provider": "The Rum Howler Blog",
-        "rating": 7.85
-      }
-    ],
-    "reviews": []
-  },
-  {
-    "name": "Kōloa Kaua`i White Hawaiian Rum",
-    "category": "rum",
-    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/white-rums/koloa-kauai-white-hawaiian-rum/",
-    "ratings": [
-      {
-        "provider": "The Rum Howler Blog",
-        "rating": 8.35
-      }
-    ],
-    "reviews": []
-  },
-  {
-    "name": "Blue Chair Bay White Rum",
-    "category": "rum",
-    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/white-rums/blue-chair-bay-white-rum/",
-    "ratings": [
-      {
-        "provider": "The Rum Howler Blog",
-        "rating": 8.25
       }
     ],
     "reviews": []
@@ -213,25 +140,49 @@
     "reviews": []
   },
   {
-    "name": "Brugal Especial Extra Dry Rum",
+    "name": "DownSlope White Rum",
     "category": "rum",
-    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/white-rums/brugal-especial-extra-dry/",
+    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/white-rums/downslope-distilling-white-rum/",
     "ratings": [
       {
         "provider": "The Rum Howler Blog",
-        "rating": 8.45
+        "rating": 7.65
       }
     ],
     "reviews": []
   },
   {
-    "name": "Highwood Imported White Rum",
+    "name": "Cristal Parrot Lite Rum (Traveller’s)",
     "category": "rum",
-    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/white-rums/review-highwood-imported-white-rum/",
+    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/white-rums/cristal-parrot-lite-rum/",
     "ratings": [
       {
         "provider": "The Rum Howler Blog",
-        "rating": 8.35
+        "rating": 7.85
+      }
+    ],
+    "reviews": []
+  },
+  {
+    "name": "Blue Chair Bay White Rum",
+    "category": "rum",
+    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/white-rums/blue-chair-bay-white-rum/",
+    "ratings": [
+      {
+        "provider": "The Rum Howler Blog",
+        "rating": 8.25
+      }
+    ],
+    "reviews": []
+  },
+  {
+    "name": "Montanya Platino Rum",
+    "category": "rum",
+    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/white-rums/montanya-platino-rum/",
+    "ratings": [
+      {
+        "provider": "The Rum Howler Blog",
+        "rating": 7.8
       }
     ],
     "reviews": []
@@ -256,25 +207,86 @@
     "reviews": []
   },
   {
-    "name": "Montanya Platino Rum",
+    "name": "El Dorado Deluxe Silver 6 Year Aged Rum",
+    "age": 6.0,
     "category": "rum",
-    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/white-rums/montanya-platino-rum/",
+    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/white-rums/el-dorado-deluxe-silver-6-year-aged-rum/",
     "ratings": [
       {
         "provider": "The Rum Howler Blog",
-        "rating": 7.8
+        "rating": 8.7
       }
     ],
     "reviews": []
   },
   {
-    "name": "Shellback Caribbean Silver Rum",
+    "name": "Highwood Imported White Rum",
     "category": "rum",
-    "productUrl": "https://therumhowlerblog.com/rum-reviews/white-rums/shellback-caribbean-silver-rum/",
+    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/white-rums/review-highwood-imported-white-rum/",
     "ratings": [
       {
         "provider": "The Rum Howler Blog",
-        "rating": 7.9
+        "rating": 8.35
+      }
+    ],
+    "reviews": []
+  },
+  {
+    "name": "Brugal Titanium Rum",
+    "category": "rum",
+    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/white-rums/brugal-titanium-rum/",
+    "ratings": [
+      {
+        "provider": "The Rum Howler Blog",
+        "rating": 9.0
+      }
+    ],
+    "reviews": []
+  },
+  {
+    "name": "Mount Gay Eclipse Silver",
+    "category": "rum",
+    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/white-rums/mount-gay-eclipse-silver/",
+    "ratings": [
+      {
+        "provider": "The Rum Howler Blog",
+        "rating": 8.15
+      }
+    ],
+    "reviews": []
+  },
+  {
+    "name": "Kōloa Kaua`i White Hawaiian Rum",
+    "category": "rum",
+    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/white-rums/koloa-kauai-white-hawaiian-rum/",
+    "ratings": [
+      {
+        "provider": "The Rum Howler Blog",
+        "rating": 8.35
+      }
+    ],
+    "reviews": []
+  },
+  {
+    "name": "Bermudez Ron Viejo Blanco",
+    "category": "rum",
+    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/white-rums/review-bermudez-ron-viejo-blanco/",
+    "ratings": [
+      {
+        "provider": "The Rum Howler Blog",
+        "rating": 8.8
+      }
+    ],
+    "reviews": []
+  },
+  {
+    "name": "Brugal Especial Extra Dry Rum",
+    "category": "rum",
+    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/white-rums/brugal-especial-extra-dry/",
+    "ratings": [
+      {
+        "provider": "The Rum Howler Blog",
+        "rating": 8.45
       }
     ],
     "reviews": []
@@ -299,25 +311,13 @@
     "reviews": []
   },
   {
-    "name": "Newfoundlander’s White Rum",
+    "name": "Shellback Caribbean Silver Rum",
     "category": "rum",
-    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/white-rums/newfoundlanders-white-rum/",
+    "productUrl": "https://therumhowlerblog.com/rum-reviews/white-rums/shellback-caribbean-silver-rum/",
     "ratings": [
       {
         "provider": "The Rum Howler Blog",
-        "rating": 8.5
-      }
-    ],
-    "reviews": []
-  },
-  {
-    "name": "Mount Gay Eclipse Silver",
-    "category": "rum",
-    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/white-rums/mount-gay-eclipse-silver/",
-    "ratings": [
-      {
-        "provider": "The Rum Howler Blog",
-        "rating": 8.15
+        "rating": 7.9
       }
     ],
     "reviews": []
@@ -335,37 +335,13 @@
     "reviews": []
   },
   {
-    "name": "Brugal Titanium Rum",
+    "name": "Newfoundlander’s White Rum",
     "category": "rum",
-    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/white-rums/brugal-titanium-rum/",
+    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/white-rums/newfoundlanders-white-rum/",
     "ratings": [
       {
         "provider": "The Rum Howler Blog",
-        "rating": 9.0
-      }
-    ],
-    "reviews": []
-  },
-  {
-    "name": "Pumpkin Face White Rum",
-    "category": "rum",
-    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/white-rums/pumpkin-face-white-rum/",
-    "ratings": [
-      {
-        "provider": "The Rum Howler Blog",
-        "rating": 8.65
-      }
-    ],
-    "reviews": []
-  },
-  {
-    "name": "Potter’s Superior White Rum",
-    "category": "rum",
-    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/white-rums/potters-superior-white-rum/",
-    "ratings": [
-      {
-        "provider": "The Rum Howler Blog",
-        "rating": 8.6
+        "rating": 8.5
       }
     ],
     "reviews": []
@@ -383,20 +359,13 @@
     "reviews": []
   },
   {
-    "name": "Proof Rum",
+    "name": "Pumpkin Face White Rum",
     "category": "rum",
-    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/white-rums/proof-rum/",
-    "silpoMatch": {
-      "silpo_title": "Ром Takamaka white overproof 69 rum",
-      "similarity_score": 1.0,
-      "price": 999.0,
-      "in_stock": true,
-      "url": "https://silpo.ua/product/rom-takamaka-white-overproof-69-rum-871949"
-    },
+    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/white-rums/pumpkin-face-white-rum/",
     "ratings": [
       {
         "provider": "The Rum Howler Blog",
-        "rating": 8.3
+        "rating": 8.65
       }
     ],
     "reviews": []
@@ -409,6 +378,30 @@
       {
         "provider": "The Rum Howler Blog",
         "rating": 8.7
+      }
+    ],
+    "reviews": []
+  },
+  {
+    "name": "Potter’s Superior White Rum",
+    "category": "rum",
+    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/white-rums/potters-superior-white-rum/",
+    "ratings": [
+      {
+        "provider": "The Rum Howler Blog",
+        "rating": 8.6
+      }
+    ],
+    "reviews": []
+  },
+  {
+    "name": "Proof Rum",
+    "category": "rum",
+    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/white-rums/proof-rum/",
+    "ratings": [
+      {
+        "provider": "The Rum Howler Blog",
+        "rating": 8.3
       }
     ],
     "reviews": []
@@ -450,6 +443,37 @@
     "reviews": []
   },
   {
+    "name": "Traveller’s White Rum",
+    "category": "rum",
+    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/white-rums/travellers-white-rum/",
+    "ratings": [
+      {
+        "provider": "The Rum Howler Blog",
+        "rating": 7.8
+      }
+    ],
+    "reviews": []
+  },
+  {
+    "name": "Santiago de Cuba Ron Carta Blanca",
+    "category": "rum",
+    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/white-rums/rum-review-santiago-de-cuba-ron-carta-blanca/",
+    "silpoMatch": {
+      "silpo_title": "Ром Santiago de Cuba Carta Blanca",
+      "similarity_score": 0.8787878787878788,
+      "price": 599.0,
+      "in_stock": true,
+      "url": "https://silpo.ua/product/rom-santiago-de-cuba-carta-blanca-504544"
+    },
+    "ratings": [
+      {
+        "provider": "The Rum Howler Blog",
+        "rating": 8.25
+      }
+    ],
+    "reviews": []
+  },
+  {
     "name": "Bacardi Carta Fuego",
     "category": "rum",
     "productUrl": "https://therumhowlerblog.com/rum-reviews/flavoured-spiced-rums/bacardi-carta-fuego/",
@@ -474,20 +498,37 @@
     "reviews": []
   },
   {
-    "name": "Santiago de Cuba Ron Carta Blanca",
+    "name": "Black Magic Spiced Rum",
     "category": "rum",
-    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/white-rums/rum-review-santiago-de-cuba-ron-carta-blanca/",
-    "silpoMatch": {
-      "silpo_title": "Ром Santiago de Cuba Carta Blanca",
-      "similarity_score": 0.8787878787878788,
-      "price": 599.0,
-      "in_stock": true,
-      "url": "https://silpo.ua/product/rom-santiago-de-cuba-carta-blanca-504544"
-    },
+    "productUrl": "https://therumhowlerblog.com/rum-reviews/flavoured-spiced-rums/black-magic-spiced-rum/",
     "ratings": [
       {
         "provider": "The Rum Howler Blog",
-        "rating": 8.25
+        "rating": 8.2
+      }
+    ],
+    "reviews": []
+  },
+  {
+    "name": "Tanduay Silver Asian Rum",
+    "category": "rum",
+    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/white-rums/tanduay-silver-asian-rum/",
+    "ratings": [
+      {
+        "provider": "The Rum Howler Blog",
+        "rating": 8.35
+      }
+    ],
+    "reviews": []
+  },
+  {
+    "name": "Cabot Tower 100 Proof Rum",
+    "category": "rum",
+    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/dark-rums/cabot-tower-100-proof-rum/",
+    "ratings": [
+      {
+        "provider": "The Rum Howler Blog",
+        "rating": 10.0
       }
     ],
     "reviews": []
@@ -517,9 +558,9 @@
     "reviews": []
   },
   {
-    "name": "Cabot Tower 100 Proof Rum",
+    "name": "London Dock Rum (Favell’s 100 Proof)",
     "category": "rum",
-    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/dark-rums/cabot-tower-100-proof-rum/",
+    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/dark-rums/london-dock-rum-favells-100-proof/",
     "ratings": [
       {
         "provider": "The Rum Howler Blog",
@@ -529,25 +570,13 @@
     "reviews": []
   },
   {
-    "name": "Black Magic Spiced Rum",
+    "name": "Panama Red 108 Overproof Rum",
     "category": "rum",
-    "productUrl": "https://therumhowlerblog.com/rum-reviews/flavoured-spiced-rums/black-magic-spiced-rum/",
+    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/dark-rums/panama-red-108-108/",
     "ratings": [
       {
         "provider": "The Rum Howler Blog",
-        "rating": 8.2
-      }
-    ],
-    "reviews": []
-  },
-  {
-    "name": "Lemon Hart 151 Demerara Rum",
-    "category": "rum",
-    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/dark-rums/lemon-hart-demerara-151-rum/",
-    "ratings": [
-      {
-        "provider": "The Rum Howler Blog",
-        "rating": 8.6
+        "rating": 8.9
       }
     ],
     "reviews": []
@@ -565,25 +594,25 @@
     "reviews": []
   },
   {
-    "name": "Tanduay Silver Asian Rum",
+    "name": "Captain Morgan Jack-O’Blast Pumpkin Spiced Rum",
     "category": "rum",
-    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/white-rums/tanduay-silver-asian-rum/",
+    "productUrl": "https://therumhowlerblog.com/rum-reviews/flavoured-spiced-rums/captain-morgan-jack-oblast-pumpkin-spiced-rum/",
     "ratings": [
       {
         "provider": "The Rum Howler Blog",
-        "rating": 8.35
+        "rating": 8.65
       }
     ],
     "reviews": []
   },
   {
-    "name": "Traveller’s White Rum",
+    "name": "Lemon Hart 151 Demerara Rum",
     "category": "rum",
-    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/white-rums/travellers-white-rum/",
+    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/dark-rums/lemon-hart-demerara-151-rum/",
     "ratings": [
       {
         "provider": "The Rum Howler Blog",
-        "rating": 7.8
+        "rating": 8.6
       }
     ],
     "reviews": []
@@ -601,30 +630,6 @@
     "reviews": []
   },
   {
-    "name": "London Dock Rum (Favell’s 100 Proof)",
-    "category": "rum",
-    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/dark-rums/london-dock-rum-favells-100-proof/",
-    "ratings": [
-      {
-        "provider": "The Rum Howler Blog",
-        "rating": 10.0
-      }
-    ],
-    "reviews": []
-  },
-  {
-    "name": "Captain Morgan Jack-O’Blast Pumpkin Spiced Rum",
-    "category": "rum",
-    "productUrl": "https://therumhowlerblog.com/rum-reviews/flavoured-spiced-rums/captain-morgan-jack-oblast-pumpkin-spiced-rum/",
-    "ratings": [
-      {
-        "provider": "The Rum Howler Blog",
-        "rating": 8.65
-      }
-    ],
-    "reviews": []
-  },
-  {
     "name": "Chic Choc Spiced Rum",
     "category": "rum",
     "productUrl": "https://therumhowlerblog.com/rum-reviews/flavoured-spiced-rums/chic-choc-spiced-rum/",
@@ -632,30 +637,6 @@
       {
         "provider": "The Rum Howler Blog",
         "rating": 8.25
-      }
-    ],
-    "reviews": []
-  },
-  {
-    "name": "Plantation Original Dark 73 % Overproof Rum",
-    "category": "rum",
-    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/dark-rums/plantation-original-dark-73-overproof-rum/",
-    "ratings": [
-      {
-        "provider": "The Rum Howler Blog",
-        "rating": 7.3
-      }
-    ],
-    "reviews": []
-  },
-  {
-    "name": "Admiral Nelson’s Spiced Rum",
-    "category": "rum",
-    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/flavoured-spiced-rums/admiral-nelsons-spiced-rum/",
-    "ratings": [
-      {
-        "provider": "The Rum Howler Blog",
-        "rating": 7.6
       }
     ],
     "reviews": []
@@ -685,37 +666,25 @@
     "reviews": []
   },
   {
-    "name": "Bacardi Oakheart Spiced Rum",
+    "name": "Plantation Original Dark 73 % Overproof Rum",
     "category": "rum",
-    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/flavoured-spiced-rums/bacardi-oakheart-spiced-rum/",
+    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/dark-rums/plantation-original-dark-73-overproof-rum/",
     "ratings": [
       {
         "provider": "The Rum Howler Blog",
-        "rating": 8.6
+        "rating": 7.3
       }
     ],
     "reviews": []
   },
   {
-    "name": "Blackheart Spiced Rum",
+    "name": "Admiral Nelson’s Spiced Rum",
     "category": "rum",
-    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/flavoured-spiced-rums/blackheart-spiced-rum/",
+    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/flavoured-spiced-rums/admiral-nelsons-spiced-rum/",
     "ratings": [
       {
         "provider": "The Rum Howler Blog",
-        "rating": 8.35
-      }
-    ],
-    "reviews": []
-  },
-  {
-    "name": "Jamaican Lion Spiced Rum",
-    "category": "rum",
-    "productUrl": "https://therumhowlerblog.com/rum-reviews/flavoured-spiced-rums/jamaica-lion-spiced-rum/",
-    "ratings": [
-      {
-        "provider": "The Rum Howler Blog",
-        "rating": 7.35
+        "rating": 7.6
       }
     ],
     "reviews": []
@@ -733,37 +702,37 @@
     "reviews": []
   },
   {
-    "name": "Calico Jack Spiced Rum",
+    "name": "Bacardi Oakheart Spiced Rum",
     "category": "rum",
-    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/flavoured-spiced-rums/review-calico-jack-spiced-rum/",
+    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/flavoured-spiced-rums/bacardi-oakheart-spiced-rum/",
     "ratings": [
       {
         "provider": "The Rum Howler Blog",
-        "rating": 7.85
+        "rating": 8.6
       }
     ],
     "reviews": []
   },
   {
-    "name": "Blue Chair Bay Coconut Spiced Rum",
+    "name": "Jamaican Lion Spiced Rum",
     "category": "rum",
-    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/flavoured-spiced-rums/blue-chair-bay-coconut-spiced-rum/",
+    "productUrl": "https://therumhowlerblog.com/rum-reviews/flavoured-spiced-rums/jamaica-lion-spiced-rum/",
     "ratings": [
       {
         "provider": "The Rum Howler Blog",
-        "rating": 8.7
+        "rating": 7.35
       }
     ],
     "reviews": []
   },
   {
-    "name": "Brinley Gold Shipwreck Spiced Rum",
+    "name": "Blackheart Spiced Rum",
     "category": "rum",
-    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/flavoured-spiced-rums/brinley-gold-shipwreck-spiced-rum/",
+    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/flavoured-spiced-rums/blackheart-spiced-rum/",
     "ratings": [
       {
         "provider": "The Rum Howler Blog",
-        "rating": 8.15
+        "rating": 8.35
       }
     ],
     "reviews": []
@@ -781,13 +750,13 @@
     "reviews": []
   },
   {
-    "name": "Captain Morgan Original Spiced Rum",
+    "name": "Blue Chair Bay Coconut Spiced Rum",
     "category": "rum",
-    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/flavoured-spiced-rums/captain-morgans-original-spiced-rum/",
+    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/flavoured-spiced-rums/blue-chair-bay-coconut-spiced-rum/",
     "ratings": [
       {
         "provider": "The Rum Howler Blog",
-        "rating": 8.1
+        "rating": 8.7
       }
     ],
     "reviews": []
@@ -805,20 +774,61 @@
     "reviews": []
   },
   {
+    "name": "Brinley Gold Shipwreck Spiced Rum",
+    "category": "rum",
+    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/flavoured-spiced-rums/brinley-gold-shipwreck-spiced-rum/",
+    "ratings": [
+      {
+        "provider": "The Rum Howler Blog",
+        "rating": 8.15
+      }
+    ],
+    "reviews": []
+  },
+  {
     "name": "Pusser’s Spiced Rum",
     "category": "rum",
     "productUrl": "https://therumhowlerblog.com/rum-reviews/flavoured-spiced-rums/pussers-spiced-rum/",
-    "silpoMatch": {
-      "silpo_title": "Ром Pusser's Rum Gunpowder Spiced",
-      "similarity_score": 1.0,
-      "price": 2199.0,
-      "in_stock": true,
-      "url": "https://silpo.ua/product/rom-pusser-s-rum-gunpowder-spiced-927837"
-    },
     "ratings": [
       {
         "provider": "The Rum Howler Blog",
         "rating": 8.4
+      }
+    ],
+    "reviews": []
+  },
+  {
+    "name": "Calico Jack Spiced Rum",
+    "category": "rum",
+    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/flavoured-spiced-rums/review-calico-jack-spiced-rum/",
+    "ratings": [
+      {
+        "provider": "The Rum Howler Blog",
+        "rating": 7.85
+      }
+    ],
+    "reviews": []
+  },
+  {
+    "name": "Captain Morgan Black Spiced Rum",
+    "abv": 0.0,
+    "age": 0.0,
+    "region": "Puerto Rico",
+    "brand": "Captain Morgan",
+    "type": "Spiced",
+    "category": "rum",
+    "imgUrl": "https://images.rumratings.com/uploads/brand/image/166/small_Captain_Morgan_Black_Spiced_rum.webp?v=1741230379",
+    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/flavoured-spiced-rums/captain-morgan-black-spiced-rum/",
+    "yearDistilled": 0,
+    "womenLed": false,
+    "ratings": [
+      {
+        "provider": "The Rum Howler Blog",
+        "rating": 8.15
+      },
+      {
+        "provider": "RumRatings",
+        "rating": 5.9
       }
     ],
     "reviews": []
@@ -836,35 +846,6 @@
     "reviews": []
   },
   {
-    "name": "Captain Morgan Black Spiced Rum",
-    "abv": 0.0,
-    "age": 0.0,
-    "region": "Puerto Rico",
-    "brand": "Captain Morgan",
-    "type": "Spiced",
-    "category": "rum",
-    "volumeWeight": "359",
-    "imgUrl": "https://images.rumratings.com/uploads/brand/image/166/small_Captain_Morgan_Black_Spiced_rum.webp?v=1741230379",
-    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/flavoured-spiced-rums/captain-morgan-black-spiced-rum/",
-    "silpoMatch": {
-      "silpo_title": "Напій на основі ромu Captain Morgan Black Spiced",
-      "similarity_score": 0.8,
-      "price": 879.0,
-      "url": "https://silpo.ua/product/napii-na-osnovi-romu-captain-morgan-black-spiced-830173"
-    },
-    "ratings": [
-      {
-        "provider": "The Rum Howler Blog",
-        "rating": 8.15
-      },
-      {
-        "provider": "RumRatings",
-        "rating": 5.9
-      }
-    ],
-    "reviews": []
-  },
-  {
     "name": "Captain Morgan Silver Spiced Rum",
     "category": "rum",
     "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/flavoured-spiced-rums/captain-morgan-silver-spiced-rum/",
@@ -877,13 +858,25 @@
     "reviews": []
   },
   {
-    "name": "Panama Red 108 Overproof Rum",
+    "name": "Captain Morgan 100 Spiced Rum",
     "category": "rum",
-    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/dark-rums/panama-red-108-108/",
+    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/flavoured-spiced-rums/captain-morgan-100-spiced-rum/",
     "ratings": [
       {
         "provider": "The Rum Howler Blog",
-        "rating": 8.9
+        "rating": 10.0
+      }
+    ],
+    "reviews": []
+  },
+  {
+    "name": "Captain Morgan Original Spiced Rum",
+    "category": "rum",
+    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/flavoured-spiced-rums/captain-morgans-original-spiced-rum/",
+    "ratings": [
+      {
+        "provider": "The Rum Howler Blog",
+        "rating": 8.1
       }
     ],
     "reviews": []
@@ -901,9 +894,9 @@
     "reviews": []
   },
   {
-    "name": "Captain Morgan 100 Spiced Rum",
+    "name": "Captain Morgan Apple Smash",
     "category": "rum",
-    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/flavoured-spiced-rums/captain-morgan-100-spiced-rum/",
+    "productUrl": "https://therumhowlerblog.com/rum-reviews/flavoured-spiced-rums/captain-morgan-apple-smash/",
     "ratings": [
       {
         "provider": "The Rum Howler Blog",
@@ -925,31 +918,13 @@
     "reviews": []
   },
   {
-    "name": "El Dorado Spiced",
+    "name": "George Street Spiced Rum",
     "category": "rum",
-    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/flavoured-spiced-rums/el-dorado-spiced-rum/",
+    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/flavoured-spiced-rums/george-street-spiced-rum/",
     "ratings": [
       {
         "provider": "The Rum Howler Blog",
-        "rating": 8.35
-      }
-    ],
-    "reviews": []
-  },
-  {
-    "name": "Captain Morgan Apple Smash",
-    "category": "rum",
-    "productUrl": "https://therumhowlerblog.com/rum-reviews/flavoured-spiced-rums/captain-morgan-apple-smash/",
-    "silpoMatch": {
-      "silpo_title": "Напій на основі ромu Captain Morgan Tiki Mango & Pineapple",
-      "similarity_score": 0.75,
-      "price": 489.0,
-      "url": "https://silpo.ua/product/napii-na-osnovi-romu-captain-morgan-tiki-mango-pineapple-873720"
-    },
-    "ratings": [
-      {
-        "provider": "The Rum Howler Blog",
-        "rating": 10.0
+        "rating": 8.65
       }
     ],
     "reviews": []
@@ -967,13 +942,13 @@
     "reviews": []
   },
   {
-    "name": "Kōloa Kaua`i Spice Hawaiian Rum",
+    "name": "El Dorado Spiced",
     "category": "rum",
-    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/flavoured-spiced-rums/koloa-kauai-spice-hawaiian-rum/",
+    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/flavoured-spiced-rums/el-dorado-spiced-rum/",
     "ratings": [
       {
         "provider": "The Rum Howler Blog",
-        "rating": 7.85
+        "rating": 8.35
       }
     ],
     "reviews": []
@@ -986,6 +961,32 @@
       {
         "provider": "The Rum Howler Blog",
         "rating": 8.7
+      }
+    ],
+    "reviews": []
+  },
+  {
+    "name": "Kraken Black Spiced Rum",
+    "description": "Kraken Black Spiced Rum was first introduced by Proximo Spirits in 2010. The dark rum is infused with 11 “secret” spices, caramel and other natural flavors. The rum gets its name after the mythical sea creature 'The Kraken' which attacked ships during the 18th and 19th centuries.",
+    "abv": 0.0,
+    "age": 0.0,
+    "region": "Trinidad and Tobago",
+    "brand": "Kraken",
+    "type": "Spiced",
+    "category": "Multiple",
+    "volumeWeight": "$3X",
+    "imgUrl": "https://images.rumratings.com/uploads/brand/image/482/small_Kraken_Black_Spiced_rum_400px.webp?v=1741230472",
+    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/flavoured-spiced-rums/review-the-kraken-black-spiced-rum/",
+    "yearDistilled": 2010,
+    "womenLed": false,
+    "ratings": [
+      {
+        "provider": "The Rum Howler Blog",
+        "rating": 7.8
+      },
+      {
+        "provider": "RumRatings",
+        "rating": 6.0
       }
     ],
     "reviews": []
@@ -1010,6 +1011,18 @@
     "reviews": []
   },
   {
+    "name": "Kōloa Kaua`i Spice Hawaiian Rum",
+    "category": "rum",
+    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/flavoured-spiced-rums/koloa-kauai-spice-hawaiian-rum/",
+    "ratings": [
+      {
+        "provider": "The Rum Howler Blog",
+        "rating": 7.85
+      }
+    ],
+    "reviews": []
+  },
+  {
     "name": "Dictador Orange (100 Month Aged) Rum",
     "category": "rum",
     "productUrl": "https://therumhowlerblog.com/rum-reviews/flavoured-spiced-rums/dictador-orange-100-month-rum/",
@@ -1029,30 +1042,6 @@
     "reviews": []
   },
   {
-    "name": "George Street Spiced Rum",
-    "category": "rum",
-    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/flavoured-spiced-rums/george-street-spiced-rum/",
-    "ratings": [
-      {
-        "provider": "The Rum Howler Blog",
-        "rating": 8.65
-      }
-    ],
-    "reviews": []
-  },
-  {
-    "name": "Sailor Jerry Spiced Navy Rum",
-    "category": "rum",
-    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/flavoured-spiced-rums/sailor-jerry-spiced-navy-rum/",
-    "ratings": [
-      {
-        "provider": "The Rum Howler Blog",
-        "rating": 8.2
-      }
-    ],
-    "reviews": []
-  },
-  {
     "name": "Lemon Hart Navy Spiced Rum",
     "category": "rum",
     "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/flavoured-spiced-rums/lemon-hart-navy-spiced-rum/",
@@ -1060,18 +1049,6 @@
       {
         "provider": "The Rum Howler Blog",
         "rating": 8.45
-      }
-    ],
-    "reviews": []
-  },
-  {
-    "name": "Siesta Key Spiced Rum",
-    "category": "rum",
-    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/flavoured-spiced-rums/siesta-key-spiced-rum/",
-    "ratings": [
-      {
-        "provider": "The Rum Howler Blog",
-        "rating": 8.3
       }
     ],
     "reviews": []
@@ -1089,13 +1066,13 @@
     "reviews": []
   },
   {
-    "name": "Stiggins’ Fancy Plantation Pineapple Rum",
+    "name": "Sailor Jerry Spiced Navy Rum",
     "category": "rum",
-    "productUrl": "https://therumhowlerblog.com/rum-reviews/flavoured-spiced-rums/stiggins-fancy-plantation-pineapple-rum/",
+    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/flavoured-spiced-rums/sailor-jerry-spiced-navy-rum/",
     "ratings": [
       {
         "provider": "The Rum Howler Blog",
-        "rating": 8.6
+        "rating": 8.2
       }
     ],
     "reviews": []
@@ -1113,37 +1090,37 @@
     "reviews": []
   },
   {
-    "name": "VooDoo Spiced Rum",
+    "name": "Stiggins’ Fancy Plantation Pineapple Rum",
     "category": "rum",
-    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/flavoured-spiced-rums/voodoo-spiced-rum/",
+    "productUrl": "https://therumhowlerblog.com/rum-reviews/flavoured-spiced-rums/stiggins-fancy-plantation-pineapple-rum/",
     "ratings": [
       {
         "provider": "The Rum Howler Blog",
-        "rating": 7.8
+        "rating": 8.6
       }
     ],
     "reviews": []
   },
   {
-    "name": "Kraken Black Spiced Rum",
-    "description": "Kraken Black Spiced Rum was first introduced by Proximo Spirits in 2010 . The dark rum is infused with 11 “secret” spices, caramel and other natural flavors.",
-    "abv": 47.0,
-    "age": 0.0,
-    "region": "Trinidad and Tobago",
-    "brand": "Kraken",
-    "type": "Spiced",
+    "name": "Screech Spiced 100 (Proof) Rum",
     "category": "rum",
-    "volumeWeight": "700 ml",
-    "imgUrl": "https://images.rumratings.com/uploads/brand/image/482/small_Kraken_Black_Spiced_rum_400px.webp?v=1741230472",
-    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/flavoured-spiced-rums/review-the-kraken-black-spiced-rum/",
+    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/flavoured-spiced-rums/screech-spiced-100-proof-rum/",
     "ratings": [
       {
         "provider": "The Rum Howler Blog",
-        "rating": 7.8
-      },
+        "rating": 10.0
+      }
+    ],
+    "reviews": []
+  },
+  {
+    "name": "Siesta Key Spiced Rum",
+    "category": "rum",
+    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/flavoured-spiced-rums/siesta-key-spiced-rum/",
+    "ratings": [
       {
-        "provider": "RumRatings",
-        "rating": 6.0
+        "provider": "The Rum Howler Blog",
+        "rating": 8.3
       }
     ],
     "reviews": []
@@ -1156,30 +1133,6 @@
       {
         "provider": "The Rum Howler Blog",
         "rating": 7.8
-      }
-    ],
-    "reviews": []
-  },
-  {
-    "name": "Admiral Nelson’s Coconut Rum",
-    "category": "rum",
-    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/flavoured-spiced-rums/admiral-nelsons-coconut-rum/",
-    "ratings": [
-      {
-        "provider": "The Rum Howler Blog",
-        "rating": 8.0
-      }
-    ],
-    "reviews": []
-  },
-  {
-    "name": "Blue Chair Bay Coconut Rum",
-    "category": "rum",
-    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/flavoured-spiced-rums/blue-chair-bay-coconut-rum/",
-    "ratings": [
-      {
-        "provider": "The Rum Howler Blog",
-        "rating": 8.4
       }
     ],
     "reviews": []
@@ -1198,16 +1151,17 @@
   },
   {
     "name": "Bacardi Gold Rum",
-    "description": "Bacardi Gold rum is manufactured in Puerto Rico where it is distilled from fermented molasses. It is then filtered through charcoal and aged in charred oak barrels for between 1 and 2 years. Unlike Bacardi Superior, Bacardi Gold is only filtered once.\nBacardi's official logo, a fruit bat, dates to 1862 when founder Don Facundo Bacardi found fruit bats living in rafters of the building he bought to house the distillery. Bats are considered an omen of good luck in Cuba and have emblazoned Bacardi rum bottles ever since.",
+    "description": "Bacardi Gold rum is manufactured in Puerto Rico where it is distilled from fermented molasses. It is then filtered through charcoal and aged in charred oak barrels for between 1 and 2 years. Unlike Bacardi Superior, Bacardi Gold is only filtered once. Bacardi's official logo, a fruit bat, dates to 1862 when founder Don Facundo Bacardi found fruit bats living in rafters of the building he bought to house the distillery. Bats are considered an omen of good luck in Cuba and have emblazoned Bacardi rum bottles ever since.",
     "abv": 0.0,
-    "age": 0.0,
+    "age": 2.0,
     "region": "United States",
     "brand": "Bacardi",
     "type": "Gold",
     "category": "rum",
-    "volumeWeight": "326",
     "imgUrl": "https://images.rumratings.com/uploads/brand/image/78/small_Bacardi_Gold_rum.webp?v=1741230350",
     "productUrl": "https://therumhowlerblog.com/rum-reviews/dark-rums/bacardi-gold/",
+    "yearDistilled": 0,
+    "womenLed": false,
     "ratings": [
       {
         "provider": "The Rum Howler Blog",
@@ -1216,6 +1170,18 @@
       {
         "provider": "RumRatings",
         "rating": 4.3
+      }
+    ],
+    "reviews": []
+  },
+  {
+    "name": "VooDoo Spiced Rum",
+    "category": "rum",
+    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/flavoured-spiced-rums/voodoo-spiced-rum/",
+    "ratings": [
+      {
+        "provider": "The Rum Howler Blog",
+        "rating": 7.8
       }
     ],
     "reviews": []
@@ -1257,13 +1223,37 @@
     "reviews": []
   },
   {
-    "name": "Hispaniola Mamajuana",
+    "name": "Blue Chair Bay Coconut Rum",
     "category": "rum",
-    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/flavoured-spiced-rums/hispaniola-mamajuana/",
+    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/flavoured-spiced-rums/blue-chair-bay-coconut-rum/",
     "ratings": [
       {
         "provider": "The Rum Howler Blog",
-        "rating": 7.85
+        "rating": 8.4
+      }
+    ],
+    "reviews": []
+  },
+  {
+    "name": "Admiral Nelson’s Coconut Rum",
+    "category": "rum",
+    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/flavoured-spiced-rums/admiral-nelsons-coconut-rum/",
+    "ratings": [
+      {
+        "provider": "The Rum Howler Blog",
+        "rating": 8.0
+      }
+    ],
+    "reviews": []
+  },
+  {
+    "name": "Captain Morgan Grapefruit Rum",
+    "category": "rum",
+    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/flavoured-spiced-rums/captain-morgan-grapefruit-flavoured-rum/",
+    "ratings": [
+      {
+        "provider": "The Rum Howler Blog",
+        "rating": 8.75
       }
     ],
     "reviews": []
@@ -1276,18 +1266,6 @@
       {
         "provider": "The Rum Howler Blog",
         "rating": 8.35
-      }
-    ],
-    "reviews": []
-  },
-  {
-    "name": "Kuknat Coconut Rum",
-    "category": "rum",
-    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/flavoured-spiced-rums/kuknut-coconut-rum/",
-    "ratings": [
-      {
-        "provider": "The Rum Howler Blog",
-        "rating": 8.0
       }
     ],
     "reviews": []
@@ -1317,13 +1295,25 @@
     "reviews": []
   },
   {
-    "name": "Screech Honey Flavoured Rum",
+    "name": "Hispaniola Mamajuana",
     "category": "rum",
-    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/flavoured-spiced-rums/screech-honey-flavoured-rum/",
+    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/flavoured-spiced-rums/hispaniola-mamajuana/",
     "ratings": [
       {
         "provider": "The Rum Howler Blog",
-        "rating": 7.65
+        "rating": 7.85
+      }
+    ],
+    "reviews": []
+  },
+  {
+    "name": "Kuknat Coconut Rum",
+    "category": "rum",
+    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/flavoured-spiced-rums/kuknut-coconut-rum/",
+    "ratings": [
+      {
+        "provider": "The Rum Howler Blog",
+        "rating": 8.0
       }
     ],
     "reviews": []
@@ -1341,25 +1331,13 @@
     "reviews": []
   },
   {
-    "name": "Whaler’s Killer Coconut Rum",
+    "name": "Screech Honey Flavoured Rum",
     "category": "rum",
-    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/flavoured-spiced-rums/whalers-killer-coconut-rum/",
+    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/flavoured-spiced-rums/screech-honey-flavoured-rum/",
     "ratings": [
       {
         "provider": "The Rum Howler Blog",
-        "rating": 8.25
-      }
-    ],
-    "reviews": []
-  },
-  {
-    "name": "Screech Spiced 100 (Proof) Rum",
-    "category": "rum",
-    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/flavoured-spiced-rums/screech-spiced-100-proof-rum/",
-    "ratings": [
-      {
-        "provider": "The Rum Howler Blog",
-        "rating": 10.0
+        "rating": 7.65
       }
     ],
     "reviews": []
@@ -1377,13 +1355,25 @@
     "reviews": []
   },
   {
-    "name": "Whistling Andy Hibiscus-Coconut Rum",
+    "name": "Coruba Imported Dark Jamaican Rum",
     "category": "rum",
-    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/flavoured-spiced-rums/whistling-andy-hibiscus-coconut-rum/",
+    "productUrl": "https://therumhowlerblog.com/rum-reviews/dark-rums/coruba-imported-jamaican-rum/",
     "ratings": [
       {
         "provider": "The Rum Howler Blog",
-        "rating": 7.65
+        "rating": 8.55
+      }
+    ],
+    "reviews": []
+  },
+  {
+    "name": "Whaler’s Killer Coconut Rum",
+    "category": "rum",
+    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/flavoured-spiced-rums/whalers-killer-coconut-rum/",
+    "ratings": [
+      {
+        "provider": "The Rum Howler Blog",
+        "rating": 8.25
       }
     ],
     "reviews": []
@@ -1401,25 +1391,13 @@
     "reviews": []
   },
   {
-    "name": "Coruba Imported Dark Jamaican Rum",
+    "name": "Whistling Andy Hibiscus-Coconut Rum",
     "category": "rum",
-    "productUrl": "https://therumhowlerblog.com/rum-reviews/dark-rums/coruba-imported-jamaican-rum/",
+    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/flavoured-spiced-rums/whistling-andy-hibiscus-coconut-rum/",
     "ratings": [
       {
         "provider": "The Rum Howler Blog",
-        "rating": 8.55
-      }
-    ],
-    "reviews": []
-  },
-  {
-    "name": "Captain Morgan Grapefruit Rum",
-    "category": "rum",
-    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/flavoured-spiced-rums/captain-morgan-grapefruit-flavoured-rum/",
-    "ratings": [
-      {
-        "provider": "The Rum Howler Blog",
-        "rating": 8.75
+        "rating": 7.65
       }
     ],
     "reviews": []
@@ -1437,18 +1415,6 @@
     "reviews": []
   },
   {
-    "name": "London Dock Rum (Favell’s 70 Proof)",
-    "category": "rum",
-    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/dark-rums/london-dock-rum-favells-70-proof/",
-    "ratings": [
-      {
-        "provider": "The Rum Howler Blog",
-        "rating": 7.0
-      }
-    ],
-    "reviews": []
-  },
-  {
     "name": "Jamaican Lion Dark Rum",
     "category": "rum",
     "productUrl": "https://therumhowlerblog.com/rum-reviews/dark-rums/jamaican-lion-dark-rum/",
@@ -1461,18 +1427,6 @@
     "reviews": []
   },
   {
-    "name": "Siesta Key Gold Rum",
-    "category": "rum",
-    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/dark-rums/siesta-key-gold-rum/",
-    "ratings": [
-      {
-        "provider": "The Rum Howler Blog",
-        "rating": 7.8
-      }
-    ],
-    "reviews": []
-  },
-  {
     "name": "Old Lahaina Gold Rum",
     "category": "rum",
     "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/dark-rums/old-lahaina-gold-rum/",
@@ -1480,6 +1434,30 @@
       {
         "provider": "The Rum Howler Blog",
         "rating": 7.55
+      }
+    ],
+    "reviews": []
+  },
+  {
+    "name": "London Dock Rum (Favell’s 70 Proof)",
+    "category": "rum",
+    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/dark-rums/london-dock-rum-favells-70-proof/",
+    "ratings": [
+      {
+        "provider": "The Rum Howler Blog",
+        "rating": 7.0
+      }
+    ],
+    "reviews": []
+  },
+  {
+    "name": "Siesta Key Gold Rum",
+    "category": "rum",
+    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/dark-rums/siesta-key-gold-rum/",
+    "ratings": [
+      {
+        "provider": "The Rum Howler Blog",
+        "rating": 7.8
       }
     ],
     "reviews": []
@@ -1504,6 +1482,25 @@
       {
         "provider": "The Rum Howler Blog",
         "rating": 7.85
+      }
+    ],
+    "reviews": []
+  },
+  {
+    "name": "The Wild Geese – Golden Rum",
+    "category": "rum",
+    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/dark-rums/the-wild-geese-golden-rum/",
+    "silpoMatch": {
+      "silpo_title": "Ром The Wild Geese Golden 37,5%",
+      "similarity_score": 0.8461538461538461,
+      "price": 0.0,
+      "in_stock": false,
+      "url": "https://silpo.ua/product/rom-the-wild-geese-golden-37-5-705388"
+    },
+    "ratings": [
+      {
+        "provider": "The Rum Howler Blog",
+        "rating": 8.05
       }
     ],
     "reviews": []
@@ -1545,20 +1542,13 @@
     "reviews": []
   },
   {
-    "name": "The Wild Geese – Golden Rum",
+    "name": "Lemon Hart Original Demerara Rum",
     "category": "rum",
-    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/dark-rums/the-wild-geese-golden-rum/",
-    "silpoMatch": {
-      "silpo_title": "Ром The Wild Geese Golden 37,5%",
-      "similarity_score": 0.8461538461538461,
-      "price": 0.0,
-      "in_stock": false,
-      "url": "https://silpo.ua/product/rom-the-wild-geese-golden-37-5-705388"
-    },
+    "productUrl": "https://therumhowlerblog.com/rum-reviews/dark-rums/lemon-hart-orginal-demerara-rum/",
     "ratings": [
       {
         "provider": "The Rum Howler Blog",
-        "rating": 8.05
+        "rating": 8.1
       }
     ],
     "reviews": []
@@ -1576,9 +1566,21 @@
     "reviews": []
   },
   {
-    "name": "Lemon Hart Original Demerara Rum",
+    "name": "Big Black Dick Dark Caribbean Rum",
     "category": "rum",
-    "productUrl": "https://therumhowlerblog.com/rum-reviews/dark-rums/lemon-hart-orginal-demerara-rum/",
+    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/flavoured-spiced-rums/review-big-black-dick-dark-caribbean-rum/",
+    "ratings": [
+      {
+        "provider": "The Rum Howler Blog",
+        "rating": 7.45
+      }
+    ],
+    "reviews": []
+  },
+  {
+    "name": "Captain Morgan Deluxe Dark Rum",
+    "category": "rum",
+    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/dark-rums/captain-morgan-deluxe-dark-rum/",
     "ratings": [
       {
         "provider": "The Rum Howler Blog",
@@ -1600,13 +1602,13 @@
     "reviews": []
   },
   {
-    "name": "Big Black Dick Dark Caribbean Rum",
+    "name": "The Wild Geese – Premium Rum",
     "category": "rum",
-    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/flavoured-spiced-rums/review-big-black-dick-dark-caribbean-rum/",
+    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/dark-rums/the-wild-geese-premium-rum/",
     "ratings": [
       {
         "provider": "The Rum Howler Blog",
-        "rating": 7.45
+        "rating": 7.85
       }
     ],
     "reviews": []
@@ -1624,18 +1626,6 @@
     "reviews": []
   },
   {
-    "name": "The Wild Geese – Premium Rum",
-    "category": "rum",
-    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/dark-rums/the-wild-geese-premium-rum/",
-    "ratings": [
-      {
-        "provider": "The Rum Howler Blog",
-        "rating": 7.85
-      }
-    ],
-    "reviews": []
-  },
-  {
     "name": "Romero Dark Rum",
     "category": "rum",
     "productUrl": "https://therumhowlerblog.com/rum-reviews/dark-rums/romero-dark-rum/",
@@ -1648,6 +1638,30 @@
     "reviews": []
   },
   {
+    "name": "Cruzan Black Strap Rum",
+    "category": "rum",
+    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/flavoured-spiced-rums/cruzan-blackstrap-rum/",
+    "ratings": [
+      {
+        "provider": "The Rum Howler Blog",
+        "rating": 8.25
+      }
+    ],
+    "reviews": []
+  },
+  {
+    "name": "Kōloa Kaua`i Gold Hawaiian Rum",
+    "category": "rum",
+    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/dark-rums-n-to-z/koloa-kauai-gold-hawaiian-rum/",
+    "ratings": [
+      {
+        "provider": "The Rum Howler Blog",
+        "rating": 8.2
+      }
+    ],
+    "reviews": []
+  },
+  {
     "name": "Romero Dark Sugar Cane Spirit",
     "category": "rum",
     "productUrl": "https://therumhowlerblog.com/rum-reviews/dark-rums/romero-dark-sugarcane-spirit/",
@@ -1655,18 +1669,6 @@
       {
         "provider": "The Rum Howler Blog",
         "rating": 8.45
-      }
-    ],
-    "reviews": []
-  },
-  {
-    "name": "Captain Morgan Deluxe Dark Rum",
-    "category": "rum",
-    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/dark-rums/captain-morgan-deluxe-dark-rum/",
-    "ratings": [
-      {
-        "provider": "The Rum Howler Blog",
-        "rating": 8.1
       }
     ],
     "reviews": []
@@ -1712,12 +1714,6 @@
     "name": "Appleton Estate Signature Blend VX Rum",
     "category": "rum",
     "productUrl": "https://therumhowlerblog.com/rum-reviews/dark-rums/appleton-estate-signature-blend-vx-jamaican-rum/",
-    "silpoMatch": {
-      "silpo_title": "Ром Appleton Estate Signature Blend",
-      "similarity_score": 0.8,
-      "price": 929.0,
-      "url": "https://silpo.ua/product/rom-appleton-estate-signature-blend-759526"
-    },
     "ratings": [
       {
         "provider": "The Rum Howler Blog",
@@ -1775,30 +1771,6 @@
     "reviews": []
   },
   {
-    "name": "Kōloa Kaua`i Gold Hawaiian Rum",
-    "category": "rum",
-    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/dark-rums-n-to-z/koloa-kauai-gold-hawaiian-rum/",
-    "ratings": [
-      {
-        "provider": "The Rum Howler Blog",
-        "rating": 8.2
-      }
-    ],
-    "reviews": []
-  },
-  {
-    "name": "Legendario Ron Anejo",
-    "category": "rum",
-    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/dark-rums/legendario-ron-anejo/",
-    "ratings": [
-      {
-        "provider": "The Rum Howler Blog",
-        "rating": 8.9
-      }
-    ],
-    "reviews": []
-  },
-  {
     "name": "Cane Island Australia Rum (4 Years Old)",
     "age": 4.0,
     "category": "rum",
@@ -1807,30 +1779,6 @@
       {
         "provider": "The Rum Howler Blog",
         "rating": 8.7
-      }
-    ],
-    "reviews": []
-  },
-  {
-    "name": "McDowell’s No. 1 Celebration Rum",
-    "category": "rum",
-    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/dark-rums/mcdowells-no-1-celebration-rum/",
-    "ratings": [
-      {
-        "provider": "The Rum Howler Blog",
-        "rating": 7.85
-      }
-    ],
-    "reviews": []
-  },
-  {
-    "name": "Myer’s Planters’ Punch (Canadian Bottling)",
-    "category": "rum",
-    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/dark-rums/myers-planters-punch/",
-    "ratings": [
-      {
-        "provider": "The Rum Howler Blog",
-        "rating": 8.6
       }
     ],
     "reviews": []
@@ -1867,13 +1815,37 @@
     "reviews": []
   },
   {
-    "name": "Old Sam Demerara Rum",
+    "name": "Legendario Ron Anejo",
     "category": "rum",
-    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/dark-rums/old-sam-demerara-rum/",
+    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/dark-rums/legendario-ron-anejo/",
     "ratings": [
       {
         "provider": "The Rum Howler Blog",
-        "rating": 8.2
+        "rating": 8.9
+      }
+    ],
+    "reviews": []
+  },
+  {
+    "name": "Myer’s Planters’ Punch (Canadian Bottling)",
+    "category": "rum",
+    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/dark-rums/myers-planters-punch/",
+    "ratings": [
+      {
+        "provider": "The Rum Howler Blog",
+        "rating": 8.6
+      }
+    ],
+    "reviews": []
+  },
+  {
+    "name": "McDowell’s No. 1 Celebration Rum",
+    "category": "rum",
+    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/dark-rums/mcdowells-no-1-celebration-rum/",
+    "ratings": [
+      {
+        "provider": "The Rum Howler Blog",
+        "rating": 7.85
       }
     ],
     "reviews": []
@@ -1903,13 +1875,13 @@
     "reviews": []
   },
   {
-    "name": "Cruzan Black Strap Rum",
+    "name": "Old Sam Demerara Rum",
     "category": "rum",
-    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/flavoured-spiced-rums/cruzan-blackstrap-rum/",
+    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/dark-rums/old-sam-demerara-rum/",
     "ratings": [
       {
         "provider": "The Rum Howler Blog",
-        "rating": 8.25
+        "rating": 8.2
       }
     ],
     "reviews": []
@@ -1939,21 +1911,9 @@
     "reviews": []
   },
   {
-    "name": "Angostura Royal Oak",
+    "name": "Mount 1703 Gay Black Barrel",
     "category": "rum",
-    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/dark-rums/angostura-royal-oak-select/",
-    "ratings": [
-      {
-        "provider": "The Rum Howler Blog",
-        "rating": 8.2
-      }
-    ],
-    "reviews": []
-  },
-  {
-    "name": "Neptune Barbados Gold Rum",
-    "category": "rum",
-    "productUrl": "https://therumhowlerblog.com/rum-reviews/dark-rums/review-neptune-barbados-gold-rum/",
+    "productUrl": "https://therumhowlerblog.com/rum-reviews/dark-rums/mount-gay-1703-black-barrel-rum/",
     "ratings": [
       {
         "provider": "The Rum Howler Blog",
@@ -1963,28 +1923,9 @@
     "reviews": []
   },
   {
-    "name": "Gosling’s Black Seal",
+    "name": "Neptune Barbados Gold Rum",
     "category": "rum",
-    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/dark-rums-n-to-z/goslings-black-seal-rum/",
-    "silpoMatch": {
-      "silpo_title": "Ром Gosling's Black Seal 151 Bermuda Rum",
-      "similarity_score": 1.0,
-      "price": 1599.0,
-      "in_stock": true,
-      "url": "https://silpo.ua/product/rom-gosling-s-black-seal-151-bermuda-rum-937507"
-    },
-    "ratings": [
-      {
-        "provider": "The Rum Howler Blog",
-        "rating": 8.5
-      }
-    ],
-    "reviews": []
-  },
-  {
-    "name": "Mount 1703 Gay Black Barrel",
-    "category": "rum",
-    "productUrl": "https://therumhowlerblog.com/rum-reviews/dark-rums/mount-gay-1703-black-barrel-rum/",
+    "productUrl": "https://therumhowlerblog.com/rum-reviews/dark-rums/review-neptune-barbados-gold-rum/",
     "ratings": [
       {
         "provider": "The Rum Howler Blog",
@@ -2006,25 +1947,50 @@
     "reviews": []
   },
   {
-    "name": "Pixan Solera Especial",
+    "name": "Smuggler’s Cove Dark Rum",
     "category": "rum",
-    "productUrl": "https://therumhowlerblog.com/rum-reviews/dark-rums/pixan-solera-especial/",
+    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/dark-rums/smugglers-cove-dark-rum/",
     "ratings": [
       {
         "provider": "The Rum Howler Blog",
-        "rating": 8.4
+        "rating": 8.45
       }
     ],
     "reviews": []
   },
   {
-    "name": "Barceló Añejo Rum",
-    "category": "rum",
-    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/dark-rums/barcelo-anejo/",
+    "name": "Gosling’s Black Seal",
+    "description": "The James Gosling family business first produced Gosling Black Seal rum in 1806, and it is now the oldest surviving business on the island of Burmuda. Gosling 'Black Seal' rum received its name from the black wax originally used to seal the bottles. It is Bermuda's most widely exported product and considered the nation's national drink.",
+    "abv": 40.0,
+    "age": 0.0,
+    "region": "Bermuda",
+    "brand": "Gosling's",
+    "type": "Dark",
+    "category": ":null",
+    "volumeWeight": "750 ml",
+    "imgUrl": "https://images.rumratings.com/uploads/brand/image/420/small_Gosling_s_Black_Seal_rum.webp?v=1741230454",
+    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/dark-rums-n-to-z/goslings-black-seal-rum/",
+    "code": "420",
+    "silpoMatch": {
+      "silpo_title": "Ром Gosling's Black Seal 151 Bermuda Rum",
+      "similarity_score": 1.0,
+      "price": 1599.0,
+      "in_stock": true,
+      "url": "https://silpo.ua/product/rom-gosling-s-black-seal-151-bermuda-rum-937507"
+    },
+    "yearDistilled": 1806,
+    "rawMaterial": "Molasses",
+    "process": "Traditional",
+    "distillationMethod": "Pot Still",
+    "womenLed": false,
     "ratings": [
       {
         "provider": "The Rum Howler Blog",
-        "rating": 8.05
+        "rating": 8.5
+      },
+      {
+        "provider": "RumRatings",
+        "rating": 6.4
       }
     ],
     "reviews": []
@@ -2042,25 +2008,13 @@
     "reviews": []
   },
   {
-    "name": "Kōloa Kaua`i Dark Hawaiian Rum",
+    "name": "Pixan Solera Especial",
     "category": "rum",
-    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/dark-rums-n-to-z/koloa-kauai-dark-hawaiian-rum/",
+    "productUrl": "https://therumhowlerblog.com/rum-reviews/dark-rums/pixan-solera-especial/",
     "ratings": [
       {
         "provider": "The Rum Howler Blog",
-        "rating": 8.05
-      }
-    ],
-    "reviews": []
-  },
-  {
-    "name": "Smuggler’s Cove Dark Rum",
-    "category": "rum",
-    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/dark-rums/smugglers-cove-dark-rum/",
-    "ratings": [
-      {
-        "provider": "The Rum Howler Blog",
-        "rating": 8.45
+        "rating": 8.4
       }
     ],
     "reviews": []
@@ -2078,13 +2032,37 @@
     "reviews": []
   },
   {
-    "name": "Richland Classic Reserve Single Barrel Select",
+    "name": "Brugal Anejo Superior Rum",
     "category": "rum",
-    "productUrl": "https://therumhowlerblog.com/rum-reviews/dark-rums/richland-classic-reserve-single-barrel-select-rum/",
+    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/dark-rums/brugal-ron-anejo/",
+    "ratings": [
+      {
+        "provider": "The Rum Howler Blog",
+        "rating": 8.5
+      }
+    ],
+    "reviews": []
+  },
+  {
+    "name": "Bermudez Ron Anejo 1852",
+    "category": "rum",
+    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/dark-rums/bermudez-ron-anejo-1852/",
     "ratings": [
       {
         "provider": "The Rum Howler Blog",
         "rating": 8.75
+      }
+    ],
+    "reviews": []
+  },
+  {
+    "name": "Angostura Royal Oak",
+    "category": "rum",
+    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/dark-rums/angostura-royal-oak-select/",
+    "ratings": [
+      {
+        "provider": "The Rum Howler Blog",
+        "rating": 8.2
       }
     ],
     "reviews": []
@@ -2126,25 +2104,37 @@
     "reviews": []
   },
   {
-    "name": "Six Saints Caribbean Rum",
+    "name": "Richland Classic Reserve Single Barrel Select",
     "category": "rum",
-    "productUrl": "https://therumhowlerblog.com/rum-reviews/dark-rums/six-saints-caribbean-rum/",
+    "productUrl": "https://therumhowlerblog.com/rum-reviews/dark-rums/richland-classic-reserve-single-barrel-select-rum/",
     "ratings": [
       {
         "provider": "The Rum Howler Blog",
-        "rating": 8.3
+        "rating": 8.75
       }
     ],
     "reviews": []
   },
   {
-    "name": "Brugal Anejo Superior Rum",
+    "name": "Barceló Añejo Rum",
     "category": "rum",
-    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/dark-rums/brugal-ron-anejo/",
+    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/dark-rums/barcelo-anejo/",
     "ratings": [
       {
         "provider": "The Rum Howler Blog",
-        "rating": 8.5
+        "rating": 8.05
+      }
+    ],
+    "reviews": []
+  },
+  {
+    "name": "Kōloa Kaua`i Dark Hawaiian Rum",
+    "category": "rum",
+    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/dark-rums-n-to-z/koloa-kauai-dark-hawaiian-rum/",
+    "ratings": [
+      {
+        "provider": "The Rum Howler Blog",
+        "rating": 8.05
       }
     ],
     "reviews": []
@@ -2162,6 +2152,18 @@
     "reviews": []
   },
   {
+    "name": "Six Saints Caribbean Rum",
+    "category": "rum",
+    "productUrl": "https://therumhowlerblog.com/rum-reviews/dark-rums/six-saints-caribbean-rum/",
+    "ratings": [
+      {
+        "provider": "The Rum Howler Blog",
+        "rating": 8.3
+      }
+    ],
+    "reviews": []
+  },
+  {
     "name": "West Indies Rum & Cane Merchants – Central America XO Rum",
     "category": "rum",
     "productUrl": "https://therumhowlerblog.com/rum-reviews/dark-rums/west-indies-rum-cane-merchants-central-america-xo/",
@@ -2174,30 +2176,6 @@
     "reviews": []
   },
   {
-    "name": "Plantation Grenada 1998 (Old Reserve Rum)",
-    "category": "rum",
-    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/dark-rums/plantation-grenada-1998-old-reserve-rum/",
-    "ratings": [
-      {
-        "provider": "The Rum Howler Blog",
-        "rating": 8.75
-      }
-    ],
-    "reviews": []
-  },
-  {
-    "name": "Bermudez Ron Anejo 1852",
-    "category": "rum",
-    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/dark-rums/bermudez-ron-anejo-1852/",
-    "ratings": [
-      {
-        "provider": "The Rum Howler Blog",
-        "rating": 8.75
-      }
-    ],
-    "reviews": []
-  },
-  {
     "name": "Abuelo Anejo 7 Anos",
     "category": "rum",
     "productUrl": "https://therumhowlerblog.com/rum-reviews/dark-rums/ron-abuelo-anejo-7-anos/",
@@ -2205,37 +2183,6 @@
       {
         "provider": "The Rum Howler Blog",
         "rating": 8.15
-      }
-    ],
-    "reviews": []
-  },
-  {
-    "name": "Plantation Jamaica (Old Reserve 2000 Rum)",
-    "category": "rum",
-    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/dark-rums/plantation-jamaica-old-reserve-2000-rum/",
-    "ratings": [
-      {
-        "provider": "The Rum Howler Blog",
-        "rating": 8.55
-      }
-    ],
-    "reviews": []
-  },
-  {
-    "name": "Admiral Rodney HMS Princessa",
-    "category": "rum",
-    "productUrl": "https://therumhowlerblog.com/rum-reviews/dark-rums/admiral-rodney-hms-princessa/",
-    "silpoMatch": {
-      "silpo_title": "Ром Admiral Rodney HMS Princessa",
-      "similarity_score": 1.0,
-      "price": 1799.0,
-      "in_stock": true,
-      "url": "https://silpo.ua/product/rom-admiral-rodney-hms-princessa-933209"
-    },
-    "ratings": [
-      {
-        "provider": "The Rum Howler Blog",
-        "rating": 8.85
       }
     ],
     "reviews": []
@@ -2260,6 +2207,128 @@
     "reviews": []
   },
   {
+    "name": "Plantation Grenada 1998 (Old Reserve Rum)",
+    "category": "rum",
+    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/dark-rums/plantation-grenada-1998-old-reserve-rum/",
+    "ratings": [
+      {
+        "provider": "The Rum Howler Blog",
+        "rating": 8.75
+      }
+    ],
+    "reviews": []
+  },
+  {
+    "name": "Admiral Rodney HMS Princessa",
+    "category": "rum",
+    "productUrl": "https://therumhowlerblog.com/rum-reviews/dark-rums/admiral-rodney-hms-princessa/",
+    "ratings": [
+      {
+        "provider": "The Rum Howler Blog",
+        "rating": 8.85
+      }
+    ],
+    "reviews": []
+  },
+  {
+    "name": "Plantation Jamaica (Old Reserve 2000 Rum)",
+    "category": "rum",
+    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/dark-rums/plantation-jamaica-old-reserve-2000-rum/",
+    "ratings": [
+      {
+        "provider": "The Rum Howler Blog",
+        "rating": 8.55
+      }
+    ],
+    "reviews": []
+  },
+  {
+    "name": "Isla Ñ Dark Rum",
+    "category": "rum",
+    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/dark-rums-n-to-z/isla-n-dark-rum/",
+    "ratings": [
+      {
+        "provider": "The Rum Howler Blog",
+        "rating": 8.05
+      }
+    ],
+    "reviews": []
+  },
+  {
+    "name": "Pusser’s (Blue Label) Rum",
+    "category": "rum",
+    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/dark-rums/pussers-blue-label-rum/",
+    "ratings": [
+      {
+        "provider": "The Rum Howler Blog",
+        "rating": 8.5
+      }
+    ],
+    "reviews": []
+  },
+  {
+    "name": "Screech (Famous Newfoundland Screech Rum)",
+    "category": "rum",
+    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/dark-rums/famous-newfoundland-screech-rum/",
+    "ratings": [
+      {
+        "provider": "The Rum Howler Blog",
+        "rating": 8.6
+      }
+    ],
+    "reviews": []
+  },
+  {
+    "name": "Atlantico Private Cask Rum",
+    "category": "rum",
+    "productUrl": "https://therumhowlerblog.com/rum-reviews/dark-rums/atlantico-private-cask-rum/",
+    "ratings": [
+      {
+        "provider": "The Rum Howler Blog",
+        "rating": 8.5
+      }
+    ],
+    "reviews": []
+  },
+  {
+    "name": "Appleton Estate Reserve 8 Year Old Rum",
+    "age": 8.0,
+    "category": "rum",
+    "productUrl": "https://therumhowlerblog.com/rum-reviews/dark-rums/appleton-estate-reserve-8-years-old/",
+    "ratings": [
+      {
+        "provider": "The Rum Howler Blog",
+        "rating": 8.95
+      }
+    ],
+    "reviews": []
+  },
+  {
+    "name": "Bacardi Gran Reserva 8 Años Rum",
+    "category": "rum",
+    "productUrl": "https://therumhowlerblog.com/rum-reviews/dark-rums/bacardi-8-yr-old-rum/",
+    "ratings": [
+      {
+        "provider": "The Rum Howler Blog",
+        "rating": 8.75
+      }
+    ],
+    "reviews": []
+  },
+  {
+    "name": "Bacardi Gran Reserva Diez (10 Years Old)",
+    "age": 10.0,
+    "category": "rum",
+    "productUrl": "https://therumhowlerblog.com/rum-reviews/dark-rums/bacardi-gran-reserva-diez-10-years-old/",
+    "ratings": [
+      {
+        "provider": "The Rum Howler Blog",
+        "rating": 9.05
+      }
+    ],
+    "reviews": []
+  },
+  {
     "name": "Ragged Rock Rum",
     "category": "rum",
     "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/dark-rums/ragged-rock-rum/",
@@ -2267,6 +2336,92 @@
       {
         "provider": "The Rum Howler Blog",
         "rating": 8.2
+      }
+    ],
+    "reviews": []
+  },
+  {
+    "name": "Plantation Barbados 2000 (Old Reserve Rum)",
+    "category": "rum",
+    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/dark-rums-m-r/plantation-barbados-old-reserve-2000/",
+    "ratings": [
+      {
+        "provider": "The Rum Howler Blog",
+        "rating": 8.8
+      }
+    ],
+    "reviews": []
+  },
+  {
+    "name": "Santiago De Cuba Ron Anejo",
+    "category": "rum",
+    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/dark-rums/rum-review-santiago-de-cuba-ron-anejo/",
+    "silpoMatch": {
+      "silpo_title": "Ром Santiago de Cuba Anejo",
+      "similarity_score": 0.8461538461538461,
+      "price": 0.0,
+      "in_stock": false,
+      "url": "https://silpo.ua/product/rom-santiago-de-cuba-anejo-504538"
+    },
+    "ratings": [
+      {
+        "provider": "The Rum Howler Blog",
+        "rating": 8.25
+      }
+    ],
+    "reviews": []
+  },
+  {
+    "name": "By the Dutch Batavia Arrack (Rum)",
+    "category": "rum",
+    "productUrl": "https://therumhowlerblog.com/rum-reviews/dark-rums/by-the-dutch-batavia-arrack-rum/",
+    "ratings": [
+      {
+        "provider": "The Rum Howler Blog",
+        "rating": 8.45
+      }
+    ],
+    "reviews": []
+  },
+  {
+    "name": "Canuto (7 Anos)",
+    "category": "rum",
+    "productUrl": "https://therumhowlerblog.com/rum-reviews/dark-rums/ron-canuto-7-anos/",
+    "ratings": [
+      {
+        "provider": "The Rum Howler Blog",
+        "rating": 8.3
+      }
+    ],
+    "reviews": []
+  },
+  {
+    "name": "Carupano Anejo",
+    "category": "rum",
+    "productUrl": "https://therumhowlerblog.com/rum-reviews/dark-rums/ron-carupano-anejo/",
+    "silpoMatch": {
+      "silpo_title": "Ром Carupano Reserva Especial Anejo 6 років",
+      "similarity_score": 1.0,
+      "price": 1399.0,
+      "in_stock": true,
+      "url": "https://silpo.ua/product/rom-carupano-reserva-especial-anejo-6-rokiv-927856"
+    },
+    "ratings": [
+      {
+        "provider": "The Rum Howler Blog",
+        "rating": 8.45
+      }
+    ],
+    "reviews": []
+  },
+  {
+    "name": "Chairman’s Reserve Forgotten Casks",
+    "category": "rum",
+    "productUrl": "https://therumhowlerblog.com/rum-reviews/dark-rums/chairmans-reserve-forgotten-casks/",
+    "ratings": [
+      {
+        "provider": "The Rum Howler Blog",
+        "rating": 9.05
       }
     ],
     "reviews": []
@@ -2296,172 +2451,13 @@
     "reviews": []
   },
   {
-    "name": "Appleton Estate Reserve 8 Year Old Rum",
-    "age": 8.0,
+    "name": "Tanduay Gold Asian Rum",
     "category": "rum",
-    "productUrl": "https://therumhowlerblog.com/rum-reviews/dark-rums/appleton-estate-reserve-8-years-old/",
-    "ratings": [
-      {
-        "provider": "The Rum Howler Blog",
-        "rating": 8.95
-      }
-    ],
-    "reviews": []
-  },
-  {
-    "name": "Atlantico Private Cask Rum",
-    "category": "rum",
-    "productUrl": "https://therumhowlerblog.com/rum-reviews/dark-rums/atlantico-private-cask-rum/",
-    "ratings": [
-      {
-        "provider": "The Rum Howler Blog",
-        "rating": 8.5
-      }
-    ],
-    "reviews": []
-  },
-  {
-    "name": "Bacardi Gran Reserva Diez (10 Years Old)",
-    "age": 10.0,
-    "category": "rum",
-    "productUrl": "https://therumhowlerblog.com/rum-reviews/dark-rums/bacardi-gran-reserva-diez-10-years-old/",
-    "ratings": [
-      {
-        "provider": "The Rum Howler Blog",
-        "rating": 9.05
-      }
-    ],
-    "reviews": []
-  },
-  {
-    "name": "Bacardi Gran Reserva 8 Años Rum",
-    "category": "rum",
-    "productUrl": "https://therumhowlerblog.com/rum-reviews/dark-rums/bacardi-8-yr-old-rum/",
-    "ratings": [
-      {
-        "provider": "The Rum Howler Blog",
-        "rating": 8.75
-      }
-    ],
-    "reviews": []
-  },
-  {
-    "name": "Pusser’s (Blue Label) Rum",
-    "category": "rum",
-    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/dark-rums/pussers-blue-label-rum/",
-    "silpoMatch": {
-      "silpo_title": "Ром Pusser's Rum Blue Label",
-      "similarity_score": 1.0,
-      "price": 1799.0,
-      "in_stock": true,
-      "url": "https://silpo.ua/product/rom-pusser-s-rum-blue-label-871951"
-    },
-    "ratings": [
-      {
-        "provider": "The Rum Howler Blog",
-        "rating": 8.5
-      }
-    ],
-    "reviews": []
-  },
-  {
-    "name": "Isla Ñ Dark Rum",
-    "category": "rum",
-    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/dark-rums-n-to-z/isla-n-dark-rum/",
-    "ratings": [
-      {
-        "provider": "The Rum Howler Blog",
-        "rating": 8.05
-      }
-    ],
-    "reviews": []
-  },
-  {
-    "name": "Santiago De Cuba Ron Anejo",
-    "category": "rum",
-    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/dark-rums/rum-review-santiago-de-cuba-ron-anejo/",
-    "silpoMatch": {
-      "silpo_title": "Ром Santiago de Cuba Anejo 8 років",
-      "similarity_score": 0.75,
-      "price": 929.0,
-      "url": "https://silpo.ua/product/rom-santiago-de-cuba-anejo-8-rokiv-923555"
-    },
-    "ratings": [
-      {
-        "provider": "The Rum Howler Blog",
-        "rating": 8.25
-      }
-    ],
-    "reviews": []
-  },
-  {
-    "name": "Screech (Famous Newfoundland Screech Rum)",
-    "category": "rum",
-    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/dark-rums/famous-newfoundland-screech-rum/",
-    "ratings": [
-      {
-        "provider": "The Rum Howler Blog",
-        "rating": 8.6
-      }
-    ],
-    "reviews": []
-  },
-  {
-    "name": "Pampero Seleccion 1938",
-    "category": "rum",
-    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/dark-rums-m-r/rum-review-pampero-seleccion-1938/",
-    "ratings": [
-      {
-        "provider": "The Rum Howler Blog",
-        "rating": 8.05
-      }
-    ],
-    "reviews": []
-  },
-  {
-    "name": "By the Dutch Batavia Arrack (Rum)",
-    "category": "rum",
-    "productUrl": "https://therumhowlerblog.com/rum-reviews/dark-rums/by-the-dutch-batavia-arrack-rum/",
+    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/dark-rums/tanduay-gold-asian-rum/",
     "ratings": [
       {
         "provider": "The Rum Howler Blog",
         "rating": 8.45
-      }
-    ],
-    "reviews": []
-  },
-  {
-    "name": "Coloma 8 Anos Rum",
-    "category": "rum",
-    "productUrl": "https://therumhowlerblog.com/rum-reviews/dark-rums/coloma-8-anos-rum/",
-    "ratings": [
-      {
-        "provider": "The Rum Howler Blog",
-        "rating": 8.55
-      }
-    ],
-    "reviews": []
-  },
-  {
-    "name": "Plantation Barbados 2000 (Old Reserve Rum)",
-    "category": "rum",
-    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/dark-rums-m-r/plantation-barbados-old-reserve-2000/",
-    "ratings": [
-      {
-        "provider": "The Rum Howler Blog",
-        "rating": 8.8
-      }
-    ],
-    "reviews": []
-  },
-  {
-    "name": "Chairman’s Reserve Forgotten Casks",
-    "category": "rum",
-    "productUrl": "https://therumhowlerblog.com/rum-reviews/dark-rums/chairmans-reserve-forgotten-casks/",
-    "ratings": [
-      {
-        "provider": "The Rum Howler Blog",
-        "rating": 9.05
       }
     ],
     "reviews": []
@@ -2479,32 +2475,25 @@
     "reviews": []
   },
   {
-    "name": "Carupano Anejo",
+    "name": "Coloma 8 Anos Rum",
     "category": "rum",
-    "productUrl": "https://therumhowlerblog.com/rum-reviews/dark-rums/ron-carupano-anejo/",
-    "silpoMatch": {
-      "silpo_title": "Ром Carupano Reserva Especial Anejo 6 років",
-      "similarity_score": 1.0,
-      "price": 1399.0,
-      "in_stock": true,
-      "url": "https://silpo.ua/product/rom-carupano-reserva-especial-anejo-6-rokiv-927856"
-    },
+    "productUrl": "https://therumhowlerblog.com/rum-reviews/dark-rums/coloma-8-anos-rum/",
     "ratings": [
       {
         "provider": "The Rum Howler Blog",
-        "rating": 8.45
+        "rating": 8.55
       }
     ],
     "reviews": []
   },
   {
-    "name": "Canuto (7 Anos)",
+    "name": "Angostura Single Barrel Rum",
     "category": "rum",
-    "productUrl": "https://therumhowlerblog.com/rum-reviews/dark-rums/ron-canuto-7-anos/",
+    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/dark-rums/angostura-single-barrel/",
     "ratings": [
       {
         "provider": "The Rum Howler Blog",
-        "rating": 8.3
+        "rating": 8.75
       }
     ],
     "reviews": []
@@ -2522,6 +2511,18 @@
     "reviews": []
   },
   {
+    "name": "Travellers 3 Barrel Aged Rum",
+    "category": "rum",
+    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/dark-rums/3-barrel-aged-rum/",
+    "ratings": [
+      {
+        "provider": "The Rum Howler Blog",
+        "rating": 8.55
+      }
+    ],
+    "reviews": []
+  },
+  {
     "name": "Dictador Claro (100 Month Aged)",
     "category": "rum",
     "productUrl": "https://therumhowlerblog.com/rum-reviews/dark-rums/dictador-claro-100-month-aged-rum/",
@@ -2529,6 +2530,18 @@
       {
         "provider": "The Rum Howler Blog",
         "rating": 10.0
+      }
+    ],
+    "reviews": []
+  },
+  {
+    "name": "Pampero Seleccion 1938",
+    "category": "rum",
+    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/dark-rums-m-r/rum-review-pampero-seleccion-1938/",
+    "ratings": [
+      {
+        "provider": "The Rum Howler Blog",
+        "rating": 8.05
       }
     ],
     "reviews": []
@@ -2542,43 +2555,6 @@
       {
         "provider": "The Rum Howler Blog",
         "rating": 8.4
-      }
-    ],
-    "reviews": []
-  },
-  {
-    "name": "A.D. Rattray 9 Year Old (2003) Barbados Rum – Four Square Distillery (Cask 15)",
-    "age": 9.0,
-    "category": "rum",
-    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/dark-rums/a-d-rattray-9-year-old-barbados-rum-four-square-distillery-2003/",
-    "ratings": [
-      {
-        "provider": "The Rum Howler Blog",
-        "rating": 7.9
-      }
-    ],
-    "reviews": []
-  },
-  {
-    "name": "Tanduay Gold Asian Rum",
-    "category": "rum",
-    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/dark-rums/tanduay-gold-asian-rum/",
-    "ratings": [
-      {
-        "provider": "The Rum Howler Blog",
-        "rating": 8.45
-      }
-    ],
-    "reviews": []
-  },
-  {
-    "name": "Travellers 3 Barrel Aged Rum",
-    "category": "rum",
-    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/dark-rums/3-barrel-aged-rum/",
-    "ratings": [
-      {
-        "provider": "The Rum Howler Blog",
-        "rating": 8.55
       }
     ],
     "reviews": []
@@ -2610,13 +2586,13 @@
     "reviews": []
   },
   {
-    "name": "Angostura Single Barrel Rum",
+    "name": "Flor de Caña 5 Añejo Clasico",
     "category": "rum",
-    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/dark-rums/angostura-single-barrel/",
+    "productUrl": "https://therumhowlerblog.com/rum-reviews/dark-rums/flor-de-cana-5-anejo-clasico/",
     "ratings": [
       {
         "provider": "The Rum Howler Blog",
-        "rating": 8.75
+        "rating": 8.45
       }
     ],
     "reviews": []
@@ -2629,6 +2605,19 @@
       {
         "provider": "The Rum Howler Blog",
         "rating": 8.7
+      }
+    ],
+    "reviews": []
+  },
+  {
+    "name": "A.D. Rattray 9 Year Old (2003) Barbados Rum – Four Square Distillery (Cask 15)",
+    "age": 9.0,
+    "category": "rum",
+    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/dark-rums/a-d-rattray-9-year-old-barbados-rum-four-square-distillery-2003/",
+    "ratings": [
+      {
+        "provider": "The Rum Howler Blog",
+        "rating": 7.9
       }
     ],
     "reviews": []
@@ -2659,43 +2648,13 @@
     "reviews": []
   },
   {
-    "name": "Flor de Caña 5 Añejo Clasico",
-    "category": "rum",
-    "productUrl": "https://therumhowlerblog.com/rum-reviews/dark-rums/flor-de-cana-5-anejo-clasico/",
-    "ratings": [
-      {
-        "provider": "The Rum Howler Blog",
-        "rating": 8.45
-      }
-    ],
-    "reviews": []
-  },
-  {
     "name": "Appleton Estate Reserve Rum",
     "category": "rum",
     "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/dark-rums/review-appleton-estate-reserve-rum/",
-    "silpoMatch": {
-      "silpo_title": "Ром Appleton Estate Reserve ямайський 8 років",
-      "similarity_score": 0.75,
-      "price": 1299.0,
-      "url": "https://silpo.ua/product/rom-appleton-estate-reserve-iamaiskyi-8-rokiv-926818"
-    },
     "ratings": [
       {
         "provider": "The Rum Howler Blog",
         "rating": 8.5
-      }
-    ],
-    "reviews": []
-  },
-  {
-    "name": "Millonario 10 Anniversario Reserva",
-    "category": "rum",
-    "productUrl": "https://therumhowlerblog.com/rum-reviews/dark-rums/ron-millonario-10-anniversario-reserva/",
-    "ratings": [
-      {
-        "provider": "The Rum Howler Blog",
-        "rating": 8.95
       }
     ],
     "reviews": []
@@ -2713,13 +2672,25 @@
     "reviews": []
   },
   {
-    "name": "Bermudez Don Armando",
+    "name": "Millonario 10 Anniversario Reserva",
     "category": "rum",
-    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/dark-rums/bermudez-don-armando/",
+    "productUrl": "https://therumhowlerblog.com/rum-reviews/dark-rums/ron-millonario-10-anniversario-reserva/",
     "ratings": [
       {
         "provider": "The Rum Howler Blog",
         "rating": 8.95
+      }
+    ],
+    "reviews": []
+  },
+  {
+    "name": "Barcelo Imperial Rum",
+    "category": "rum",
+    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/dark-rums/review-barcello-imperial-rum/",
+    "ratings": [
+      {
+        "provider": "The Rum Howler Blog",
+        "rating": 8.15
       }
     ],
     "reviews": []
@@ -2737,25 +2708,13 @@
     "reviews": []
   },
   {
-    "name": "Diplomático Reserva",
-    "description": "Diplomatico Reserva rum is distilled from molasses using both copper pot and column stills. The rum is then aged in small oak casks for between 2 and 8 years before blending and bottling.\nthe Diplomatico distillery is located on the northern slopes of the Andes mountains in Venezuela. The area has a rich rum history dating to 1896.",
-    "abv": 0.0,
-    "age": 0.0,
-    "region": "Venezuela",
-    "brand": "Diplomatico",
-    "type": "Aged",
+    "name": "Bermudez Don Armando",
     "category": "rum",
-    "volumeWeight": "381",
-    "imgUrl": "https://images.rumratings.com/uploads/brand/image/317/small_Diplomatico__Reserva_rum_400pxb.webp?v=1741230425",
-    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/dark-rums/diplomatico-reserva/",
+    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/dark-rums/bermudez-don-armando/",
     "ratings": [
       {
         "provider": "The Rum Howler Blog",
-        "rating": 9.0
-      },
-      {
-        "provider": "RumRatings",
-        "rating": 6.6
+        "rating": 8.95
       }
     ],
     "reviews": []
@@ -2786,18 +2745,6 @@
     "reviews": []
   },
   {
-    "name": "Doorly’s Fine Old Barbados Rum (XO)",
-    "category": "rum",
-    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/dark-rums/doorlys-xo/",
-    "ratings": [
-      {
-        "provider": "The Rum Howler Blog",
-        "rating": 8.8
-      }
-    ],
-    "reviews": []
-  },
-  {
     "name": "Dos Maderas (5+5) PX",
     "category": "rum",
     "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/dark-rums/dos-maderas-55-px/",
@@ -2805,6 +2752,57 @@
       {
         "provider": "The Rum Howler Blog",
         "rating": 8.85
+      }
+    ],
+    "reviews": []
+  },
+  {
+    "name": "El Dorado 8 Year Old Cask Aged Rum",
+    "age": 8.0,
+    "category": "rum",
+    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/dark-rums/el-dorado-8-year-old-cask-aged-rum/",
+    "ratings": [
+      {
+        "provider": "The Rum Howler Blog",
+        "rating": 8.85
+      }
+    ],
+    "reviews": []
+  },
+  {
+    "name": "Diplomático Reserva",
+    "description": "Diplomatico Reserva rum is distilled from molasses using both copper pot and column stills. The rum is then aged in small oak casks for between 2 and 8 years before blending and bottling. the Diplomatico distillery is located on the northern slopes of the Andes mountains in Venezuela. The area has a rich rum history dating to 1896.",
+    "abv": 0.0,
+    "age": 8.0,
+    "region": "Venezuela",
+    "brand": "Diplomatico",
+    "type": "Aged",
+    "category": "rum",
+    "imgUrl": "https://images.rumratings.com/uploads/brand/image/317/small_Diplomatico__Reserva_rum_400pxb.webp?v=1741230425",
+    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/dark-rums/diplomatico-reserva/",
+    "yearDistilled": 0,
+    "distillationMethod": "Column Still",
+    "womenLed": false,
+    "ratings": [
+      {
+        "provider": "The Rum Howler Blog",
+        "rating": 9.0
+      },
+      {
+        "provider": "RumRatings",
+        "rating": 6.6
+      }
+    ],
+    "reviews": []
+  },
+  {
+    "name": "Doorly’s Fine Old Barbados Rum (XO)",
+    "category": "rum",
+    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/dark-rums/doorlys-xo/",
+    "ratings": [
+      {
+        "provider": "The Rum Howler Blog",
+        "rating": 8.8
       }
     ],
     "reviews": []
@@ -2829,19 +2827,6 @@
       {
         "provider": "The Rum Howler Blog",
         "rating": 8.65
-      }
-    ],
-    "reviews": []
-  },
-  {
-    "name": "El Dorado 8 Year Old Cask Aged Rum",
-    "age": 8.0,
-    "category": "rum",
-    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/dark-rums/el-dorado-8-year-old-cask-aged-rum/",
-    "ratings": [
-      {
-        "provider": "The Rum Howler Blog",
-        "rating": 8.85
       }
     ],
     "reviews": []
@@ -2883,14 +2868,13 @@
     "reviews": []
   },
   {
-    "name": "Havana Club 7 Year Old Cuban Rum",
-    "age": 7.0,
+    "name": "El Dorado Single Barrel PM",
     "category": "rum",
-    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/dark-rums/havana-club-7/",
+    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/dark-rums/review-el-dorado-single-barrel-demerara-rum-pm/",
     "ratings": [
       {
         "provider": "The Rum Howler Blog",
-        "rating": 8.35
+        "rating": 7.9
       }
     ],
     "reviews": []
@@ -2908,37 +2892,14 @@
     "reviews": []
   },
   {
-    "name": "El Dorado Single Barrel PM",
+    "name": "Havana Club 7 Year Old Cuban Rum",
+    "age": 7.0,
     "category": "rum",
-    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/dark-rums/review-el-dorado-single-barrel-demerara-rum-pm/",
+    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/dark-rums/havana-club-7/",
     "ratings": [
       {
         "provider": "The Rum Howler Blog",
-        "rating": 7.9
-      }
-    ],
-    "reviews": []
-  },
-  {
-    "name": "Barcelo Imperial Rum",
-    "description": "Barcelo Imperial rum is produced in the Dominican Republic using column stills before aged in white oak casks for up to 10 years.",
-    "abv": 37.5,
-    "age": 10.0,
-    "region": "Dominican Republic",
-    "brand": "Barcelo",
-    "type": "Aged",
-    "category": "rum",
-    "volumeWeight": "700 ml",
-    "imgUrl": "https://images.rumratings.com/uploads/brand/image/99/small_Barcelo_Imperial_rum.webp?v=1741230358",
-    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/dark-rums/review-barcello-imperial-rum/",
-    "ratings": [
-      {
-        "provider": "The Rum Howler Blog",
-        "rating": 8.15
-      },
-      {
-        "provider": "RumRatings",
-        "rating": 6.8
+        "rating": 8.35
       }
     ],
     "reviews": []
@@ -2980,18 +2941,6 @@
     "reviews": []
   },
   {
-    "name": "Rum Nation Guatemala Gran Reserva",
-    "category": "rum",
-    "productUrl": "https://therumhowlerblog.com/rum-reviews/dark-rums/rum-nation-guatemala-gran-reserva/",
-    "ratings": [
-      {
-        "provider": "The Rum Howler Blog",
-        "rating": 8.6
-      }
-    ],
-    "reviews": []
-  },
-  {
     "name": "Rum Nation British Guyana",
     "category": "rum",
     "productUrl": "https://therumhowlerblog.com/rum-reviews/dark-rums/rum-nation-british-guyana-10-year-old-cask-strength/",
@@ -3017,64 +2966,13 @@
     "reviews": []
   },
   {
-    "name": "Rum Nation Jamaica 7 Year Old Cask Strength Pot Still Rum",
-    "age": 7.0,
+    "name": "Rum Nation Guatemala Gran Reserva",
     "category": "rum",
-    "productUrl": "https://therumhowlerblog.com/rum-reviews/dark-rums/rum-nation-jamaica-7-years-old-pot-still-cask-strength/",
+    "productUrl": "https://therumhowlerblog.com/rum-reviews/dark-rums/rum-nation-guatemala-gran-reserva/",
     "ratings": [
       {
         "provider": "The Rum Howler Blog",
-        "rating": 9.1
-      }
-    ],
-    "reviews": []
-  },
-  {
-    "name": "Rum Nation Peruano (8 Year Old)",
-    "age": 8.0,
-    "category": "rum",
-    "productUrl": "https://therumhowlerblog.com/rum-reviews/dark-rums/rum-nation-peruano/",
-    "ratings": [
-      {
-        "provider": "The Rum Howler Blog",
-        "rating": 8.4
-      }
-    ],
-    "reviews": []
-  },
-  {
-    "name": "Santos Dumont XO Rum",
-    "category": "rum",
-    "productUrl": "https://therumhowlerblog.com/rum-reviews/dark-rums/santos-dumont-xo-rum/",
-    "ratings": [
-      {
-        "provider": "The Rum Howler Blog",
-        "rating": 8.5
-      }
-    ],
-    "reviews": []
-  },
-  {
-    "name": "Juan Santos 5 Year Old Rum",
-    "age": 5.0,
-    "category": "rum",
-    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/dark-rums-n-to-z/rum-review-juan-santos-5-year-rum/",
-    "ratings": [
-      {
-        "provider": "The Rum Howler Blog",
-        "rating": 8.8
-      }
-    ],
-    "reviews": []
-  },
-  {
-    "name": "Plantation Nicaragua 1998 (Old Reserve Rum)",
-    "category": "rum",
-    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/dark-rums/plantation-nicaragua-1998/",
-    "ratings": [
-      {
-        "provider": "The Rum Howler Blog",
-        "rating": 8.3
+        "rating": 8.6
       }
     ],
     "reviews": []
@@ -3093,14 +2991,51 @@
     "reviews": []
   },
   {
-    "name": "Plantation Barbados (Grande reserve) 5 Year old Rum",
-    "age": 5.0,
+    "name": "Rum Nation Jamaica 7 Year Old Cask Strength Pot Still Rum",
+    "age": 7.0,
     "category": "rum",
-    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/dark-rums/plantation-barbados-grande-reserve-5-year-old-rum/",
+    "productUrl": "https://therumhowlerblog.com/rum-reviews/dark-rums/rum-nation-jamaica-7-years-old-pot-still-cask-strength/",
     "ratings": [
       {
         "provider": "The Rum Howler Blog",
-        "rating": 8.7
+        "rating": 9.1
+      }
+    ],
+    "reviews": []
+  },
+  {
+    "name": "Santos Dumont XO Rum",
+    "category": "rum",
+    "productUrl": "https://therumhowlerblog.com/rum-reviews/dark-rums/santos-dumont-xo-rum/",
+    "ratings": [
+      {
+        "provider": "The Rum Howler Blog",
+        "rating": 8.5
+      }
+    ],
+    "reviews": []
+  },
+  {
+    "name": "Rum Nation Peruano (8 Year Old)",
+    "age": 8.0,
+    "category": "rum",
+    "productUrl": "https://therumhowlerblog.com/rum-reviews/dark-rums/rum-nation-peruano/",
+    "ratings": [
+      {
+        "provider": "The Rum Howler Blog",
+        "rating": 8.4
+      }
+    ],
+    "reviews": []
+  },
+  {
+    "name": "Seven Fathoms Rum",
+    "category": "rum",
+    "productUrl": "https://therumhowlerblog.com/rum-reviews/dark-rums/seven-fathoms-rum/",
+    "ratings": [
+      {
+        "provider": "The Rum Howler Blog",
+        "rating": 8.6
       }
     ],
     "reviews": []
@@ -3119,6 +3054,18 @@
     "reviews": []
   },
   {
+    "name": "Pyrat Rum XO Reserve",
+    "category": "rum",
+    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/dark-rums/pyrat-rum-xo-reserve/",
+    "ratings": [
+      {
+        "provider": "The Rum Howler Blog",
+        "rating": 8.45
+      }
+    ],
+    "reviews": []
+  },
+  {
     "name": "Zaka Trinidad Rum",
     "category": "rum",
     "productUrl": "https://therumhowlerblog.com/rum-reviews/dark-rums/zaka-rum/",
@@ -3131,37 +3078,13 @@
     "reviews": []
   },
   {
-    "name": "Abuelo Rum Napolean XV",
+    "name": "Plantation Nicaragua 1998 (Old Reserve Rum)",
     "category": "rum",
-    "productUrl": "https://therumhowlerblog.com/rum-reviews/dark-rums/ron-abuelo-rum-napolean-xv/",
+    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/dark-rums/plantation-nicaragua-1998/",
     "ratings": [
       {
         "provider": "The Rum Howler Blog",
-        "rating": 9.0
-      }
-    ],
-    "reviews": []
-  },
-  {
-    "name": "Seven Fathoms Rum",
-    "category": "rum",
-    "productUrl": "https://therumhowlerblog.com/rum-reviews/dark-rums/seven-fathoms-rum/",
-    "ratings": [
-      {
-        "provider": "The Rum Howler Blog",
-        "rating": 8.6
-      }
-    ],
-    "reviews": []
-  },
-  {
-    "name": "Plantation Panama 2000 (Old Reserve Rum)",
-    "category": "rum",
-    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/dark-rums/plantation-panama-2000-old-reserve/",
-    "ratings": [
-      {
-        "provider": "The Rum Howler Blog",
-        "rating": 9.0
+        "rating": 8.3
       }
     ],
     "reviews": []
@@ -3179,37 +3102,13 @@
     "reviews": []
   },
   {
-    "name": "Renegade Panama Don José 1997",
+    "name": "Abuelo Rum Napolean XV",
     "category": "rum",
-    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/dark-rums/renegade-panama-don-jose-1997/",
+    "productUrl": "https://therumhowlerblog.com/rum-reviews/dark-rums/ron-abuelo-rum-napolean-xv/",
     "ratings": [
       {
         "provider": "The Rum Howler Blog",
-        "rating": 9.4
-      }
-    ],
-    "reviews": []
-  },
-  {
-    "name": "Pyrat Rum XO Reserve",
-    "description": "Pyrat XO Rum is produced from nine different Caribbean rums that are blended and then aged up to 15 years in used American sweet oak barrels.",
-    "abv": 40.0,
-    "age": 15.0,
-    "region": "Multiple",
-    "brand": "Pyrat",
-    "type": "Gold",
-    "category": "rum",
-    "volumeWeight": "700 ml",
-    "imgUrl": "https://images.rumratings.com/uploads/brand/image/671/small_Pyrat-_XO_rum_400px.webp?v=1741230530",
-    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/dark-rums/pyrat-rum-xo-reserve/",
-    "ratings": [
-      {
-        "provider": "The Rum Howler Blog",
-        "rating": 8.45
-      },
-      {
-        "provider": "RumRatings",
-        "rating": 6.0
+        "rating": 9.0
       }
     ],
     "reviews": []
@@ -3218,30 +3117,6 @@
     "name": "Angostura 1787 Rum",
     "category": "rum",
     "productUrl": "https://therumhowlerblog.com/rum-reviews/dark-rums/angostura-1787-rum/",
-    "ratings": [
-      {
-        "provider": "The Rum Howler Blog",
-        "rating": 8.6
-      }
-    ],
-    "reviews": []
-  },
-  {
-    "name": "Barcelo Imperial Premium 30 Aniversario Rum",
-    "category": "rum",
-    "productUrl": "https://therumhowlerblog.com/rum-reviews/dark-rums/ron-barcelo-imperial-premium-blend-30-aniversario-rum/",
-    "ratings": [
-      {
-        "provider": "The Rum Howler Blog",
-        "rating": 9.35
-      }
-    ],
-    "reviews": []
-  },
-  {
-    "name": "Arehucas 12 Anos Anejo Reserva Rum",
-    "category": "rum",
-    "productUrl": "https://therumhowlerblog.com/rum-reviews/dark-rums/arehucas-anejo-12-years/",
     "ratings": [
       {
         "provider": "The Rum Howler Blog",
@@ -3264,6 +3139,32 @@
     "reviews": []
   },
   {
+    "name": "Plantation Barbados (Grande reserve) 5 Year old Rum",
+    "age": 5.0,
+    "category": "rum",
+    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/dark-rums/plantation-barbados-grande-reserve-5-year-old-rum/",
+    "ratings": [
+      {
+        "provider": "The Rum Howler Blog",
+        "rating": 8.7
+      }
+    ],
+    "reviews": []
+  },
+  {
+    "name": "Juan Santos 5 Year Old Rum",
+    "age": 5.0,
+    "category": "rum",
+    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/dark-rums-n-to-z/rum-review-juan-santos-5-year-rum/",
+    "ratings": [
+      {
+        "provider": "The Rum Howler Blog",
+        "rating": 8.8
+      }
+    ],
+    "reviews": []
+  },
+  {
     "name": "Appleton Estate 15 Year Old (Minimum Age) Rum",
     "age": 15.0,
     "category": "rum",
@@ -3277,22 +3178,21 @@
     "reviews": []
   },
   {
-    "name": "Rum Nation Barbados 10 Year Old Rum (2001)",
-    "age": 10.0,
+    "name": "Arehucas 12 Anos Anejo Reserva Rum",
     "category": "rum",
-    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/dark-rums/rum-nation-barbados-10-year-old-rum-2001/",
+    "productUrl": "https://therumhowlerblog.com/rum-reviews/dark-rums/arehucas-anejo-12-years/",
     "ratings": [
       {
         "provider": "The Rum Howler Blog",
-        "rating": 8.9
+        "rating": 8.6
       }
     ],
     "reviews": []
   },
   {
-    "name": "Pampero Anniversario Reserva Exclusiva",
+    "name": "Plantation Panama 2000 (Old Reserve Rum)",
     "category": "rum",
-    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/dark-rums-m-r/review-pampero-anniversario-reserva-exclusiva/",
+    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/dark-rums/plantation-panama-2000-old-reserve/",
     "ratings": [
       {
         "provider": "The Rum Howler Blog",
@@ -3302,21 +3202,21 @@
     "reviews": []
   },
   {
-    "name": "Cihuatan Obsidiana (Travel Edition)",
+    "name": "Renegade Black Rock 2000 Rum",
     "category": "rum",
-    "productUrl": "https://therumhowlerblog.com/rum-reviews/dark-rums/cihuatan-obsidiana-exclusive-travelers-edition/",
+    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/dark-rums/renegade-black-rock-2000-rum/",
     "ratings": [
       {
         "provider": "The Rum Howler Blog",
-        "rating": 8.45
+        "rating": 10.0
       }
     ],
     "reviews": []
   },
   {
-    "name": "Cane Island Nicaragua Rum",
+    "name": "Barcelo Imperial Premium 30 Aniversario Rum",
     "category": "rum",
-    "productUrl": "https://therumhowlerblog.com/rum-reviews/dark-rums/cane-island-nicaragua/",
+    "productUrl": "https://therumhowlerblog.com/rum-reviews/dark-rums/ron-barcelo-imperial-premium-blend-30-aniversario-rum/",
     "ratings": [
       {
         "provider": "The Rum Howler Blog",
@@ -3326,13 +3226,14 @@
     "reviews": []
   },
   {
-    "name": "Cihuatan Reserva Especial 12",
+    "name": "Berrys’ Finest Panama Rum (Aged 11 Years)",
+    "age": 11.0,
     "category": "rum",
-    "productUrl": "https://therumhowlerblog.com/rum-reviews/dark-rums/cihuatan-reserva-especial-12/",
+    "productUrl": "https://therumhowlerblog.com/rum-reviews/dark-rums/berrys-finest-panama-rum-aged-11-years/",
     "ratings": [
       {
         "provider": "The Rum Howler Blog",
-        "rating": 9.0
+        "rating": 8.95
       }
     ],
     "reviews": []
@@ -3345,6 +3246,18 @@
       {
         "provider": "The Rum Howler Blog",
         "rating": 8.65
+      }
+    ],
+    "reviews": []
+  },
+  {
+    "name": "Cane Island Nicaragua Rum",
+    "category": "rum",
+    "productUrl": "https://therumhowlerblog.com/rum-reviews/dark-rums/cane-island-nicaragua/",
+    "ratings": [
+      {
+        "provider": "The Rum Howler Blog",
+        "rating": 9.35
       }
     ],
     "reviews": []
@@ -3369,14 +3282,75 @@
     "reviews": []
   },
   {
-    "name": "Berrys’ Finest Panama Rum (Aged 11 Years)",
-    "age": 11.0,
+    "name": "Renegade Panama Don José 1997",
     "category": "rum",
-    "productUrl": "https://therumhowlerblog.com/rum-reviews/dark-rums/berrys-finest-panama-rum-aged-11-years/",
+    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/dark-rums/renegade-panama-don-jose-1997/",
     "ratings": [
       {
         "provider": "The Rum Howler Blog",
-        "rating": 8.95
+        "rating": 9.4
+      }
+    ],
+    "reviews": []
+  },
+  {
+    "name": "Rum Nation Barbados 10 Year Old Rum (2001)",
+    "age": 10.0,
+    "category": "rum",
+    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/dark-rums/rum-nation-barbados-10-year-old-rum-2001/",
+    "ratings": [
+      {
+        "provider": "The Rum Howler Blog",
+        "rating": 8.9
+      }
+    ],
+    "reviews": []
+  },
+  {
+    "name": "Cihuatan Reserva Especial 12",
+    "category": "rum",
+    "productUrl": "https://therumhowlerblog.com/rum-reviews/dark-rums/cihuatan-reserva-especial-12/",
+    "ratings": [
+      {
+        "provider": "The Rum Howler Blog",
+        "rating": 9.0
+      }
+    ],
+    "reviews": []
+  },
+  {
+    "name": "St. Nicholas Abbey 10 Year Old Barbados Rum",
+    "age": 10.0,
+    "category": "rum",
+    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/dark-rums/st-nicholas-abbey-10-year-old-barbados-rum/",
+    "ratings": [
+      {
+        "provider": "The Rum Howler Blog",
+        "rating": 8.4
+      }
+    ],
+    "reviews": []
+  },
+  {
+    "name": "Cihuatan Obsidiana (Travel Edition)",
+    "category": "rum",
+    "productUrl": "https://therumhowlerblog.com/rum-reviews/dark-rums/cihuatan-obsidiana-exclusive-travelers-edition/",
+    "ratings": [
+      {
+        "provider": "The Rum Howler Blog",
+        "rating": 8.45
+      }
+    ],
+    "reviews": []
+  },
+  {
+    "name": "Pampero Anniversario Reserva Exclusiva",
+    "category": "rum",
+    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/dark-rums-m-r/review-pampero-anniversario-reserva-exclusiva/",
+    "ratings": [
+      {
+        "provider": "The Rum Howler Blog",
+        "rating": 9.0
       }
     ],
     "reviews": []
@@ -3455,87 +3429,6 @@
     "reviews": []
   },
   {
-    "name": "Renegade Black Rock 2000 Rum",
-    "category": "rum",
-    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/dark-rums/renegade-black-rock-2000-rum/",
-    "ratings": [
-      {
-        "provider": "The Rum Howler Blog",
-        "rating": 10.0
-      }
-    ],
-    "reviews": []
-  },
-  {
-    "name": "Renegade Rum Company 2000 Jamaica Rum",
-    "category": "rum",
-    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/dark-rums-p-z/review-renegade-rum-company-2000-jamaica-rum/",
-    "ratings": [
-      {
-        "provider": "The Rum Howler Blog",
-        "rating": 7.25
-      }
-    ],
-    "reviews": []
-  },
-  {
-    "name": "St. Nicholas Abbey 10 Year Old Barbados Rum",
-    "age": 10.0,
-    "category": "rum",
-    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/dark-rums/st-nicholas-abbey-10-year-old-barbados-rum/",
-    "ratings": [
-      {
-        "provider": "The Rum Howler Blog",
-        "rating": 8.4
-      }
-    ],
-    "reviews": []
-  },
-  {
-    "name": "Diplomático Reserva Exclusiva",
-    "description": "Diplomatico Reserva Exclusiva rum is distilled from molasses in copper pot stills and then aged in small oak casks for on average 12 years before being bottled.",
-    "abv": 40.0,
-    "age": 12.0,
-    "region": "Venezuela",
-    "brand": "Diplomatico",
-    "type": "Aged",
-    "category": "rum",
-    "volumeWeight": "700 ml",
-    "imgUrl": "https://images.rumratings.com/uploads/brand/image/316/small_diplomatico-reserva-exclusiva.webp?v=1741230424",
-    "productUrl": "https://therumhowlerblog.com/rum-reviews/dark-rums/diplomatico-reserva-exclusiva/",
-    "silpoMatch": {
-      "silpo_title": "Ром Diplomatico Reserva Exclusiva",
-      "similarity_score": 0.9655172413793104,
-      "price": 0.0,
-      "in_stock": false,
-      "url": "https://silpo.ua/product/rom-diplomatico-reserva-exclusiva-775845"
-    },
-    "ratings": [
-      {
-        "provider": "The Rum Howler Blog",
-        "rating": 9.15
-      },
-      {
-        "provider": "RumRatings",
-        "rating": 7.9
-      }
-    ],
-    "reviews": []
-  },
-  {
-    "name": "A.D. Rattray 13 Year Old Trinidad Rum (Caroni Distillery (Cask RR1072))",
-    "age": 13.0,
-    "category": "rum",
-    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/dark-rums/caroni-1997-13-year-old-rum-cask-rr1072/",
-    "ratings": [
-      {
-        "provider": "The Rum Howler Blog",
-        "rating": 8.85
-      }
-    ],
-    "reviews": []
-  },
-  {
     "name": "Diplomatico Single VTG 2000 Rum",
     "category": "rum",
     "productUrl": "https://therumhowlerblog.com/rum-reviews/dark-rums/diplomatico-single-vtg-2000/",
@@ -3555,6 +3448,67 @@
       {
         "provider": "The Rum Howler Blog",
         "rating": 9.4
+      }
+    ],
+    "reviews": []
+  },
+  {
+    "name": "Diplomático Reserva Exclusiva",
+    "description": "Diplomatico Reserva Exclusiva rum is distilled from molasses in copper pot stills and then aged in small oak casks for on average 12 years before being bottled. Produced in Venezuela, which has a rich rum history dating to 1896, the Diplomatico Reserva Exclusiva distillery is located on the northern slopes of the Andes mountains.",
+    "abv": 0.0,
+    "age": 12.0,
+    "region": "Venezuela",
+    "brand": "Diplomatico",
+    "type": "Aged",
+    "category": "Multiple",
+    "volumeWeight": "$6X",
+    "imgUrl": "https://images.rumratings.com/uploads/brand/image/316/small_diplomatico-reserva-exclusiva.webp?v=1741230424",
+    "productUrl": "https://therumhowlerblog.com/rum-reviews/dark-rums/diplomatico-reserva-exclusiva/",
+    "silpoMatch": {
+      "silpo_title": "Ром Diplomatico Reserva Exclusiva",
+      "similarity_score": 0.9655172413793104,
+      "price": 0.0,
+      "in_stock": false,
+      "url": "https://silpo.ua/product/rom-diplomatico-reserva-exclusiva-775845"
+    },
+    "yearDistilled": 0,
+    "rawMaterial": "Molasses",
+    "process": "Aged in small oak casks",
+    "distillationMethod": "Copper Pot Still",
+    "womenLed": false,
+    "ratings": [
+      {
+        "provider": "The Rum Howler Blog",
+        "rating": 9.15
+      },
+      {
+        "provider": "RumRatings",
+        "rating": 7.9
+      }
+    ],
+    "reviews": []
+  },
+  {
+    "name": "Abuelo 12-Year-Old Rum",
+    "category": "rum",
+    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/dark-rums/ron-abuelo-12-year-old/",
+    "ratings": [
+      {
+        "provider": "The Rum Howler Blog",
+        "rating": 8.4
+      }
+    ],
+    "reviews": []
+  },
+  {
+    "name": "A.D. Rattray 13 Year Old Trinidad Rum (Caroni Distillery (Cask RR1072))",
+    "age": 13.0,
+    "category": "rum",
+    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/dark-rums/caroni-1997-13-year-old-rum-cask-rr1072/",
+    "ratings": [
+      {
+        "provider": "The Rum Howler Blog",
+        "rating": 8.85
       }
     ],
     "reviews": []
@@ -3585,6 +3539,18 @@
     "reviews": []
   },
   {
+    "name": "Renegade Rum Company 2000 Jamaica Rum",
+    "category": "rum",
+    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/dark-rums-p-z/review-renegade-rum-company-2000-jamaica-rum/",
+    "ratings": [
+      {
+        "provider": "The Rum Howler Blog",
+        "rating": 7.25
+      }
+    ],
+    "reviews": []
+  },
+  {
     "name": "El Pasador de oro Gran Reserva Rum",
     "category": "rum",
     "productUrl": "https://therumhowlerblog.com/rum-reviews/dark-rums/el-pasador-de-oro-gran-reserva-rum/",
@@ -3609,18 +3575,6 @@
     "reviews": []
   },
   {
-    "name": "Bermudez Anniversario",
-    "category": "rum",
-    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/dark-rums/bermudez-anniversario/",
-    "ratings": [
-      {
-        "provider": "The Rum Howler Blog",
-        "rating": 9.15
-      }
-    ],
-    "reviews": []
-  },
-  {
     "name": "Esclavo XO Rum",
     "category": "rum",
     "productUrl": "https://therumhowlerblog.com/rum-reviews/dark-rums/ron-esclavo-xo-rum/",
@@ -3633,18 +3587,6 @@
     "reviews": []
   },
   {
-    "name": "Flor de Caña Centenario 12",
-    "category": "rum",
-    "productUrl": "https://therumhowlerblog.com/rum-reviews/dark-rums/flor-de-cana-12-centenario/",
-    "ratings": [
-      {
-        "provider": "The Rum Howler Blog",
-        "rating": 9.15
-      }
-    ],
-    "reviews": []
-  },
-  {
     "name": "Flor de Caña Centenario 18",
     "category": "rum",
     "productUrl": "https://therumhowlerblog.com/rum-reviews/dark-rums/flor-de-cana-centenario-18/",
@@ -3652,6 +3594,18 @@
       {
         "provider": "The Rum Howler Blog",
         "rating": 9.2
+      }
+    ],
+    "reviews": []
+  },
+  {
+    "name": "Flor de Caña Centenario 12",
+    "category": "rum",
+    "productUrl": "https://therumhowlerblog.com/rum-reviews/dark-rums/flor-de-cana-12-centenario/",
+    "ratings": [
+      {
+        "provider": "The Rum Howler Blog",
+        "rating": 9.15
       }
     ],
     "reviews": []
@@ -3670,6 +3624,31 @@
     "reviews": []
   },
   {
+    "name": "Bermudez Anniversario",
+    "category": "rum",
+    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/dark-rums/bermudez-anniversario/",
+    "ratings": [
+      {
+        "provider": "The Rum Howler Blog",
+        "rating": 9.15
+      }
+    ],
+    "reviews": []
+  },
+  {
+    "name": "Berrys’ Finest Barbados Rum (Aged 13 Years)",
+    "age": 13.0,
+    "category": "rum",
+    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/dark-rums/berrys-finest-barbados-rum-aged-13-years/",
+    "ratings": [
+      {
+        "provider": "The Rum Howler Blog",
+        "rating": 8.7
+      }
+    ],
+    "reviews": []
+  },
+  {
     "name": "La Hechicera Solera 21",
     "category": "rum",
     "productUrl": "https://therumhowlerblog.com/rum-reviews/dark-rums/la-hechicera-solera-21/",
@@ -3682,19 +3661,6 @@
     "reviews": []
   },
   {
-    "name": "DDL Albion 1994 17 Year Old Full Proof Old Demerara Rum",
-    "age": 17.0,
-    "category": "rum",
-    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/dark-rums/ddl-albion-1994-17-year-old-full-proof-old-demerara-rum-review/",
-    "ratings": [
-      {
-        "provider": "The Rum Howler Blog",
-        "rating": 8.55
-      }
-    ],
-    "reviews": []
-  },
-  {
     "name": "Cockspur 12",
     "category": "rum",
     "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/dark-rums/review-cockspur-12-year-old-bajan-crafted-rum/",
@@ -3702,43 +3668,6 @@
       {
         "provider": "The Rum Howler Blog",
         "rating": 8.9
-      }
-    ],
-    "reviews": []
-  },
-  {
-    "name": "Dictador 12 Year Solera",
-    "age": 12.0,
-    "category": "rum",
-    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/dark-rums/dictador-12-year-solera/",
-    "ratings": [
-      {
-        "provider": "The Rum Howler Blog",
-        "rating": 9.0
-      }
-    ],
-    "reviews": []
-  },
-  {
-    "name": "Abuelo 12-Year-Old Rum",
-    "category": "rum",
-    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/dark-rums/ron-abuelo-12-year-old/",
-    "ratings": [
-      {
-        "provider": "The Rum Howler Blog",
-        "rating": 8.4
-      }
-    ],
-    "reviews": []
-  },
-  {
-    "name": "Dictador XO Perpetual",
-    "category": "rum",
-    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/dark-rums/dictador-xo-perpetual/",
-    "ratings": [
-      {
-        "provider": "The Rum Howler Blog",
-        "rating": 9.1
       }
     ],
     "reviews": []
@@ -3764,14 +3693,51 @@
     "reviews": []
   },
   {
-    "name": "El Dorado 15 Year Old Special Reserve Rum",
-    "age": 15.0,
+    "name": "Dictador 12 Year Solera",
+    "age": 12.0,
     "category": "rum",
-    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/dark-rums/el-dorado-15-year-old-rum/",
+    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/dark-rums/dictador-12-year-solera/",
     "ratings": [
       {
         "provider": "The Rum Howler Blog",
-        "rating": 8.85
+        "rating": 9.0
+      }
+    ],
+    "reviews": []
+  },
+  {
+    "name": "Dictador XO Perpetual",
+    "category": "rum",
+    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/dark-rums/dictador-xo-perpetual/",
+    "ratings": [
+      {
+        "provider": "The Rum Howler Blog",
+        "rating": 9.1
+      }
+    ],
+    "reviews": []
+  },
+  {
+    "name": "DDL Albion 1994 17 Year Old Full Proof Old Demerara Rum",
+    "age": 17.0,
+    "category": "rum",
+    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/dark-rums/ddl-albion-1994-17-year-old-full-proof-old-demerara-rum-review/",
+    "ratings": [
+      {
+        "provider": "The Rum Howler Blog",
+        "rating": 8.55
+      }
+    ],
+    "reviews": []
+  },
+  {
+    "name": "Dictador XO Insolent",
+    "category": "rum",
+    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/dark-rums/dictador-xo-insolent-rum/",
+    "ratings": [
+      {
+        "provider": "The Rum Howler Blog",
+        "rating": 9.7
       }
     ],
     "reviews": []
@@ -3784,19 +3750,6 @@
       {
         "provider": "The Rum Howler Blog",
         "rating": 9.05
-      }
-    ],
-    "reviews": []
-  },
-  {
-    "name": "El Dorado 12 Year Old Special Reserve Rum",
-    "age": 12.0,
-    "category": "rum",
-    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/dark-rums/el-dorado-12-year-old-special-reserve-demarera-rum/",
-    "ratings": [
-      {
-        "provider": "The Rum Howler Blog",
-        "rating": 9.3
       }
     ],
     "reviews": []
@@ -3815,19 +3768,7 @@
     "reviews": []
   },
   {
-    "name": "Dictador XO Insolent",
-    "category": "rum",
-    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/dark-rums/dictador-xo-insolent-rum/",
-    "ratings": [
-      {
-        "provider": "The Rum Howler Blog",
-        "rating": 9.7
-      }
-    ],
-    "reviews": []
-  },
-  {
-    "name": "F",
+    "name": "lor De Caña Centenario 21 Commemorative Edition",
     "category": "rum",
     "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/dark-rums/flor-de-cana-centenario-21-commemorative-edition/",
     "ratings": [
@@ -3839,7 +3780,33 @@
     "reviews": []
   },
   {
-    "name": "lor De Caña Centenario 21 Commemorative Edition",
+    "name": "El Dorado 15 Year Old Special Reserve Rum",
+    "age": 15.0,
+    "category": "rum",
+    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/dark-rums/el-dorado-15-year-old-rum/",
+    "ratings": [
+      {
+        "provider": "The Rum Howler Blog",
+        "rating": 8.85
+      }
+    ],
+    "reviews": []
+  },
+  {
+    "name": "El Dorado 12 Year Old Special Reserve Rum",
+    "age": 12.0,
+    "category": "rum",
+    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/dark-rums/el-dorado-12-year-old-special-reserve-demarera-rum/",
+    "ratings": [
+      {
+        "provider": "The Rum Howler Blog",
+        "rating": 9.3
+      }
+    ],
+    "reviews": []
+  },
+  {
+    "name": "F",
     "category": "rum",
     "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/dark-rums/flor-de-cana-centenario-21-commemorative-edition/",
     "ratings": [
@@ -3889,9 +3856,10 @@
     "brand": "Kirk and Sweeney",
     "type": "Aged",
     "category": "rum",
-    "volumeWeight": "397",
     "imgUrl": "https://images.rumratings.com/uploads/brand/image/1178/small_Kirk_and_Sweeney_12-year_rum.webp?v=1741230691",
     "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/dark-rums/kirk-and-sweeney-12-year-rum/",
+    "yearDistilled": 0,
+    "womenLed": false,
     "ratings": [
       {
         "provider": "The Rum Howler Blog",
@@ -3917,14 +3885,13 @@
     "reviews": []
   },
   {
-    "name": "Berrys’ Finest Barbados Rum (Aged 13 Years)",
-    "age": 13.0,
+    "name": "Millonario Solera 15 Reserva Especial",
     "category": "rum",
-    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/dark-rums/berrys-finest-barbados-rum-aged-13-years/",
+    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/dark-rums/ron-millonario-solera-15-reserva-especial/",
     "ratings": [
       {
         "provider": "The Rum Howler Blog",
-        "rating": 8.7
+        "rating": 9.25
       }
     ],
     "reviews": []
@@ -3942,25 +3909,13 @@
     "reviews": []
   },
   {
-    "name": "Millonario Solera 15 Reserva Especial",
+    "name": "Santa Theresa 1796 Antiguo de Solera",
     "category": "rum",
-    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/dark-rums/ron-millonario-solera-15-reserva-especial/",
+    "productUrl": "https://therumhowlerblog.com/rum-reviews/dark-rums/santa-theresa-1796-antiguo-de-solera/",
     "ratings": [
       {
         "provider": "The Rum Howler Blog",
         "rating": 9.25
-      }
-    ],
-    "reviews": []
-  },
-  {
-    "name": "Mocambo 20 Anos Anejo Rum (Art Edition)",
-    "category": "rum",
-    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/dark-rums/review-macombo-20-anos-anejo-rum/",
-    "ratings": [
-      {
-        "provider": "The Rum Howler Blog",
-        "rating": 8.75
       }
     ],
     "reviews": []
@@ -3978,18 +3933,6 @@
     "reviews": []
   },
   {
-    "name": "Santa Theresa 1796 Antiguo de Solera",
-    "category": "rum",
-    "productUrl": "https://therumhowlerblog.com/rum-reviews/dark-rums/santa-theresa-1796-antiguo-de-solera/",
-    "ratings": [
-      {
-        "provider": "The Rum Howler Blog",
-        "rating": 9.25
-      }
-    ],
-    "reviews": []
-  },
-  {
     "name": "Vizcaya V.X.O.P. Cask No. 21",
     "category": "rum",
     "productUrl": "https://therumhowlerblog.com/rum-reviews/dark-rums/vizcaya-v-x-o-p-cask-no-21/",
@@ -3997,6 +3940,18 @@
       {
         "provider": "The Rum Howler Blog",
         "rating": 8.65
+      }
+    ],
+    "reviews": []
+  },
+  {
+    "name": "Mocambo 20 Anos Anejo Rum (Art Edition)",
+    "category": "rum",
+    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/dark-rums/review-macombo-20-anos-anejo-rum/",
+    "ratings": [
+      {
+        "provider": "The Rum Howler Blog",
+        "rating": 8.75
       }
     ],
     "reviews": []
@@ -4014,10 +3969,21 @@
     "reviews": []
   },
   {
-    "name": "Old Monk Gold Reserve Rum (12 Years Blended)",
-    "age": 12.0,
+    "name": "Old Monk Legend",
     "category": "rum",
-    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/dark-rums/old-monk-gold-reserve-rum-12-years-blended/",
+    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/dark-rums/old-monk-the-legend/",
+    "ratings": [
+      {
+        "provider": "The Rum Howler Blog",
+        "rating": 8.65
+      }
+    ],
+    "reviews": []
+  },
+  {
+    "name": "Matusalem Gran Reserva 15 Solera Blender",
+    "category": "rum",
+    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/dark-rums-m-r/matusalem-gran-reserva/",
     "ratings": [
       {
         "provider": "The Rum Howler Blog",
@@ -4039,31 +4005,6 @@
     "reviews": []
   },
   {
-    "name": "Plantation XO 20th Anniversary Barbados Rum",
-    "category": "rum",
-    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/dark-rums/plantation-xo-20th-anniversary-barbados-rum/",
-    "ratings": [
-      {
-        "provider": "The Rum Howler Blog",
-        "rating": 9.2
-      }
-    ],
-    "reviews": []
-  },
-  {
-    "name": "Appleton Estate Joy Anniversary 25 Year Old Rum",
-    "age": 25.0,
-    "category": "rum",
-    "productUrl": "https://therumhowlerblog.com/rum-reviews/dark-rums/appleton-estate-joy-anniversary-blend/",
-    "ratings": [
-      {
-        "provider": "The Rum Howler Blog",
-        "rating": 9.75
-      }
-    ],
-    "reviews": []
-  },
-  {
     "name": "Old Monk Supreme Rum (Very Old Vatted)",
     "category": "rum",
     "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/dark-rums/old-monk-supreme-rum-very-old-vatted/",
@@ -4071,30 +4012,6 @@
       {
         "provider": "The Rum Howler Blog",
         "rating": 8.8
-      }
-    ],
-    "reviews": []
-  },
-  {
-    "name": "Old Monk Legend",
-    "category": "rum",
-    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/dark-rums/old-monk-the-legend/",
-    "ratings": [
-      {
-        "provider": "The Rum Howler Blog",
-        "rating": 8.65
-      }
-    ],
-    "reviews": []
-  },
-  {
-    "name": "Rum Nation Caroni 1998",
-    "category": "rum",
-    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/dark-rums/rum-nation-caroni-1998/",
-    "ratings": [
-      {
-        "provider": "The Rum Howler Blog",
-        "rating": 9.3
       }
     ],
     "reviews": []
@@ -4113,30 +4030,6 @@
     "reviews": []
   },
   {
-    "name": "Matusalem Gran Reserva 15 Solera Blender",
-    "category": "rum",
-    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/dark-rums-m-r/matusalem-gran-reserva/",
-    "ratings": [
-      {
-        "provider": "The Rum Howler Blog",
-        "rating": 8.7
-      }
-    ],
-    "reviews": []
-  },
-  {
-    "name": "El Dorado Grand Special Reserve (50th Anniversary) Rum",
-    "category": "rum",
-    "productUrl": "https://therumhowlerblog.com/rum-reviews/dark-rums/el-dorado-grand-special-reserve-50th-anniversary-rum/",
-    "ratings": [
-      {
-        "provider": "The Rum Howler Blog",
-        "rating": 9.15
-      }
-    ],
-    "reviews": []
-  },
-  {
     "name": "Juan Santos 12 Year Gran Reserva Rum",
     "age": 12.0,
     "category": "rum",
@@ -4145,6 +4038,32 @@
       {
         "provider": "The Rum Howler Blog",
         "rating": 8.9
+      }
+    ],
+    "reviews": []
+  },
+  {
+    "name": "Appleton Estate Joy Anniversary 25 Year Old Rum",
+    "age": 25.0,
+    "category": "rum",
+    "productUrl": "https://therumhowlerblog.com/rum-reviews/dark-rums/appleton-estate-joy-anniversary-blend/",
+    "ratings": [
+      {
+        "provider": "The Rum Howler Blog",
+        "rating": 9.75
+      }
+    ],
+    "reviews": []
+  },
+  {
+    "name": "Old Monk Gold Reserve Rum (12 Years Blended)",
+    "age": 12.0,
+    "category": "rum",
+    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/dark-rums/old-monk-gold-reserve-rum-12-years-blended/",
+    "ratings": [
+      {
+        "provider": "The Rum Howler Blog",
+        "rating": 8.7
       }
     ],
     "reviews": []
@@ -4163,6 +4082,18 @@
     "reviews": []
   },
   {
+    "name": "Rum Nation Caroni 1998",
+    "category": "rum",
+    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/dark-rums/rum-nation-caroni-1998/",
+    "ratings": [
+      {
+        "provider": "The Rum Howler Blog",
+        "rating": 9.3
+      }
+    ],
+    "reviews": []
+  },
+  {
     "name": "Rum Nation Panama (Aged 18 years)",
     "age": 18.0,
     "category": "rum",
@@ -4176,13 +4107,25 @@
     "reviews": []
   },
   {
-    "name": "Mount Gay 1703 Old Cask Selection",
+    "name": "El Dorado Grand Special Reserve (50th Anniversary) Rum",
     "category": "rum",
-    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/dark-rums-m-r/mount-gay-1703/",
+    "productUrl": "https://therumhowlerblog.com/rum-reviews/dark-rums/el-dorado-grand-special-reserve-50th-anniversary-rum/",
     "ratings": [
       {
         "provider": "The Rum Howler Blog",
-        "rating": 8.65
+        "rating": 9.15
+      }
+    ],
+    "reviews": []
+  },
+  {
+    "name": "Plantation XO 20th Anniversary Barbados Rum",
+    "category": "rum",
+    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/dark-rums/plantation-xo-20th-anniversary-barbados-rum/",
+    "ratings": [
+      {
+        "provider": "The Rum Howler Blog",
+        "rating": 9.2
       }
     ],
     "reviews": []
@@ -4213,6 +4156,19 @@
     "reviews": []
   },
   {
+    "name": "Tanduay Superior 12 Year Old Rum",
+    "age": 12.0,
+    "category": "rum",
+    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/dark-rums/tanduay-superior-rum-aged-12-years/",
+    "ratings": [
+      {
+        "provider": "The Rum Howler Blog",
+        "rating": 8.5
+      }
+    ],
+    "reviews": []
+  },
+  {
     "name": "Matusalum Gran Reserva 23 Rum",
     "category": "rum",
     "productUrl": "https://therumhowlerblog.com/rum-reviews/dark-rums/ron-matusalum-gran-reserva-23-rum/",
@@ -4227,32 +4183,6 @@
       {
         "provider": "The Rum Howler Blog",
         "rating": 9.25
-      }
-    ],
-    "reviews": []
-  },
-  {
-    "name": "Tanduay Superior 12 Year Old Rum",
-    "age": 12.0,
-    "category": "rum",
-    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/dark-rums/tanduay-superior-rum-aged-12-years/",
-    "ratings": [
-      {
-        "provider": "The Rum Howler Blog",
-        "rating": 8.5
-      }
-    ],
-    "reviews": []
-  },
-  {
-    "name": "Appleton Estate 21 Yr Old Rum",
-    "age": 21.0,
-    "category": "rum",
-    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/dark-rums/review-appleton-estate-21-yr-old-rum/",
-    "ratings": [
-      {
-        "provider": "The Rum Howler Blog",
-        "rating": 8.8
       }
     ],
     "reviews": []
@@ -4294,6 +4224,31 @@
     "reviews": []
   },
   {
+    "name": "Appleton Estate 21 Yr Old Rum",
+    "age": 21.0,
+    "category": "rum",
+    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/dark-rums/review-appleton-estate-21-yr-old-rum/",
+    "ratings": [
+      {
+        "provider": "The Rum Howler Blog",
+        "rating": 8.8
+      }
+    ],
+    "reviews": []
+  },
+  {
+    "name": "Mount Gay 1703 Old Cask Selection",
+    "category": "rum",
+    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/dark-rums-m-r/mount-gay-1703/",
+    "ratings": [
+      {
+        "provider": "The Rum Howler Blog",
+        "rating": 8.65
+      }
+    ],
+    "reviews": []
+  },
+  {
     "name": "Zacapa Endicion Negra (95.5)",
     "category": "rum",
     "productUrl": "https://therumhowlerblog.com/rum-reviews/dark-rums/ron-zacapa-endicion-negra/",
@@ -4301,6 +4256,31 @@
       {
         "provider": "The Rum Howler Blog",
         "rating": 9.55
+      }
+    ],
+    "reviews": []
+  },
+  {
+    "name": "Appleton Estate Master Blender’s Legacy",
+    "category": "rum",
+    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/dark-rums/appleton-estate-master-blenders-legacy/",
+    "ratings": [
+      {
+        "provider": "The Rum Howler Blog",
+        "rating": 9.3
+      }
+    ],
+    "reviews": []
+  },
+  {
+    "name": "Appleton Estate Limited Edition 30 Year Old Rum",
+    "age": 30.0,
+    "category": "rum",
+    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/dark-rums/appleton-estate-limited-edition-30-year-old-rum/",
+    "ratings": [
+      {
+        "provider": "The Rum Howler Blog",
+        "rating": 7.8
       }
     ],
     "reviews": []
@@ -4319,18 +4299,6 @@
     "reviews": []
   },
   {
-    "name": "Cubaney Ron Tesero Grand Reserve",
-    "category": "rum",
-    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/dark-rums/cubaney-ron-tesero-grand-reserve/",
-    "ratings": [
-      {
-        "provider": "The Rum Howler Blog",
-        "rating": 9.4
-      }
-    ],
-    "reviews": []
-  },
-  {
     "name": "Barbancourt 8 Yr Old Haitian Rhum",
     "age": 8.0,
     "category": "rum",
@@ -4339,19 +4307,6 @@
       {
         "provider": "The Rum Howler Blog",
         "rating": 8.3
-      }
-    ],
-    "reviews": []
-  },
-  {
-    "name": "Appleton Estate 50 Year Old Jamaica Rum – Jamaica Independence Reserve",
-    "age": 50.0,
-    "category": "rum",
-    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/dark-rums/appleton-estate-50-year-old-jamaica-rum-jamaica-independence-reserve/",
-    "ratings": [
-      {
-        "provider": "The Rum Howler Blog",
-        "rating": 8.95
       }
     ],
     "reviews": []
@@ -4383,13 +4338,13 @@
     "reviews": []
   },
   {
-    "name": "Appleton Estate Master Blender’s Legacy",
+    "name": "Cubaney Ron Tesero Grand Reserve",
     "category": "rum",
-    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/dark-rums/appleton-estate-master-blenders-legacy/",
+    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/dark-rums/cubaney-ron-tesero-grand-reserve/",
     "ratings": [
       {
         "provider": "The Rum Howler Blog",
-        "rating": 9.3
+        "rating": 9.4
       }
     ],
     "reviews": []
@@ -4475,18 +4430,6 @@
     "reviews": []
   },
   {
-    "name": "Rum Nation – Engenho Novo Amarone Cask (Nat 84)",
-    "category": "rum",
-    "productUrl": "https://therumhowlerblog.com/rum-reviews/rum-nation-engenho-novo-amarone-cask-rare-rums/",
-    "ratings": [
-      {
-        "provider": "The Rum Howler Blog",
-        "rating": 8.4
-      }
-    ],
-    "reviews": []
-  },
-  {
     "name": "Rum Nation Jamaica 26 Year Old (Distilled 1986)",
     "age": 26.0,
     "category": "rum",
@@ -4500,64 +4443,26 @@
     "reviews": []
   },
   {
-    "name": "Rum Nation Demerara 23 Year Old",
-    "age": 23.0,
+    "name": "Appleton Estate 50 Year Old Jamaica Rum – Jamaica Independence Reserve",
+    "age": 50.0,
     "category": "rum",
-    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/dark-rums/rum-nation-demerara-23-year-old/",
+    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/dark-rums/appleton-estate-50-year-old-jamaica-rum-jamaica-independence-reserve/",
     "ratings": [
       {
         "provider": "The Rum Howler Blog",
-        "rating": 9.35
+        "rating": 8.95
       }
     ],
     "reviews": []
   },
   {
-    "name": "Pumpkin Face 23",
+    "name": "Rum Nation – Engenho Novo Amarone Cask (Nat 84)",
     "category": "rum",
-    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/dark-rums/pumpkin-face-23/",
+    "productUrl": "https://therumhowlerblog.com/rum-reviews/rum-nation-engenho-novo-amarone-cask-rare-rums/",
     "ratings": [
       {
         "provider": "The Rum Howler Blog",
-        "rating": 9.2
-      }
-    ],
-    "reviews": []
-  },
-  {
-    "name": "Appleton Estate Limited Edition 30 Year Old Rum",
-    "age": 30.0,
-    "category": "rum",
-    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/dark-rums/appleton-estate-limited-edition-30-year-old-rum/",
-    "ratings": [
-      {
-        "provider": "The Rum Howler Blog",
-        "rating": 7.8
-      }
-    ],
-    "reviews": []
-  },
-  {
-    "name": "Pyrat Rum Cask 1623",
-    "category": "rum",
-    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/dark-rums/pyrat-rum-cask-1623-19065-2/",
-    "ratings": [
-      {
-        "provider": "The Rum Howler Blog",
-        "rating": 8.25
-      }
-    ],
-    "reviews": []
-  },
-  {
-    "name": "Rum Nation Panama (Aged 21 years)",
-    "age": 21.0,
-    "category": "rum",
-    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/dark-rums/rum-nation-panama-21-years/",
-    "ratings": [
-      {
-        "provider": "The Rum Howler Blog",
-        "rating": 9.2
+        "rating": 8.4
       }
     ],
     "reviews": []
@@ -4576,50 +4481,13 @@
     "reviews": []
   },
   {
-    "name": "Séverin Rhum Viex 4 ans",
+    "name": "Pumpkin Face 23",
     "category": "rum",
-    "productUrl": "https://therumhowlerblog.com/rum-reviews/review-severin-rhum-viex-4-ans/",
+    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/dark-rums/pumpkin-face-23/",
     "ratings": [
       {
         "provider": "The Rum Howler Blog",
-        "rating": 8.35
-      }
-    ],
-    "reviews": []
-  },
-  {
-    "name": "William Hinton 3 Year Old Rum",
-    "age": 3.0,
-    "category": "rum",
-    "productUrl": "https://therumhowlerblog.com/rum-reviews/william-hinton-3-year-old-rhum/",
-    "ratings": [
-      {
-        "provider": "The Rum Howler Blog",
-        "rating": 8.2
-      }
-    ],
-    "reviews": []
-  },
-  {
-    "name": "Takamaka – St. Andre",
-    "category": "rum",
-    "productUrl": "https://therumhowlerblog.com/rum-reviews/takamaka-st-andre/",
-    "ratings": [
-      {
-        "provider": "The Rum Howler Blog",
-        "rating": 8.55
-      }
-    ],
-    "reviews": []
-  },
-  {
-    "name": "Toucan No. 4 Rhum",
-    "category": "rum",
-    "productUrl": "https://therumhowlerblog.com/rum-reviews/toucan-no-4/",
-    "ratings": [
-      {
-        "provider": "The Rum Howler Blog",
-        "rating": 8.3
+        "rating": 9.2
       }
     ],
     "reviews": []
@@ -4638,13 +4506,75 @@
     "reviews": []
   },
   {
-    "name": "Print (Opens in new window) Print",
+    "name": "Pyrat Rum Cask 1623",
     "category": "rum",
-    "productUrl": "https://therumhowlerblog.com/rum-reviews/#print?share=print",
+    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/dark-rums/pyrat-rum-cask-1623-19065-2/",
     "ratings": [
       {
         "provider": "The Rum Howler Blog",
-        "rating": 8.4
+        "rating": 8.25
+      }
+    ],
+    "reviews": []
+  },
+  {
+    "name": "Séverin Rhum Viex 4 ans",
+    "category": "rum",
+    "productUrl": "https://therumhowlerblog.com/rum-reviews/review-severin-rhum-viex-4-ans/",
+    "ratings": [
+      {
+        "provider": "The Rum Howler Blog",
+        "rating": 8.35
+      }
+    ],
+    "reviews": []
+  },
+  {
+    "name": "Toucan No. 4 Rhum",
+    "category": "rum",
+    "productUrl": "https://therumhowlerblog.com/rum-reviews/toucan-no-4/",
+    "ratings": [
+      {
+        "provider": "The Rum Howler Blog",
+        "rating": 8.3
+      }
+    ],
+    "reviews": []
+  },
+  {
+    "name": "Rum Nation Demerara 23 Year Old",
+    "age": 23.0,
+    "category": "rum",
+    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/dark-rums/rum-nation-demerara-23-year-old/",
+    "ratings": [
+      {
+        "provider": "The Rum Howler Blog",
+        "rating": 9.35
+      }
+    ],
+    "reviews": []
+  },
+  {
+    "name": "Takamaka – St. Andre",
+    "category": "rum",
+    "productUrl": "https://therumhowlerblog.com/rum-reviews/takamaka-st-andre/",
+    "ratings": [
+      {
+        "provider": "The Rum Howler Blog",
+        "rating": 8.55
+      }
+    ],
+    "reviews": []
+  },
+  {
+    "name": "William Hinton 3 Year Old Rum",
+    "age": 3.0,
+    "category": "rum",
+    "productUrl": "https://therumhowlerblog.com/rum-reviews/william-hinton-3-year-old-rhum/",
+    "ratings": [
+      {
+        "provider": "The Rum Howler Blog",
+        "rating": 8.2
       }
     ],
     "reviews": []
@@ -4663,6 +4593,31 @@
     "reviews": []
   },
   {
+    "name": "Print (Opens in new window) Print",
+    "category": "rum",
+    "productUrl": "https://therumhowlerblog.com/rum-reviews/#print?share=print",
+    "ratings": [
+      {
+        "provider": "The Rum Howler Blog",
+        "rating": 8.4
+      }
+    ],
+    "reviews": []
+  },
+  {
+    "name": "Rum Nation Panama (Aged 21 years)",
+    "age": 21.0,
+    "category": "rum",
+    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/dark-rums/rum-nation-panama-21-years/",
+    "ratings": [
+      {
+        "provider": "The Rum Howler Blog",
+        "rating": 9.2
+      }
+    ],
+    "reviews": []
+  },
+  {
     "name": "Barbancourt 15 Year Old Estate Reserve",
     "age": 15.0,
     "category": "rum",
@@ -4671,44 +4626,6 @@
       {
         "provider": "The Rum Howler Blog",
         "rating": 9.05
-      }
-    ],
-    "reviews": []
-  },
-  {
-    "name": "Zafra Master Reserve",
-    "category": "rum",
-    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/dark-rums-p-z/zafra-master-reserve/",
-    "ratings": [
-      {
-        "provider": "The Rum Howler Blog",
-        "rating": 9.0
-      }
-    ],
-    "reviews": []
-  },
-  {
-    "name": "Reimonenq Vieux 9 Year Old Rhum (Distilled 1999)",
-    "age": 9.0,
-    "category": "rum",
-    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/dark-rums/reimonenq-vieux-9-year-old-rhum-1999/",
-    "ratings": [
-      {
-        "provider": "The Rum Howler Blog",
-        "rating": 9.4
-      }
-    ],
-    "reviews": []
-  },
-  {
-    "name": "Reimonenq Vieux 5 Year Old Rhum (Distilled 2006)",
-    "age": 5.0,
-    "category": "rum",
-    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/dark-rums/reimonenq-vieux-5-year-old-rhum-distilled-2006/",
-    "ratings": [
-      {
-        "provider": "The Rum Howler Blog",
-        "rating": 8.85
       }
     ],
     "reviews": []
@@ -4727,6 +4644,32 @@
     "reviews": []
   },
   {
+    "name": "Reimonenq Vieux 5 Year Old Rhum (Distilled 2006)",
+    "age": 5.0,
+    "category": "rum",
+    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/dark-rums/reimonenq-vieux-5-year-old-rhum-distilled-2006/",
+    "ratings": [
+      {
+        "provider": "The Rum Howler Blog",
+        "rating": 8.85
+      }
+    ],
+    "reviews": []
+  },
+  {
+    "name": "Reimonenq Vieux 9 Year Old Rhum (Distilled 1999)",
+    "age": 9.0,
+    "category": "rum",
+    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/dark-rums/reimonenq-vieux-9-year-old-rhum-1999/",
+    "ratings": [
+      {
+        "provider": "The Rum Howler Blog",
+        "rating": 9.4
+      }
+    ],
+    "reviews": []
+  },
+  {
     "name": "Leblon Natural Cane Cachaca",
     "category": "rum",
     "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/cachaca/leblon-natural-cane-cachaca/",
@@ -4739,26 +4682,13 @@
     "reviews": []
   },
   {
-    "name": "Zacapa XO (25 Year Solero) Rum",
-    "age": 25.0,
+    "name": "Zafra Master Reserve",
     "category": "rum",
-    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/dark-rums-p-z/review-zacapa-centenario-xo-25-yr-solero-rum/",
+    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/dark-rums-p-z/zafra-master-reserve/",
     "ratings": [
       {
         "provider": "The Rum Howler Blog",
-        "rating": 9.5
-      }
-    ],
-    "reviews": []
-  },
-  {
-    "name": "Porto Morretes (Ouro) Cachaca",
-    "category": "rum",
-    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/cachaca/porto-morretes-ouro-cachaca/",
-    "ratings": [
-      {
-        "provider": "The Rum Howler Blog",
-        "rating": 8.6
+        "rating": 9.0
       }
     ],
     "reviews": []
@@ -4771,6 +4701,18 @@
       {
         "provider": "The Rum Howler Blog",
         "rating": 8.05
+      }
+    ],
+    "reviews": []
+  },
+  {
+    "name": "Porto Morretes (Ouro) Cachaca",
+    "category": "rum",
+    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/cachaca/porto-morretes-ouro-cachaca/",
+    "ratings": [
+      {
+        "provider": "The Rum Howler Blog",
+        "rating": 8.6
       }
     ],
     "reviews": []
@@ -4800,18 +4742,36 @@
     "reviews": []
   },
   {
+    "name": "Zacapa XO (25 Year Solero) Rum",
+    "age": 25.0,
+    "category": "rum",
+    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/dark-rums-p-z/review-zacapa-centenario-xo-25-yr-solero-rum/",
+    "ratings": [
+      {
+        "provider": "The Rum Howler Blog",
+        "rating": 9.5
+      }
+    ],
+    "reviews": []
+  },
+  {
     "name": "Ron Zacapa 23 Solera",
-    "description": "Ron Zacapa 23 Solera Rum was created in 1976 in the highlands of Guatemala, where it is distilled in a copper-lined column still from fresh cane juice before solera aging.",
-    "abv": 40.0,
+    "description": "Ron Zacapa 23 Solera Rum was created in 1976 in the highlands of Guatemala, where it is distilled in a copper-lined column still from fresh cane juice before solera aging. The 500 year-old Spanish Sistema Solera method is used to age Ron Zacapa 23 in white oak casks. This results in a combination of rums aged between 6 and 23 years.",
+    "abv": 0.0,
     "age": 23.0,
     "region": "Guatemala",
     "brand": "Ron Zacapa",
     "type": "Aged",
-    "category": "Rum",
-    "volumeWeight": "700 ml",
+    "category": "Multiple",
+    "volumeWeight": "$6X",
     "imgUrl": "https://images.rumratings.com/uploads/brand/image/853/small_ron-zacapa-23-solera.webp?v=1741230589",
     "productUrl": "https://rumratings.com/rum/853-ron-zacapa-23-solera",
     "code": "",
+    "yearDistilled": 1976,
+    "rawMaterial": "Cane Juice",
+    "process": "Solera aging",
+    "distillationMethod": "Copper-Lined Column Still",
+    "womenLed": false,
     "ratings": [
       {
         "provider": "RumRatings",
@@ -4823,16 +4783,21 @@
   {
     "name": "Plantation XO 20th Anniversary",
     "description": "Plantation XO 20th Anniversary rum is a combination of pot-stilled and column-stilled Barbadian rums that are initially aged in the Caribbean in ex-bourbon casks for 12-20 years. They are then transported to France for a second 12-18 months aging in small French oak casks.",
-    "abv": 40.0,
+    "abv": 0.0,
     "age": 20.0,
     "region": "Multiple",
     "brand": "Plantation",
     "type": "Aged",
-    "category": "Rum",
-    "volumeWeight": "700 ml",
+    "category": "Multiple",
+    "volumeWeight": "$4X",
     "imgUrl": "https://images.rumratings.com/uploads/brand/image/654/small_Plantation_XO_20th_Anniversary_rum_400px.webp?v=1741230525",
     "productUrl": "https://rumratings.com/rum/654-plantation-xo-20th-anniversary",
     "code": "",
+    "yearDistilled": 0,
+    "rawMaterial": "",
+    "process": "",
+    "distillationMethod": "",
+    "womenLed": false,
     "ratings": [
       {
         "provider": "RumRatings",
@@ -4844,16 +4809,21 @@
   {
     "name": "El Dorado (pre 2020 bottle) 12-Year",
     "description": "El Dorado 12-Year Rum is composed of a blend of aged rums, all at least 12 years old. The rums are distilled using a combination of stills including coffey stills and a double wooden pot still before being aged in bourbon oak casks.",
-    "abv": 40.0,
+    "abv": 0.0,
     "age": 12.0,
     "region": "Guyana",
     "brand": "El Dorado",
     "type": "Aged",
-    "category": "Rum",
-    "volumeWeight": "700 ml",
+    "category": "Multiple",
+    "volumeWeight": "$3X",
     "imgUrl": "https://images.rumratings.com/uploads/brand/image/367/small_El_dorado_12-year_rum_400px.webp?v=1741230438",
     "productUrl": "https://rumratings.com/rum/367-el-dorado-pre-2020-bottle-12-year",
     "code": "",
+    "yearDistilled": 0,
+    "rawMaterial": "Molasses",
+    "process": "",
+    "distillationMethod": "Coffey Still, Double Wooden Pot Still",
+    "womenLed": false,
     "ratings": [
       {
         "provider": "RumRatings",
@@ -4863,270 +4833,75 @@
     "reviews": []
   },
   {
-    "name": "Havana Club 7-Year",
-    "description": "Havana Club 7-Year Rum is distilled from fermented molasses and aged in charred white oak barrels for seven years.",
-    "abv": 40.0,
-    "age": 7.0,
-    "region": "Cuba",
-    "brand": "Havana Club",
-    "type": "Aged",
-    "category": "Rum",
-    "volumeWeight": "700 ml",
-    "imgUrl": "https://images.rumratings.com/uploads/brand/image/436/small_Havana_Club_7_Year_rum.webp?v=1741230458",
-    "productUrl": "https://rumratings.com/rum/436-havana-club-7-year",
-    "code": "",
-    "ratings": [
-      {
-        "provider": "RumRatings",
-        "rating": 6.5
-      }
-    ],
-    "reviews": []
-  },
-  {
-    "name": "Bumbu Original",
-    "description": "Bumbu Original rum is a blend crafted with over 30 different rums from across the Caribbean and is aged for up to 15 years in white oak barrels.",
-    "abv": 35.0,
-    "age": 15.0,
-    "region": "Barbados",
-    "brand": "Bumbu",
-    "type": "Aged",
-    "category": "Rum",
-    "volumeWeight": "700 ml",
-    "imgUrl": "https://images.rumratings.com/uploads/brand/image/3660/small_bumbu-original.webp?v=1773670800",
-    "productUrl": "https://rumratings.com/rum/3660-bumbu-original",
-    "code": "",
-    "ratings": [
-      {
-        "provider": "RumRatings",
-        "rating": 6.3
-      }
-    ],
-    "reviews": []
-  },
-  {
-    "name": "Don Papa Small Batch",
-    "description": "Don Papa Small Batch Rum is produced by the Bleeding Heart Rum Company on the southern island of Negros in the Philippines. The rum is distilled from molasses, then aged for over 7 years in American oak barrels, and lastly charcoal filtered.",
-    "abv": 40.0,
-    "age": 7.0,
-    "region": "Philippines",
-    "brand": "Don Papa",
-    "type": "Aged",
-    "category": "Rum",
-    "volumeWeight": "700 ml",
-    "imgUrl": "https://images.rumratings.com/uploads/brand/image/1052/small_Don_Papa_Rum.webp?v=1741230653",
-    "productUrl": "https://rumratings.com/rum/1052-don-papa-small-batch",
-    "code": "",
-    "ratings": [
-      {
-        "provider": "RumRatings",
-        "rating": 5.6
-      }
-    ],
-    "reviews": []
-  },
-  {
-    "name": "El Dorado Special Reserve (pre 2020 bottle) 15-Year",
-    "description": "El Dorado Special Reserve 15-Year rum is crafted from 15 to 25 year old rums that are then blended and married together in bourbon oak casks.",
-    "abv": 43.0,
-    "age": 15.0,
-    "region": "Guyana",
-    "brand": "El Dorado",
-    "type": "Aged",
-    "category": "Rum",
-    "volumeWeight": "700 ml",
-    "imgUrl": "https://images.rumratings.com/uploads/brand/image/377/small_el-dorado-special-reserve-15-year.webp?v=1741230441",
-    "productUrl": "https://rumratings.com/rum/377-el-dorado-special-reserve-pre-2020-bottle-15-year",
-    "code": "",
-    "ratings": [
-      {
-        "provider": "RumRatings",
-        "rating": 8.0
-      }
-    ],
-    "reviews": []
-  },
-  {
-    "name": "Sailor Jerry Spiced",
-    "description": "Sailor Jerry’s Spiced rum is crafted from a blend of Caribbean rums that are blended and infused with spices and other flavors including vanilla and cinnamon.",
-    "abv": 46.0,
+    "name": "Captain Morgan Original Spiced Gold",
+    "description": ":null",
+    "abv": 21.0,
     "age": 0.0,
-    "region": "Virgin Islands, U.S.",
-    "brand": "Sailor Jerry",
+    "region": "Puerto Rico",
+    "brand": "Captain Morgan",
     "type": "Spiced",
-    "category": "Rum",
-    "volumeWeight": "700 ml",
-    "imgUrl": "https://images.rumratings.com/uploads/brand/image/866/small_sailor-jerry-spiced.webp?v=1741230593",
-    "productUrl": "https://rumratings.com/rum/866-sailor-jerry-spiced",
-    "code": "",
+    "category": ":null",
+    "volumeWeight": "750 ml",
+    "imgUrl": "https://images.rumratings.com/uploads/brand/image/3618/small_Captain_Morgan_Original_Spiced_Gold_rum_400px.webp?v=1741231090",
+    "productUrl": "https://rumratings.com/rum/3618-captain-morgan-original-spiced-gold",
+    "code": "3618",
+    "yearDistilled": 0,
+    "rawMaterial": "Molasses",
+    "process": "Continuous",
+    "distillationMethod": "Column Still",
+    "womenLed": false,
     "ratings": [
       {
         "provider": "RumRatings",
-        "rating": 5.9
+        "rating": 4.2
       }
     ],
     "reviews": []
   },
   {
-    "name": "Pampero Aniversario Reserva Exclusiva",
-    "description": "Pampero Aniversario was first crafted in 1963 to commemorate the Pampero company’s 25th anniversary. The rum is a blend of rums ranging in maturity from four to six years and aged in whisky and bourbon barrels.",
+    "name": "Flor de Caña 18-Year",
+    "description": "A sugar-free 18-year old, ultra premium rum that is sustainably produced (Carbon Neutral & Fair Trade certified). From a 5th generation family estate, it is naturally aged without artificial ingredients, distilled 100% with renewable energy and KOSHER certified. A full-bodied rum with a long and smooth finish that lingers in the palate. Best enjoyed neat or on a rock, with a peel of orange.",
     "abv": 40.0,
-    "age": 6.0,
-    "region": "Venezuela",
-    "brand": "Pampero",
-    "type": "Aged",
-    "category": "Rum",
-    "volumeWeight": "700 ml",
-    "imgUrl": "https://images.rumratings.com/uploads/brand/image/631/small_pampero-aniversario-reserva-exclusiva.webp?v=1741230518",
-    "productUrl": "https://rumratings.com/rum/631-pampero-aniversario-reserva-exclusiva",
-    "code": "",
-    "ratings": [
-      {
-        "provider": "RumRatings",
-        "rating": 7.1
-      }
-    ],
-    "reviews": []
-  },
-  {
-    "name": "Ron Zacapa XO",
-    "description": "Ron Zacapa XO Rum is produced in the highlands of Guatemala where it is distillled from fresh cane juice. The rum is then aged from 6 to 23 years at 7544 feet above sea level at 62 °F (17 °C) using the solera process.",
-    "abv": 40.0,
-    "age": 23.0,
-    "region": "Guatemala",
-    "brand": "Ron Zacapa",
-    "type": "Aged",
-    "category": "Rum",
-    "volumeWeight": "700 ml",
-    "imgUrl": "https://images.rumratings.com/uploads/brand/image/854/small_ron-zacapa-xo.webp?v=1741230590",
-    "productUrl": "https://rumratings.com/rum/854-ron-zacapa-xo",
-    "code": "",
-    "ratings": [
-      {
-        "provider": "RumRatings",
-        "rating": 8.6
-      }
-    ],
-    "reviews": []
-  },
-  {
-    "name": "Santa Teresa 1796",
-    "description": "Santa Teresa 1796 rum is produced in Venezuela and aged using the solera system that blends rums aged between 4 and 35 years.",
-    "abv": 40.0,
-    "age": 35.0,
-    "region": "Venezuela",
-    "brand": "Santa Teresa",
-    "type": "Aged",
-    "category": "Rum",
-    "volumeWeight": "700 ml",
-    "imgUrl": "https://images.rumratings.com/uploads/brand/image/870/small_Santa_Teresa_1796_rum.webp?v=1741230594",
-    "productUrl": "https://rumratings.com/rum/870-santa-teresa-1796",
-    "code": "",
-    "ratings": [
-      {
-        "provider": "RumRatings",
-        "rating": 7.6
-      }
-    ],
-    "reviews": []
-  },
-  {
-    "name": "Dos Maderas PX 5+5",
-    "description": "Dos Maderas PX 5 + 5 rum is made from a combination of rums from Barbados and Guyana. It is unique because of its triple aging process where for 5 initial years the rum is aged in the Caribbean in oak casks.",
-    "abv": 40.0,
-    "age": 5.0,
-    "region": "Barbados",
-    "brand": "Dos Maderas",
-    "type": "Aged",
-    "category": "Rum",
-    "volumeWeight": "700 ml",
-    "imgUrl": "https://images.rumratings.com/uploads/brand/image/341/small_Dos_Maderas_PX_5x5_rum.webp?v=1741230432",
-    "productUrl": "https://rumratings.com/rum/341-dos-maderas-px-5-5",
-    "code": "",
-    "ratings": [
-      {
-        "provider": "RumRatings",
-        "rating": 7.6
-      }
-    ],
-    "reviews": []
-  },
-  {
-    "name": "Bacardi Superior",
-    "description": "Bacardi Superior Rum is the original Bacardi rum, dating back to 1862 when Don Facundo Bacardi Massó purchased his first rum distillery in Cuba.",
-    "abv": 37.5,
-    "age": 1.0,
-    "region": "United States",
-    "brand": "Bacardi",
-    "type": "Light",
-    "category": "Rum",
-    "volumeWeight": "700 ml",
-    "imgUrl": "https://images.rumratings.com/uploads/brand/image/1033/small_Bacardi_Superior_rum.webp?v=1741230647",
-    "productUrl": "https://rumratings.com/rum/1033-bacardi-superior",
-    "code": "",
-    "ratings": [
-      {
-        "provider": "RumRatings",
-        "rating": 3.5
-      }
-    ],
-    "reviews": []
-  },
-  {
-    "name": "Mount Gay XO Extra Old",
-    "description": "Mount Gay Extra Old (often written \"OX\") is a blend of rums aged between 8 and 15 years in American bourbon barrels.",
-    "abv": 40.0,
-    "age": 15.0,
-    "region": "Barbados",
-    "brand": "Mount Gay",
-    "type": "Aged",
-    "category": "Rum",
-    "volumeWeight": "700 ml",
-    "imgUrl": "https://images.rumratings.com/uploads/brand/image/565/small_Mount_Gay_Extra_Old_rum_A_400px.webp?v=1741230498",
-    "productUrl": "https://rumratings.com/rum/565-mount-gay-xo-extra-old",
-    "code": "",
-    "ratings": [
-      {
-        "provider": "RumRatings",
-        "rating": 7.8
-      }
-    ],
-    "reviews": []
-  },
-  {
-    "name": "Flor de Caña 12-Year",
-    "description": "A sugar-free 12-year old, ultra premium rum that is sustainably produced (Carbon Neutral & Fair Trade certified).",
-    "abv": 40.0,
-    "age": 12.0,
+    "age": 18.0,
     "region": "Nicaragua",
     "brand": "Flor de Caña",
     "type": "Aged",
-    "category": "Rum",
-    "volumeWeight": "700 ml",
-    "imgUrl": "https://images.rumratings.com/uploads/brand/image/402/small_flor-de-cana-12-year.webp?v=1741230449",
-    "productUrl": "https://rumratings.com/rum/402-flor-de-cana-12-year",
-    "code": "",
+    "category": ":null",
+    "volumeWeight": "750 ml",
+    "imgUrl": "https://images.rumratings.com/uploads/brand/image/398/small_flor-de-cana-18-year.webp?v=1741230447",
+    "productUrl": "https://rumratings.com/rum/398-flor-de-cana-18-year",
+    "code": "398",
+    "yearDistilled": 2005,
+    "rawMaterial": "Molasses",
+    "process": "Natural Aging",
+    "distillationMethod": "Column Still",
+    "womenLed": false,
     "ratings": [
       {
         "provider": "RumRatings",
-        "rating": 6.9
+        "rating": 7.3
       }
     ],
     "reviews": []
   },
   {
-    "name": "Appleton Estate Extra 12-Year",
-    "description": "Appleton Estate 12-Year Rum is a blend of several rums aged between 12 and 18 years in American oak barrels.",
+    "name": "Plantation Barbados 5-Year",
+    "description": "Plantation Barbados 5-Year rum is distilled from molasses and aged 5 years in bourbon casks before being transported to France for further 'finishing' in Cognac casks. Plantation rum is owned by the French company Cognac Ferrand, which was founded in 1989 and produces wine, gin, and other spirits to sell in over 40 countries. The Plantation range includes 7 vintages from different Caribbean countries and 3 blends of multiple regions.",
     "abv": 40.0,
-    "age": 18.0,
-    "region": "Jamaica",
-    "brand": "Appleton Estate",
+    "age": 5.0,
+    "region": "Multiple",
+    "brand": "Plantation",
     "type": "Aged",
-    "category": "Rum",
-    "volumeWeight": "700 ml",
-    "imgUrl": "https://images.rumratings.com/uploads/brand/image/37/small_Appleton_Estate_12_Year_rum.webp?v=1741230339",
-    "productUrl": "https://rumratings.com/rum/37-appleton-estate-extra-12-year",
-    "code": "",
+    "category": ":null",
+    "volumeWeight": "750 ml",
+    "imgUrl": "https://images.rumratings.com/uploads/brand/image/642/small_Plantation_Barbados_5_rum.webp?v=1741230521",
+    "productUrl": "https://rumratings.com/rum/642-plantation-barbados-5-year",
+    "code": "642",
+    "yearDistilled": 2015,
+    "rawMaterial": "Molasses",
+    "process": "Aging",
+    "distillationMethod": "Column Still",
+    "womenLed": false,
     "ratings": [
       {
         "provider": "RumRatings",
@@ -5136,64 +4911,27 @@
     "reviews": []
   },
   {
-    "name": "Havana Club 3-Year",
-    "description": "Havana Club 3-Year rum is produced from molasses and aged for 3 years in white oak barrels before filtering and bottling.",
-    "abv": 40.0,
-    "age": 3.0,
-    "region": "Cuba",
-    "brand": "Havana Club",
-    "type": "Light",
-    "category": "Rum",
-    "volumeWeight": "700 ml",
-    "imgUrl": "https://images.rumratings.com/uploads/brand/image/435/small_Havana_Club_3_Year_rum.webp?v=1741230458",
-    "productUrl": "https://rumratings.com/rum/435-havana-club-3-year",
-    "code": "",
+    "name": "Malibu Coconut",
+    "description": "Malibu Coconut Rum is distilled from fermented molasses and blended with coconut and sugar. The brand is owned by one of the world's largest spirits producers, Pernod Ricard. Currently produced in Canada, Malibu Coconut rum was originally made in Curaçao from fruit spirits flavored with coconut and rum. The original recipe was developed as a shortcut for bartenders making Piña Coladas, however today it stands on its own.",
+    "abv": 21.0,
+    "age": 0.0,
+    "region": "Canada",
+    "brand": "Malibu",
+    "type": "Flavored",
+    "category": ":null",
+    "volumeWeight": "750 ml",
+    "imgUrl": "https://images.rumratings.com/uploads/brand/image/520/small_Malibu__Coconut_rum_400px.webp?v=1741230484",
+    "productUrl": "https://rumratings.com/rum/520-malibu-coconut",
+    "code": "520",
+    "yearDistilled": 0,
+    "rawMaterial": "Molasses",
+    "process": "Infusion",
+    "distillationMethod": "Column Still",
+    "womenLed": false,
     "ratings": [
       {
         "provider": "RumRatings",
-        "rating": 5.5
-      }
-    ],
-    "reviews": []
-  },
-  {
-    "name": "Bacardi Oakheart",
-    "description": "Launched in 2011, Bacardi Oakheart is the newest addition to the extensive Bacardi collection.",
-    "abv": 35.0,
-    "age": 2.0,
-    "region": "United States",
-    "brand": "Bacardi",
-    "type": "Spiced",
-    "category": "Rum",
-    "volumeWeight": "700 ml",
-    "imgUrl": "https://images.rumratings.com/uploads/brand/image/79/small_Bacardi_Oakheart_rum.webp?v=1741230351",
-    "productUrl": "https://rumratings.com/rum/79-bacardi-oakheart",
-    "code": "",
-    "ratings": [
-      {
-        "provider": "RumRatings",
-        "rating": 5.4
-      }
-    ],
-    "reviews": []
-  },
-  {
-    "name": "Zaya Gran Reserva 12-Year",
-    "description": "Zaya Gran Reserva Rum is a blend of molasses-based rums distilled in a five-column still and aged in white oak barrels for up to 12 years.",
-    "abv": 40.0,
-    "age": 12.0,
-    "region": "Trinidad and Tobago",
-    "brand": "Zaya",
-    "type": "Aged",
-    "category": "Rum",
-    "volumeWeight": "700 ml",
-    "imgUrl": "https://images.rumratings.com/uploads/brand/image/1030/small_zaya-gran-reserva-12-year.webp?v=1741230646",
-    "productUrl": "https://rumratings.com/rum/1030-zaya-gran-reserva-12-year",
-    "code": "",
-    "ratings": [
-      {
-        "provider": "RumRatings",
-        "rating": 7.2
+        "rating": 4.2
       }
     ],
     "reviews": []
@@ -5206,11 +4944,16 @@
     "region": "Jamaica",
     "brand": "Smith and Cross",
     "type": "Aged",
-    "category": "rum",
-    "volumeWeight": "420",
+    "category": "Jamaica",
+    "volumeWeight": "",
     "imgUrl": "https://images.rumratings.com/uploads/brand/image/902/small_Smith_and_Cross_Navy_Strength_rum.webp?v=1741230605",
     "productUrl": "https://rumratings.com/rum/902-smith-and-cross-traditional-jamaica-navy-strength",
     "code": "",
+    "yearDistilled": 0,
+    "rawMaterial": "",
+    "process": "",
+    "distillationMethod": "",
+    "womenLed": false,
     "ratings": [
       {
         "provider": "RumRatings",
@@ -5221,17 +4964,22 @@
   },
   {
     "name": "Myers's Original Dark",
-    "description": "Myer’s Original Dark Rum is a blend of up to nine different rums of various ages, all of which are distilled using Jamaica's typical production method: pot-stills. The Original Dark Rum is slightly unique in Jamaica however, because some of the molasses used earlier in the process is added back in after distillation.\nMyers rum has been produced since 1879 and named after its founder, Fred Myers.",
+    "description": "Myers’s Original Dark Rum is a blend of up to nine different rums of various ages, all of which are distilled using Jamaica's typical production method: pot-stills. The Original Dark Rum is slightly unique in Jamaica however, because some of the molasses used earlier in the process is added back in after distillation. Myers rum has been produced since 1879 and named after its founder, Fred Myers.",
     "abv": 0.0,
     "age": 0.0,
     "region": "Jamaica",
     "brand": "Myers's",
     "type": "Dark",
-    "category": "rum",
-    "volumeWeight": "418",
+    "category": "Jamaica",
+    "volumeWeight": "",
     "imgUrl": "https://images.rumratings.com/uploads/brand/image/572/small_Myerss_original_dark_rum.webp?v=1741230500",
     "productUrl": "https://rumratings.com/rum/572-myers-s-original-dark",
     "code": "",
+    "yearDistilled": 0,
+    "rawMaterial": "",
+    "process": "",
+    "distillationMethod": "Pot Still",
+    "womenLed": false,
     "ratings": [
       {
         "provider": "RumRatings",
@@ -5249,10 +4997,15 @@
     "brand": "Diplomatico",
     "type": "Aged",
     "category": "rum",
-    "volumeWeight": "415",
+    "volumeWeight": "",
     "imgUrl": "https://images.rumratings.com/uploads/brand/image/4262/small_diplomatico-mantuano.webp?v=1741231262",
     "productUrl": "https://rumratings.com/rum/4262-diplomatico-mantuano",
     "code": "",
+    "yearDistilled": 0,
+    "rawMaterial": "",
+    "process": "",
+    "distillationMethod": "",
+    "womenLed": false,
     "ratings": [
       {
         "provider": "RumRatings",
@@ -5263,17 +5016,22 @@
   },
   {
     "name": "Centenario 20-Year",
-    "description": "Ron Centenario 20-Year rum is produced from Costa Rican sugar cane which is turned into molasses before aging in American white oak barrels up to 20 years using the solera aging system.\nThe company producing Ron Centenario 20-Year rum used to be named Seagram de Costa Rica, but in 2002 changed its name to Centenario Internacional. The rum wasn't sold outside of Costa Rica until 2007.",
+    "description": "Ron Centenario 20-Year rum is produced from Costa Rican sugar cane which is turned into molasses before aging in American white oak barrels up to 20 years using the solera aging system. The company producing Ron Centenario 20-Year rum used to be named Seagram de Costa Rica, but in 2002 changed its name to Centenario Internacional. The rum wasn't sold outside of Costa Rica until 2007.",
     "abv": 0.0,
     "age": 20.0,
     "region": "Costa Rica",
     "brand": "Centenario",
     "type": "Aged",
     "category": "rum",
-    "volumeWeight": "395",
+    "volumeWeight": "",
     "imgUrl": "https://images.rumratings.com/uploads/brand/image/781/small_centenario-20-year.webp?v=1741230567",
     "productUrl": "https://rumratings.com/rum/781-centenario-20-year",
     "code": "",
+    "yearDistilled": 0,
+    "rawMaterial": "",
+    "process": "",
+    "distillationMethod": "",
+    "womenLed": false,
     "ratings": [
       {
         "provider": "RumRatings",
@@ -5291,10 +5049,15 @@
     "brand": "Doorly's",
     "type": "Aged",
     "category": "rum",
-    "volumeWeight": "388",
+    "volumeWeight": "",
     "imgUrl": "https://images.rumratings.com/uploads/brand/image/339/small_doorly-s-xo-6-year.webp?v=1741230431",
     "productUrl": "https://rumratings.com/rum/339-doorly-s-xo-6-year",
     "code": "",
+    "yearDistilled": 0,
+    "rawMaterial": "",
+    "process": "",
+    "distillationMethod": "",
+    "womenLed": false,
     "ratings": [
       {
         "provider": "RumRatings",
@@ -5312,10 +5075,15 @@
     "brand": "Flor de Caña",
     "type": "Aged",
     "category": "rum",
-    "volumeWeight": "387",
+    "volumeWeight": "",
     "imgUrl": "https://images.rumratings.com/uploads/brand/image/409/small_flor-de-cana-gran-reserve-7-year.webp?v=1741230451",
     "productUrl": "https://rumratings.com/rum/409-flor-de-cana-gran-reserva-7-year",
     "code": "",
+    "yearDistilled": 0,
+    "rawMaterial": "",
+    "process": "",
+    "distillationMethod": "",
+    "womenLed": false,
     "ratings": [
       {
         "provider": "RumRatings",
@@ -5326,17 +5094,22 @@
   },
   {
     "name": "Quorhum 30-Year",
-    "description": "Ron Quorhum 30-Year rum is distilled in pot-stills and aged using the solera system for up to 30 years. The rum is produced in the Dominican Republic by Oliver & Oliver.",
+    "description": "",
     "abv": 0.0,
     "age": 30.0,
     "region": "Dominican Republic",
     "brand": "Quorhum",
     "type": "Aged",
     "category": "rum",
-    "volumeWeight": "387",
+    "volumeWeight": "",
     "imgUrl": "https://images.rumratings.com/uploads/brand/image/833/small_Ron_Quorhum_30_Year_rum.webp?v=1741230583",
     "productUrl": "https://rumratings.com/rum/833-quorhum-30-year",
     "code": "",
+    "yearDistilled": 0,
+    "rawMaterial": "",
+    "process": "",
+    "distillationMethod": "",
+    "womenLed": false,
     "ratings": [
       {
         "provider": "RumRatings",
@@ -5354,10 +5127,15 @@
     "brand": "Millonario",
     "type": "Aged",
     "category": "rum",
-    "volumeWeight": "379",
+    "volumeWeight": "",
     "imgUrl": "https://images.rumratings.com/uploads/brand/image/806/small_Ron_Millonario_XO_rum_b.webp?v=1741230574",
     "productUrl": "https://rumratings.com/rum/806-millonario-xo",
     "code": "",
+    "yearDistilled": 0,
+    "rawMaterial": "",
+    "process": "",
+    "distillationMethod": "",
+    "womenLed": false,
     "ratings": [
       {
         "provider": "RumRatings",
@@ -5375,10 +5153,15 @@
     "brand": "Zafra",
     "type": "Aged",
     "category": "rum",
-    "volumeWeight": "375",
+    "volumeWeight": "",
     "imgUrl": "https://images.rumratings.com/uploads/brand/image/1029/small_zafra-master-reserve-21.webp?v=1741230645",
     "productUrl": "https://rumratings.com/rum/1029-zafra-master-reserve-21",
     "code": "",
+    "yearDistilled": 0,
+    "rawMaterial": "",
+    "process": "",
+    "distillationMethod": "",
+    "womenLed": false,
     "ratings": [
       {
         "provider": "RumRatings",
@@ -5389,17 +5172,22 @@
   },
   {
     "name": "Appleton Estate 21-Year",
-    "description": "Distilled using small-batch copper pot stills uniquely designed for Appleton Estate, this rum is a blend of several rums aged 21 years in American oak barrels. Once blended, the rum is re-casked for two years to marry the flavors.\nAppleton Estate 21-year rum is produced in Jamaica on one of the country’s oldest and most renowned sugar estates. Each bottle is individually numbered and comes with a signed aging certificate by master blender Joy Spence.",
+    "description": "Distilled using small-batch copper pot stills uniquely designed for Appleton Estate, this rum is a blend of several rums aged 21 years in American oak barrels. Once blended, the rum is re-casked for two years to marry the flavors. Appleton Estate 21-year rum is produced in Jamaica on one of the country’s oldest and most renowned sugar estates. Each bottle is individually numbered and comes with a signed aging certificate by master blender Joy Spence.",
     "abv": 0.0,
     "age": 21.0,
     "region": "Jamaica",
     "brand": "Appleton Estate",
     "type": "Aged",
     "category": "rum",
-    "volumeWeight": "357",
+    "volumeWeight": "",
     "imgUrl": "https://images.rumratings.com/uploads/brand/image/38/small_Appleton_Estate_Limited_Edition_21-Year_rum_400pxb.webp?v=1741230339",
     "productUrl": "https://rumratings.com/rum/38-appleton-estate-21-year",
     "code": "",
+    "yearDistilled": 0,
+    "rawMaterial": "",
+    "process": "",
+    "distillationMethod": "",
+    "womenLed": false,
     "ratings": [
       {
         "provider": "RumRatings",
@@ -5417,10 +5205,15 @@
     "brand": "RL Seale",
     "type": "Aged",
     "category": "rum",
-    "volumeWeight": "355",
+    "volumeWeight": "",
     "imgUrl": "https://images.rumratings.com/uploads/brand/image/729/small_rl-seale-10-year.webp?v=1741230549",
     "productUrl": "https://rumratings.com/rum/729-rl-seale-abv-43-10-year",
     "code": "",
+    "yearDistilled": 0,
+    "rawMaterial": "",
+    "process": "",
+    "distillationMethod": "",
+    "womenLed": false,
     "ratings": [
       {
         "provider": "RumRatings",
@@ -5431,17 +5224,22 @@
   },
   {
     "name": "Brugal Añejo",
-    "description": "Brugal Anejo rum is a blend of rums aged 3 to 5 years in used American white Oak barrels that previously held whiskey and bourbon.\nThe rum is produced in the Dominican Republic by Brugal & Co., a company that was founded in the late 1800s by the Spaniard Andrés Brugal Montaner. Today, the Brugal rum company remains largely in the control of Montaner's direct descendants.",
+    "description": "Brugal Anejo rum is a blend of rums aged 3 to 5 years in used American white Oak barrels that previously held whiskey and bourbon. The rum is produced in the Dominican Republic by Brugal & Co., a company that was founded in the late 1800s by the Spaniard Andrés Brugal Montaner. Today, the Brugal rum company remains largely in the control of Montaner's direct descendants.",
     "abv": 0.0,
-    "age": 0.0,
+    "age": 5.0,
     "region": "Dominican Republic",
     "brand": "Brugal",
     "type": "Gold",
     "category": "rum",
-    "volumeWeight": "348",
+    "volumeWeight": "",
     "imgUrl": "https://images.rumratings.com/uploads/brand/image/145/small_brugal_anejo_rum.webp?v=1741230372",
     "productUrl": "https://rumratings.com/rum/145-brugal-anejo",
     "code": "",
+    "yearDistilled": 0,
+    "rawMaterial": "",
+    "process": "",
+    "distillationMethod": "",
+    "womenLed": false,
     "ratings": [
       {
         "provider": "RumRatings",
@@ -5459,10 +5257,15 @@
     "brand": "Bacardi",
     "type": "Light",
     "category": "rum",
-    "volumeWeight": "330",
+    "volumeWeight": "",
     "imgUrl": "https://images.rumratings.com/uploads/brand/image/2086/small_bacardi-carta-blanca.webp?v=1741230953",
     "productUrl": "https://rumratings.com/rum/2086-bacardi-carta-blanca",
     "code": "",
+    "yearDistilled": 0,
+    "rawMaterial": "",
+    "process": "",
+    "distillationMethod": "",
+    "womenLed": false,
     "ratings": [
       {
         "provider": "RumRatings",
@@ -5475,15 +5278,20 @@
     "name": "Bumbu XO",
     "description": "Bumbu Rum XO rum is distilled in Panama before spending 18 years in American white oak bourbon barrels, with a further short finish in Andalusian white oak sherry barrels.",
     "abv": 0.0,
-    "age": 0.0,
+    "age": 18.0,
     "region": "Barbados",
     "brand": "Bumbu",
     "type": "Aged",
     "category": "rum",
-    "volumeWeight": "329",
+    "volumeWeight": "",
     "imgUrl": "https://images.rumratings.com/uploads/brand/image/7162/small_bumbu-xo.webp?v=1741231885",
     "productUrl": "https://rumratings.com/rum/7162-bumbu-xo",
     "code": "",
+    "yearDistilled": 0,
+    "rawMaterial": "",
+    "process": "",
+    "distillationMethod": "",
+    "womenLed": false,
     "ratings": [
       {
         "provider": "RumRatings",
@@ -5501,10 +5309,15 @@
     "brand": "Plantation",
     "type": "Aged",
     "category": "rum",
-    "volumeWeight": "325",
+    "volumeWeight": "",
     "imgUrl": "https://images.rumratings.com/uploads/brand/image/3735/small_Plantation_Grande_Reserve_rum_400px.webp?v=1741231120",
     "productUrl": "https://rumratings.com/rum/3735-plantation-barbados-grande-reserve",
     "code": "",
+    "yearDistilled": 0,
+    "rawMaterial": "",
+    "process": "",
+    "distillationMethod": "",
+    "womenLed": false,
     "ratings": [
       {
         "provider": "RumRatings",
@@ -5522,10 +5335,15 @@
     "brand": "El Dorado",
     "type": "Aged",
     "category": "rum",
-    "volumeWeight": "324",
+    "volumeWeight": "",
     "imgUrl": "https://images.rumratings.com/uploads/brand/image/372/small_El_Dorado_8_Year_rum.webp?v=1741230440",
     "productUrl": "https://rumratings.com/rum/372-el-dorado-8-year",
     "code": "",
+    "yearDistilled": 0,
+    "rawMaterial": "",
+    "process": "",
+    "distillationMethod": "",
+    "womenLed": false,
     "ratings": [
       {
         "provider": "RumRatings",
@@ -5543,10 +5361,15 @@
     "brand": "Appleton Estate",
     "type": "Aged",
     "category": "rum",
-    "volumeWeight": "319",
-    "imgUrl": "https://images.rumratings.com/uploads/brand/image/2278/small_Angostura_Rare-Blend-12-Year_rum_400px.webp?v=1741231004",
+    "volumeWeight": "",
+    "imgUrl": "https://images.rumratings.com/uploads/brand/image/2278/small_Angostura_Rare-Blend-12-Year_rum_400pxb.webp?v=1741231004",
     "productUrl": "https://rumratings.com/rum/2278-appleton-estate-rare-blend-12-year",
     "code": "",
+    "yearDistilled": 0,
+    "rawMaterial": "",
+    "process": "",
+    "distillationMethod": "",
+    "womenLed": false,
     "ratings": [
       {
         "provider": "RumRatings",
@@ -5564,10 +5387,15 @@
     "brand": "Plantation",
     "type": "Aged",
     "category": "rum",
-    "volumeWeight": "313",
+    "volumeWeight": "",
     "imgUrl": "https://images.rumratings.com/uploads/brand/image/5140/small_Plantation_Original_Dark_Double_Aged_rum_400px.webp?v=1741231323",
     "productUrl": "https://rumratings.com/rum/5140-plantation-original-dark-double-aged-trinidad-jamaica",
     "code": "",
+    "yearDistilled": 0,
+    "rawMaterial": "",
+    "process": "",
+    "distillationMethod": "",
+    "womenLed": false,
     "ratings": [
       {
         "provider": "RumRatings",
@@ -5585,10 +5413,15 @@
     "brand": "Appleton Estate",
     "type": "Aged",
     "category": "rum",
-    "volumeWeight": "308",
+    "volumeWeight": "",
     "imgUrl": "https://images.rumratings.com/uploads/brand/image/3424/small_appleton-estate-signature-blend.webp?v=1741231042",
     "productUrl": "https://rumratings.com/rum/3424-appleton-estate-signature-blend",
     "code": "",
+    "yearDistilled": 0,
+    "rawMaterial": "",
+    "process": "",
+    "distillationMethod": "",
+    "womenLed": false,
     "ratings": [
       {
         "provider": "RumRatings",
@@ -5606,10 +5439,15 @@
     "brand": "Plantation",
     "type": "Dark",
     "category": "rum",
-    "volumeWeight": "307",
+    "volumeWeight": "",
     "imgUrl": "https://images.rumratings.com/uploads/brand/image/4102/small_Plantation_Overproof_OFTD_Rum_400px.webp?v=1741231214",
     "productUrl": "https://rumratings.com/rum/4102-plantation-overproof-o-f-t-d",
     "code": "",
+    "yearDistilled": 0,
+    "rawMaterial": "",
+    "process": "",
+    "distillationMethod": "",
+    "womenLed": false,
     "ratings": [
       {
         "provider": "RumRatings",

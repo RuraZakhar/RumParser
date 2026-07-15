@@ -1,6 +1,8 @@
 package org.example;
 
 import com.google.gson.annotations.SerializedName;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.text.Normalizer;
 import java.util.LinkedHashSet;
@@ -10,6 +12,8 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+@Getter
+@Setter
 public class RumProduct {
 
     private static final Pattern AGE_PATTERN = Pattern.compile(
@@ -33,76 +37,17 @@ public class RumProduct {
     private String productUrl;
     private String code;
     private Offer offer;
+
     private Object silpoMatch = null;
+    private Integer yearDistilled;
+    private String rawMaterial;
+    private String process;
+    private String distillationMethod;
+    private Boolean womenLed;
+
     private Set<Rating> ratings = new LinkedHashSet<>();
     private Set<Review> reviews = new LinkedHashSet<>();
-
-    public String getName() { return name; }
-    public void setName(String name) { this.name = name; }
-
-    public String getDescription() { return description; }
-    public void setDescription(String description) { this.description = description; }
-
-    public Double getAbv() { return abv; }
-    public void setAbv(Double abv) { this.abv = abv; }
-
-    public Double getAge() { return age; }
-    public void setAge(Double age) { this.age = age; }
-
-    public String getRegion() { return region; }
-    public void setRegion(String region) { this.region = region; }
-
-    public String getCountry() { return region; }
-    public void setCountry(String country) { this.region = country; }
-
-    public String getBrand() { return brand; }
-    public void setBrand(String brand) { this.brand = brand; }
-
-    public String getType() { return type; }
-    public void setType(String type) { this.type = type; }
-
-    public String getCategory() { return category; }
-    public void setCategory(String category) { this.category = category; }
-
-    public Double getPrice() { return price; }
-    public void setPrice(Double price) { this.price = price; }
-
-    public String getVolumeWeight() { return volumeWeight; }
-    public void setVolumeWeight(String volumeWeight) { this.volumeWeight = volumeWeight; }
-
-    public String getImgUrl() { return imgUrl; }
-    public void setImgUrl(String imgUrl) { this.imgUrl = imgUrl; }
-
-    public String getProductUrl() { return productUrl; }
-    public void setProductUrl(String productUrl) { this.productUrl = productUrl; }
-
-    public String getCode() { return code; }
-    public void setCode(String code) { this.code = code; }
-
-    public Offer getOffer() { return offer; }
-    public void setOffer(Offer offer) { this.offer = offer; }
-
-    public Object getSilpoMatch() {return silpoMatch;}
-    public void setSilpoMatch(Object silpoMatch) {
-        this.silpoMatch = silpoMatch;
-    }
-
-    public Set<Rating> getRatings() { return ratings; }
-    public void setRatings(Set<Rating> ratings) {
-        this.ratings = ratings == null ? new LinkedHashSet<>() : ratings;
-    }
-
-    public Set<Review> getReviews() { return reviews; }
-    public void setReviews(Set<Review> reviews) {
-        this.reviews = reviews == null ? new LinkedHashSet<>() : reviews;
-    }
-
-    public boolean hasSilpoOffer() {
-        return offer != null
-                && "Silpo".equalsIgnoreCase(offer.getSource())
-                && offer.getPrice() != null;
-    }
-
+    
     public void mergeFrom(RumProduct incoming) {
         if (incoming == null) {
             return;
@@ -119,12 +64,20 @@ public class RumProduct {
         copyStringIfMissing(this::getImgUrl, this::setImgUrl, incoming.getImgUrl());
         copyStringIfMissing(this::getProductUrl, this::setProductUrl, incoming.getProductUrl());
         copyStringIfMissing(this::getCode, this::setCode, incoming.getCode());
+        copyIntegerIfMissing(this::getYearDistilled, this::setYearDistilled, incoming.getYearDistilled());
+        copyStringIfMissing(this::getRawMaterial, this::setRawMaterial, incoming.getRawMaterial());
+        copyStringIfMissing(this::getProcess, this::setProcess, incoming.getProcess());
+        copyStringIfMissing(this::getDistillationMethod, this::setDistillationMethod, incoming.getDistillationMethod());
+        copyBooleanIfMissing(this::getWomenLed, this::setWomenLed, incoming.getWomenLed());
 
         if (price == null && incoming.getPrice() != null) {
             price = incoming.getPrice();
         }
         if (offer == null && incoming.getOffer() != null) {
             offer = incoming.getOffer();
+        }
+        if (silpoMatch == null && incoming.getSilpoMatch() != null) {
+            silpoMatch = incoming.getSilpoMatch();
         }
 
         ratings.addAll(incoming.getRatings());
@@ -186,6 +139,22 @@ public class RumProduct {
         }
     }
 
+    private static void copyIntegerIfMissing(java.util.function.Supplier<Integer> getter,
+                                             java.util.function.Consumer<Integer> setter,
+                                             Integer incomingValue) {
+        if (getter.get() == null && incomingValue != null) {
+            setter.accept(incomingValue);
+        }
+    }
+
+    private static void copyBooleanIfMissing(java.util.function.Supplier<Boolean> getter,
+                                             java.util.function.Consumer<Boolean> setter,
+                                             Boolean incomingValue) {
+        if (getter.get() == null && incomingValue != null) {
+            setter.accept(incomingValue);
+        }
+    }
+
     @Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -197,6 +166,7 @@ public class RumProduct {
     public int hashCode() {
         return Objects.hash(normalizeName(name));
     }
+
 
     public static class Offer {
         private String id;

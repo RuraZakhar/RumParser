@@ -24,7 +24,9 @@ public class Main {
 
     public static void main(String[] args) {
         Set<RumProduct> rumSet = new LinkedHashSet<>();
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        Gson gson = new GsonBuilder()
+                .setPrettyPrinting()
+                .create();
         File file = new File(DATABASE_FILE);
 
         if (file.exists()) {
