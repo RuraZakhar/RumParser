@@ -15,7 +15,7 @@ import java.util.Set;
 
 public class SilpoPriceService {
 
-    private static final String FIRECRAWL_API_KEY = "fc-e61c2ab5344641e6952f05f314cba080";
+    private static final String FIRECRAWL_API_KEY = "fc-6643459e0664403694135d372d973aee";
     private static final String FIRECRAWL_SCRAPE_URL = "https://api.firecrawl.dev/v1/scrape";
     private static final String SILPO_RUM_CATEGORY_URL = "https://silpo.ua/category/rom-4468";
 
