@@ -23,19 +23,14 @@ public class RumRatingsParser implements RumParser {
 
     @Override
     public void parse(Set<RumProduct> rumSet) {
-        System.out.println("\n[2/2] Starting RumRatings Parser...");
-
-        if (FIRECRAWL_API_KEY == null || FIRECRAWL_API_KEY.isBlank()) {
-            System.err.println("ERROR: FIRECRAWL_API_KEY is not set.");
-            return;
-        }
+        System.out.println("\n[2/3] Starting RumRatings Parser...");
 
         HttpClient client = HttpClient.newBuilder()
                 .connectTimeout(Duration.ofSeconds(120))
                 .build();
 
         Map<String, RumProduct> topRumsToScrape = new LinkedHashMap<>();
-        int maxPages = 3;
+        int maxPages = 11;
 
         for (int page = 1; page <= maxPages; page++) {
             System.out.println(">>> Fetching RumRatings listing page " + page + "...");

@@ -17,13 +17,10 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class RumHowlerParser implements RumParser {
 
     private static final String BASE_URL = "https://therumhowlerblog.com/rum-reviews/";
-    private static final int DEFAULT_MAX_PRODUCTS = 500;
 
     @Override
     public void parse(Set<RumProduct> rumSet) {
-        System.out.println("[1/2] Scanning first source (The Rum Howler Blog)...");
-
-        int maxProducts = getPositiveEnvironmentInt("MAX_HOWLER_PRODUCTS", DEFAULT_MAX_PRODUCTS);
+        System.out.println("[1/3] Scanning first source (The Rum Howler Blog)...");
 
         try {
             Document mainPage = Jsoup.connect(BASE_URL)
@@ -49,8 +46,6 @@ public class RumHowlerParser implements RumParser {
                 if (rawName.trim().isEmpty() || rumUrl.equals(BASE_URL)) continue;
 
                 CompletableFuture<Void> future = CompletableFuture.runAsync(() -> {
-                    if (count.get() >= maxProducts) return;
-
                     try {
                         Document itemPage = Jsoup.connect(rumUrl)
                                 .userAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36")
@@ -71,20 +66,20 @@ public class RumHowlerParser implements RumParser {
                             rum.getRatings().add(rating);
 
                             synchronized (rumSet) {
-                                if (count.get() < maxProducts && rumSet.add(rum)) {
+                                if (rumSet.add(rum)) {
                                     count.incrementAndGet();
                                 }
                             }
                         }
 
-                    } catch (Exception e) {}
+                    } catch (Exception ignored) {
+                    }
                 }, executor);
 
                 futures.add(future);
             }
 
             CompletableFuture.allOf(futures.toArray(new CompletableFuture[0])).join();
-
             executor.shutdown();
 
             System.out.println("Finished Howler Blog. Total collected: " + count.get());
@@ -101,19 +96,5 @@ public class RumHowlerParser implements RumParser {
             return matcher.group(1);
         }
         return null;
-    }
-
-    private int getPositiveEnvironmentInt(String variableName, int defaultValue) {
-        String value = System.getenv(variableName);
-        if (value == null || value.isBlank()) {
-            return defaultValue;
-        }
-        try {
-            int parsedValue = Integer.parseInt(value);
-            return parsedValue > 0 ? parsedValue : defaultValue;
-        } catch (NumberFormatException e) {
-            System.err.println("Ignoring invalid " + variableName + " value: " + value);
-            return defaultValue;
-        }
     }
 }

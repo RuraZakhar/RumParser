@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
 public class Main {
 
     private static final String FILTERED_OUTPUT_FILE = "top_rum_products.json";
-    private static final double MIN_RATING = 8.5;
+    private static final double MIN_RATING = 7.0;
 
     public static void main(String[] args) {
         Set<RumProduct> rumSet = new LinkedHashSet<>();
@@ -47,13 +47,11 @@ public class Main {
 
         System.out.println("=== RUNNING RUM PARSER ===");
 
-        // --- ДОДАЄМО ВСІ 3 ПАРСЕРИ ---
         List<RumParser> parsers = new ArrayList<>();
         parsers.add(new RumHowlerParser());
         parsers.add(new RumRatingsParser());
-        parsers.add(new SilpoParser()); // НАШ НОВИЙ ПАРСЕР СІЛЬПО
+        parsers.add(new SilpoParser());
 
-        // Запускаємо їх по черзі (всі вони наповнюють та оновлюють єдиний rumSet)
         for (RumParser parser : parsers) {
             parser.parse(rumSet);
         }
@@ -61,12 +59,10 @@ public class Main {
         System.out.println("\nTotal unique rums in memory: " + rumSet.size());
         rumSet.forEach(RumProduct::enrichDerivedFields);
 
-        // Фільтруємо найкращі (тепер тут будуть і чисто Сільповські роми з оцінкою > 8.5)
         Set<RumProduct> ratedRumList = rumSet.stream()
                 .filter(rum -> rum.getRatings().stream()
                         .anyMatch(r -> r.getRating() != null && r.getRating() >= MIN_RATING))
                 .sorted(Comparator.comparingDouble(Main::highestRating).reversed())
-                .limit(500)
                 .collect(Collectors.toCollection(LinkedHashSet::new));
 
         System.out.println("Top products (rating >= " + MIN_RATING + "): " + ratedRumList.size());
