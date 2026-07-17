@@ -1,9 +1,10 @@
-package org.example;
+package rum.parser.parsers;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import rum.parser.model.RumProduct;
 
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -16,7 +17,7 @@ import java.util.Set;
 
 public class RumRatingsParser implements RumParser {
 
-    private static final String FIRECRAWL_API_KEY = "fc-6643459e0664403694135d372d973aee";
+    private static final String FIRECRAWL_API_KEY = System.getenv("FIRECRAWL_API_KEY");
     private static final String FIRECRAWL_SCRAPE_URL = "https://api.firecrawl.dev/v1/scrape";
     private static final String BASE_TARGET_URL = "https://rumratings.com/rum";
 

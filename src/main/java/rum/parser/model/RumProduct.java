@@ -1,4 +1,4 @@
-package org.example;
+package rum.parser.model;
 
 import com.google.gson.annotations.SerializedName;
 import lombok.Getter;
@@ -38,7 +38,9 @@ public class RumProduct {
     private String code;
     private Offer offer;
 
-    private Object silpoMatch = null;
+    // Змінено з Object на типізований клас
+    private SilpoMatch silpoMatch = null;
+
     private Integer yearDistilled;
     private String rawMaterial;
     private String process;
@@ -47,7 +49,7 @@ public class RumProduct {
 
     private Set<Rating> ratings = new LinkedHashSet<>();
     private Set<Review> reviews = new LinkedHashSet<>();
-    
+
     public void mergeFrom(RumProduct incoming) {
         if (incoming == null) {
             return;
@@ -167,6 +169,7 @@ public class RumProduct {
         return Objects.hash(normalizeName(name));
     }
 
+    // --- INNER CLASSES ---
 
     public static class Offer {
         private String id;
@@ -179,24 +182,48 @@ public class RumProduct {
 
         public String getId() { return id; }
         public void setId(String id) { this.id = id; }
-
         public String getCategory() { return category; }
         public void setCategory(String category) { this.category = category; }
-
         public Double getPrice() { return price; }
         public void setPrice(Double price) { this.price = price; }
-
         public Double getDiscount() { return discount; }
         public void setDiscount(Double discount) { this.discount = discount; }
-
         public Integer getStock() { return stock; }
         public void setStock(Integer stock) { this.stock = stock; }
-
         public String getUrl() { return url; }
         public void setUrl(String url) { this.url = url; }
-
         public String getSource() { return source; }
         public void setSource(String source) { this.source = source; }
+    }
+
+    public static class SilpoMatch {
+        @SerializedName("silpo_title")
+        private String silpoTitle;
+        @SerializedName("similarity_score")
+        private Double similarityScore;
+        private Double price;
+        @SerializedName("in_stock")
+        private Boolean inStock;
+        private String url;
+
+        public SilpoMatch(String silpoTitle, Double similarityScore, Double price, Boolean inStock, String url) {
+            this.silpoTitle = silpoTitle;
+            this.similarityScore = similarityScore;
+            this.price = price;
+            this.inStock = inStock;
+            this.url = url;
+        }
+
+        public String getSilpoTitle() { return silpoTitle; }
+        public void setSilpoTitle(String silpoTitle) { this.silpoTitle = silpoTitle; }
+        public Double getSimilarityScore() { return similarityScore; }
+        public void setSimilarityScore(Double similarityScore) { this.similarityScore = similarityScore; }
+        public Double getPrice() { return price; }
+        public void setPrice(Double price) { this.price = price; }
+        public Boolean getInStock() { return inStock; }
+        public void setInStock(Boolean inStock) { this.inStock = inStock; }
+        public String getUrl() { return url; }
+        public void setUrl(String url) { this.url = url; }
     }
 
     public static class Rating {
@@ -213,7 +240,6 @@ public class RumProduct {
 
         public String getProvider() { return provider; }
         public void setProvider(String provider) { this.provider = provider; }
-
         public Double getRating() { return rating; }
         public void setRating(Double rating) { this.rating = rating; }
 
@@ -239,16 +265,12 @@ public class RumProduct {
 
         public String getDate() { return date; }
         public void setDate(String date) { this.date = date; }
-
         public String getText() { return text; }
         public void setText(String text) { this.text = text; }
-
         public Double getRating() { return rating; }
         public void setRating(Double rating) { this.rating = rating; }
-
         public String getAuthor() { return author; }
         public void setAuthor(String author) { this.author = author; }
-
         public String getSource() { return source; }
         public void setSource(String source) { this.source = source; }
 

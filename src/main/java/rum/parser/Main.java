@@ -1,8 +1,15 @@
-package org.example;
+package rum.parser;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
+import rum.parser.model.RumProduct;
+import rum.parser.parsers.RumHowlerParser;
+import rum.parser.parsers.RumParser;
+import rum.parser.parsers.RumRatingsParser;
+import rum.parser.parsers.SilpoParser;
+import rum.parser.util.JsonDataExporter;
+
 import java.io.File;
 import java.io.FileReader;
 import java.lang.reflect.Type;
@@ -16,7 +23,7 @@ import java.util.stream.Collectors;
 public class Main {
 
     private static final String FILTERED_OUTPUT_FILE = "top_rum_products.json";
-    private static final double MIN_RATING = 8.5    ;
+    private static final double MIN_RATING = 8.5;
 
     public static void main(String[] args) {
         Set<RumProduct> rumSet = new LinkedHashSet<>();
@@ -40,10 +47,13 @@ public class Main {
 
         System.out.println("=== RUNNING RUM PARSER ===");
 
+        // --- ДОДАЄМО ВСІ 3 ПАРСЕРИ ---
         List<RumParser> parsers = new ArrayList<>();
         parsers.add(new RumHowlerParser());
         parsers.add(new RumRatingsParser());
+        parsers.add(new SilpoParser()); // НАШ НОВИЙ ПАРСЕР СІЛЬПО
 
+        // Запускаємо їх по черзі (всі вони наповнюють та оновлюють єдиний rumSet)
         for (RumParser parser : parsers) {
             parser.parse(rumSet);
         }
@@ -51,17 +61,13 @@ public class Main {
         System.out.println("\nTotal unique rums in memory: " + rumSet.size());
         rumSet.forEach(RumProduct::enrichDerivedFields);
 
+        // Фільтруємо найкращі (тепер тут будуть і чисто Сільповські роми з оцінкою > 8.5)
         Set<RumProduct> ratedRumList = rumSet.stream()
                 .filter(rum -> rum.getRatings().stream()
                         .anyMatch(r -> r.getRating() != null && r.getRating() >= MIN_RATING))
                 .sorted(Comparator.comparingDouble(Main::highestRating).reversed())
                 .limit(500)
                 .collect(Collectors.toCollection(LinkedHashSet::new));
-
-        System.out.println("Top rated rums to check in Silpo: " + ratedRumList.size());
-
-        SilpoPriceService silpoService = new SilpoPriceService();
-        silpoService.matchPrices(ratedRumList);
 
         System.out.println("Top products (rating >= " + MIN_RATING + "): " + ratedRumList.size());
 

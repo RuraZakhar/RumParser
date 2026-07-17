@@ -1,4 +1,4 @@
-package org.example;
+package rum.parser.util;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;

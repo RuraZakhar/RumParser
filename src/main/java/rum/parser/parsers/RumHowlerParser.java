@@ -1,5 +1,6 @@
-package org.example;
+package rum.parser.parsers;
 
+import rum.parser.model.RumProduct;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
