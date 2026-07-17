@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 public class Main {
 
     private static final String FILTERED_OUTPUT_FILE = "top_rum_products.json";
-    private static final double MIN_RATING = 7.0;
+    private static final double MIN_RATING = 8.5    ;
 
     public static void main(String[] args) {
         Set<RumProduct> rumSet = new LinkedHashSet<>();

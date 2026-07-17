@@ -107,7 +107,6 @@ public class RumRatingsParser implements RumParser {
         System.out.println("Finished RumRatings. Total top rums integrated: " + processed);
     }
 
-
     private JsonObject scrapeListingPage(HttpClient client, int page) throws Exception {
         String currentUrl = BASE_TARGET_URL + "?page=" + page;
         JsonObject requestBody = buildListingRequestBody(currentUrl);
@@ -117,8 +116,33 @@ public class RumRatingsParser implements RumParser {
     private JsonObject buildListingRequestBody(String url) {
         JsonObject requestBody = new JsonObject();
         requestBody.addProperty("url", url);
-        requestBody.addProperty("waitFor", 2000);
+        requestBody.addProperty("waitFor", 3000);
         requestBody.addProperty("onlyMainContent", true);
+
+        JsonArray actions = new JsonArray();
+
+        JsonObject clickRating = new JsonObject();
+        clickRating.addProperty("type", "click");
+        clickRating.addProperty("selector", "button[data-value=\"average_rating\"]");
+
+        JsonObject wait1 = new JsonObject();
+        wait1.addProperty("type", "wait");
+        wait1.addProperty("milliseconds", 2000);
+
+        JsonObject click50 = new JsonObject();
+        click50.addProperty("type", "click");
+        click50.addProperty("selector", "button[data-key=\"min_rating\"][data-value=\"50\"]");
+
+        JsonObject wait2 = new JsonObject();
+        wait2.addProperty("type", "wait");
+        wait2.addProperty("milliseconds", 3000);
+
+        actions.add(clickRating);
+        actions.add(wait1);
+        actions.add(click50);
+        actions.add(wait2);
+
+        requestBody.add("actions", actions);
 
         JsonArray formats = new JsonArray();
         formats.add("json");
@@ -138,7 +162,9 @@ public class RumRatingsParser implements RumParser {
         JsonObject item = new JsonObject();
         item.addProperty("type", "object");
         item.add("properties", itemProperties);
-        JsonArray required = new JsonArray(); required.add("name"); required.add("productUrl");
+        JsonArray required = new JsonArray();
+        required.add("name");
+        required.add("productUrl");
         item.add("required", required);
 
         JsonObject rums = new JsonObject();
@@ -233,7 +259,6 @@ public class RumRatingsParser implements RumParser {
         rum.enrichDerivedFields();
     }
 
-
     private JsonObject sendFirecrawlRequest(HttpClient client, JsonObject requestBody, String logContext) {
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(FIRECRAWL_SCRAPE_URL))
@@ -266,7 +291,6 @@ public class RumRatingsParser implements RumParser {
         }
         return null;
     }
-
 
     private boolean mergeIntoSet(Set<RumProduct> rumSet, RumProduct incomingRum) {
         if (rumSet.add(incomingRum)) return true;
