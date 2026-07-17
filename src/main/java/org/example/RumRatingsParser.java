@@ -16,7 +16,7 @@ import java.util.Set;
 
 public class RumRatingsParser implements RumParser {
 
-    private static final String FIRECRAWL_API_KEY = "fc-6643459e0664403694135d372d973aee";
+    private static final String FIRECRAWL_API_KEY = System.getenv("FIRECRAWL_API_KEY");
     private static final String FIRECRAWL_SCRAPE_URL = "https://api.firecrawl.dev/v1/scrape";
     private static final String BASE_TARGET_URL = "https://rumratings.com/rum";
 
@@ -34,7 +34,7 @@ public class RumRatingsParser implements RumParser {
                 .build();
 
         Map<String, RumProduct> topRumsToScrape = new LinkedHashMap<>();
-        int maxPages = 3;
+        int maxPages = getPositiveEnvironmentInt("MAX_RUM_RATINGS_PAGES", 25);
 
         for (int page = 1; page <= maxPages; page++) {
             System.out.println(">>> Fetching RumRatings listing page " + page + "...");
@@ -358,6 +358,20 @@ public class RumRatingsParser implements RumParser {
             return value == 0 ? null : value;
         } catch (RuntimeException e) {
             return null;
+        }
+    }
+
+    private int getPositiveEnvironmentInt(String variableName, int defaultValue) {
+        String value = System.getenv(variableName);
+        if (value == null || value.isBlank()) {
+            return defaultValue;
+        }
+        try {
+            int parsedValue = Integer.parseInt(value);
+            return parsedValue > 0 ? parsedValue : defaultValue;
+        } catch (NumberFormatException e) {
+            System.err.println("Ignoring invalid " + variableName + " value: " + value);
+            return defaultValue;
         }
     }
 }

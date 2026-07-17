@@ -15,17 +15,10 @@ import java.util.Set;
 
 public class SilpoPriceService {
 
-    private static final String FIRECRAWL_API_KEY = "fc-6643459e0664403694135d372d973aee";
-    private static final String FIRECRAWL_SCRAPE_URL = "https://api.firecrawl.dev/v1/scrape";
-    private static final String SILPO_RUM_CATEGORY_URL = "https://silpo.ua/category/rom-4468";
+    private static final String BASE_PRODUCT_URL = "https://silpo.ua/product/";
 
     public void matchPrices(Set<RumProduct> rums) {
         System.out.println("\n[3/3] Starting Bulk Silpo Price Matching...");
-
-        if (FIRECRAWL_API_KEY == null || FIRECRAWL_API_KEY.isEmpty()) {
-            System.err.println("ERROR: FIRECRAWL_API_KEY is not set! Skipping price matching.");
-            return;
-        }
 
         HttpClient client = HttpClient.newBuilder()
                 .connectTimeout(Duration.ofSeconds(60))
@@ -78,30 +71,59 @@ public class SilpoPriceService {
 
     private List<SilpoProductDTO> fetchAllSilpoRums(HttpClient client) {
         List<SilpoProductDTO> catalog = new ArrayList<>();
-        int maxPages = 9;
+        int limit = 100;
+        int offset = 0;
+        boolean hasMore = true;
 
-        System.out.println("Починаю послідовний збір Сільпо...");
+        System.out.println("Починаю послідовний збір Сільпо через API...");
 
-        for (int page = 1; page <= maxPages; page++) {
-            System.out.println("➡️ Завантажую сторінку " + page + " з " + maxPages + "...");
+        while (hasMore) {
+            String apiUrl = "https://sf-ecom-api.silpo.ua/v1/uk/branches/00000000-0000-0000-0000-000000000000/products?limit=" + limit + "&offset=" + offset + "&deliveryType=DeliveryHome&category=rom-4468&includeChildCategories=true&sortBy=popularity&sortDirection=desc&inStock=false";
 
-            String currentUrl = SILPO_RUM_CATEGORY_URL + (page > 1 ? "?page=" + page : "");
+            try {
+                HttpRequest request = HttpRequest.newBuilder()
+                        .uri(URI.create(apiUrl))
+                        .header("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36")
+                        .header("Accept", "application/json, text/plain, */*")
+                        .header("Referer", "https://silpo.ua/")
+                        .GET()
+                        .build();
 
-            List<SilpoProductDTO> pageItems = fetchSinglePageWithRetry(client, currentUrl);
+                System.out.println("➡️ Завантажую товари з " + offset + " по " + (offset + limit) + "...");
+                HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
-            if (!pageItems.isEmpty()) {
-                catalog.addAll(pageItems);
-                System.out.println("Сторінка " + page + " готова (" + pageItems.size() + " товарів).");
-            } else {
-                System.out.println("Сторінка " + page + " повернула 0 товарів.");
-            }
+                if (response.statusCode() == 200) {
+                    JsonObject rootObj = JsonParser.parseString(response.body()).getAsJsonObject();
+                    JsonArray items = rootObj.getAsJsonArray("items");
 
-            if (page < maxPages) {
-                try {
-                    Thread.sleep(2000);
-                } catch (InterruptedException e) {
-                    Thread.currentThread().interrupt();
+                    int fetchedSize = items.size();
+                    System.out.println("   Отримано: " + fetchedSize + " шт.");
+
+                    for (JsonElement element : items) {
+                        JsonObject item = element.getAsJsonObject();
+
+                        String title = getStringOrNull(item, "title");
+                        Double price = getDoubleOrNull(item, "price");
+                        String slug = getStringOrNull(item, "slug");
+                        String url = (slug != null && !slug.isEmpty()) ? BASE_PRODUCT_URL + slug : "";
+
+                        if (title != null && !title.isEmpty()) {
+                            catalog.add(new SilpoProductDTO(title, price != null ? price : 0.0, url));
+                        }
+                    }
+
+                    if (fetchedSize < limit) {
+                        hasMore = false;
+                    } else {
+                        offset += limit;
+                    }
+                } else {
+                    System.err.println("Помилка API Сільпо! Код: " + response.statusCode());
+                    break;
                 }
+            } catch (Exception e) {
+                System.err.println("Помилка з'єднання: " + e.getMessage());
+                break;
             }
         }
 
@@ -109,94 +131,18 @@ public class SilpoPriceService {
         return catalog;
     }
 
-    private List<SilpoProductDTO> fetchSinglePageWithRetry(HttpClient client, String url) {
-        List<SilpoProductDTO> items = new ArrayList<>();
-        int maxRetries = 3;
-
-        try {
-            JsonObject jsonBody = new JsonObject();
-            jsonBody.addProperty("url", url);
-            jsonBody.addProperty("waitFor", 5000);
-
-            JsonArray formatsArray = new JsonArray();
-            formatsArray.add("extract");
-            jsonBody.add("formats", formatsArray);
-
-            JsonObject extractOptions = new JsonObject();
-            extractOptions.addProperty("prompt", "Extract ALL products visible on this category page. For each item, extract its exact title, numerical price in UAH, and relative or absolute product URL.");
-
-            JsonObject schema = new JsonObject();
-            schema.addProperty("type", "object");
-
-            JsonObject properties = new JsonObject();
-            JsonObject productsList = new JsonObject();
-            productsList.addProperty("type", "array");
-
-            JsonObject schemaItems = new JsonObject();
-            schemaItems.addProperty("type", "object");
-
-            JsonObject itemProperties = new JsonObject();
-            JsonObject titleProp = new JsonObject(); titleProp.addProperty("type", "string");
-            JsonObject priceProp = new JsonObject(); priceProp.addProperty("type", "number");
-            JsonObject urlProp = new JsonObject(); urlProp.addProperty("type", "string");
-
-            itemProperties.add("title", titleProp);
-            itemProperties.add("price", priceProp);
-            itemProperties.add("url", urlProp);
-            schemaItems.add("properties", itemProperties);
-
-            productsList.add("items", schemaItems);
-            properties.add("products", productsList);
-            schema.add("properties", properties);
-
-            extractOptions.add("schema", schema);
-            jsonBody.add("extract", extractOptions);
-
-            HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create(FIRECRAWL_SCRAPE_URL))
-                    .header("Content-Type", "application/json")
-                    .header("Authorization", "Bearer " + FIRECRAWL_API_KEY)
-                    .POST(HttpRequest.BodyPublishers.ofString(jsonBody.toString()))
-                    .build();
-
-            for (int i = 0; i < maxRetries; i++) {
-                try {
-                    HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-
-                    if (response.statusCode() == 200) {
-                        JsonObject responseJson = JsonParser.parseString(response.body()).getAsJsonObject();
-                        if (responseJson.has("data") && responseJson.getAsJsonObject("data").has("extract")) {
-                            JsonObject extractedData = responseJson.getAsJsonObject("data").getAsJsonObject("extract");
-                            if (extractedData.has("products")) {
-                                JsonArray productsArray = extractedData.getAsJsonArray("products");
-                                for (JsonElement el : productsArray) {
-                                    JsonObject pJson = el.getAsJsonObject();
-                                    String title = pJson.has("title") && !pJson.get("title").isJsonNull() ? pJson.get("title").getAsString() : "";
-                                    double price = pJson.has("price") && !pJson.get("price").isJsonNull() ? pJson.get("price").getAsDouble() : 0.0;
-                                    String urlStr = pJson.has("url") && !pJson.get("url").isJsonNull() ? pJson.get("url").getAsString() : "";
-
-                                    if (!title.isEmpty()) {
-                                        if (!urlStr.startsWith("http") && !urlStr.isEmpty()) urlStr = "https://silpo.ua" + urlStr;
-                                        items.add(new SilpoProductDTO(title, price, urlStr));
-                                    }
-                                }
-                            }
-                        }
-                        return items;
-                    }
-
-                    System.out.println("⚠Спроба " + (i + 1) + " невдала для " + url + ", код: " + response.statusCode());
-                    Thread.sleep(3000);
-                } catch (Exception e) {
-                    System.err.println("Помилка з'єднання: " + e.getMessage());
-                    Thread.sleep(3000);
-                }
-            }
-        } catch (Exception e) {
-            System.err.println("Помилка формування запиту: " + e.getMessage());
+    private static String getStringOrNull(JsonObject obj, String field) {
+        if (obj.has(field) && !obj.get(field).isJsonNull()) {
+            return obj.get(field).getAsString();
         }
+        return null;
+    }
 
-        return items;
+    private static Double getDoubleOrNull(JsonObject obj, String field) {
+        if (obj.has(field) && !obj.get(field).isJsonNull()) {
+            return obj.get(field).getAsDouble();
+        }
+        return null;
     }
 
     private double calculateSimilarity(String s1, String s2) {
