@@ -15,109 +15,162 @@ import java.net.http.HttpResponse;
 
 public class SilpoTest {
 
+    private static final HttpClient client = HttpClient.newHttpClient();
+    private static final Gson gson = new GsonBuilder().setPrettyPrinting().create();
+
+    // Базові посилання
+    private static final String BASE_IMAGE_URL = "https://images.silpo.ua/products/1600x1600/webp/";
+    private static final String BASE_PRODUCT_URL = "https://silpo.ua/product/";
+    private static final String BASE_API_DETAILS_URL = "https://sf-ecom-api.silpo.ua/v1/uk/branches/00000000-0000-0000-0000-000000000000/products/";
+
     public static void main(String[] args) {
-        System.out.println(">>> Стартуємо повний парсинг Сільпо...");
+        System.out.println(">>> Стартуємо МЕГА-парсинг Сільпо (з деталями)...");
 
-        HttpClient client = HttpClient.newHttpClient();
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
-
-        // Базові частини посилань
-        String baseImageUrl = "https://images.silpo.ua/products/1600x1600/webp/";
-        String baseProductUrl = "https://silpo.ua/product/";
-
-        JsonArray allCleanProducts = new JsonArray(); // Тут зберемо взагалі ВСІ товари
-
-        int limit = 100; // Максимум, який дозволяє сервер за один раз
+        JsonArray allCleanProducts = new JsonArray();
+        int limit = 100;
         int offset = 0;
         boolean hasMore = true;
 
         try {
+            // ЕТАП 1: Збираємо всі товари з каталогу
             while (hasMore) {
-                // Динамічно підставляємо offset у посилання
-                String apiUrl = "https://sf-ecom-api.silpo.ua/v1/uk/branches/00000000-0000-0000-0000-000000000000/products?limit=" + limit + "&offset=" + offset + "&deliveryType=DeliveryHome&category=rom-4468&includeChildCategories=true&sortBy=popularity&sortDirection=desc&inStock=false";
+                String catalogUrl = "https://sf-ecom-api.silpo.ua/v1/uk/branches/00000000-0000-0000-0000-000000000000/products?limit=" + limit + "&offset=" + offset + "&deliveryType=DeliveryHome&category=rom-4468&includeChildCategories=true&sortBy=popularity&sortDirection=desc&inStock=false";
 
-                HttpRequest request = HttpRequest.newBuilder()
-                        .uri(URI.create(apiUrl))
-                        .header("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36")
-                        .header("Accept", "application/json, text/plain, */*")
-                        .header("Referer", "https://silpo.ua/")
-                        .GET()
-                        .build();
+                String responseBody = sendGetRequest(catalogUrl);
 
-                System.out.println("Завантажуємо товари з " + offset + " по " + (offset + limit) + "...");
-                HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-
-                if (response.statusCode() == 200) {
-                    JsonObject rootObj = JsonParser.parseString(response.body()).getAsJsonObject();
+                if (responseBody != null) {
+                    JsonObject rootObj = JsonParser.parseString(responseBody).getAsJsonObject();
                     JsonArray items = rootObj.getAsJsonArray("items");
 
                     int fetchedSize = items.size();
-                    System.out.println("   Отримано: " + fetchedSize + " шт.");
+                    System.out.println("Завантажено з каталогу сторінку (відступ " + offset + "): " + fetchedSize + " шт.");
 
-                    // Парсимо поточну порцію
                     for (JsonElement element : items) {
                         JsonObject item = element.getAsJsonObject();
                         JsonObject cleanItem = new JsonObject();
 
-                        // 1. Витягуємо текстові та числові дані
                         String title = getStringOrNull(item, "title");
                         String brand = getStringOrNull(item, "brandTitle");
                         String volume = getStringOrNull(item, "displayRatio");
                         Double price = getDoubleOrNull(item, "price");
                         Double oldPrice = getDoubleOrNull(item, "oldPrice");
-                        Double rating = getDoubleOrNull(item, "guestProductRating");
-
-                        // 2. Формуємо посилання на картинку
                         String icon = getStringOrNull(item, "icon");
-                        String imageUrl = (icon != null && !icon.isEmpty()) ? baseImageUrl + icon : null;
-
-                        // 3. Формуємо посилання на сторінку товару (через slug)
                         String slug = getStringOrNull(item, "slug");
-                        String productUrl = (slug != null && !slug.isEmpty()) ? baseProductUrl + slug : null;
 
-                        // 4. Записуємо у наш чистий об'єкт
                         cleanItem.addProperty("name", title);
                         cleanItem.addProperty("brand", brand);
                         cleanItem.addProperty("volume", volume);
                         cleanItem.addProperty("price", price);
-
                         if (oldPrice != null) cleanItem.addProperty("oldPrice", oldPrice);
-                        if (rating != null) cleanItem.addProperty("silpoRating", rating);
-                        if (imageUrl != null) cleanItem.addProperty("imageUrl", imageUrl);
-                        if (productUrl != null) cleanItem.addProperty("productUrl", productUrl);
+                        if (icon != null) cleanItem.addProperty("imageUrl", BASE_IMAGE_URL + icon);
+                        if (slug != null) cleanItem.addProperty("productUrl", BASE_PRODUCT_URL + slug);
 
-                        allCleanProducts.add(cleanItem); // Додаємо до загального списку
+                        // ЕТАП 2: Робимо додатковий запит за характеристиками (якщо є slug)
+                        if (slug != null && !slug.isEmpty()) {
+                            fetchAndAddDetails(slug, cleanItem);
+                            Thread.sleep(100); // Пауза 0.1 сек, щоб сервер нас не заблокував
+                        }
+
+                        allCleanProducts.add(cleanItem);
                     }
 
-                    // Перевіряємо, чи є ще сторінки
                     if (fetchedSize < limit) {
-                        hasMore = false; // Якщо прийшло менше 100, значить ми дійшли до кінця каталогу
+                        hasMore = false; // Кінець каталогу
                     } else {
-                        offset += limit; // Збільшуємо відступ для наступного кроку (йдемо на наступну сторінку)
+                        offset += limit;
                     }
-
                 } else {
-                    System.err.println("Помилка API! Код: " + response.statusCode());
-                    break; // Зупиняємо цикл при помилці
+                    break;
                 }
             }
 
-            // Коли цикл закінчився, зберігаємо ВЕЛИКИЙ масив у файл
-            String outputFileName = "silpo_test_result.json";
+            // Збереження результату
+            String outputFileName = "silpo_final_database.json";
             try (FileWriter writer = new FileWriter(outputFileName)) {
                 gson.toJson(allCleanProducts, writer);
                 System.out.println("-------------------------------------------------");
                 System.out.println(">>> УСПІХ! Всього зібрано товарів: " + allCleanProducts.size());
-                System.out.println(">>> Усі дані успішно збережено у файл: " + outputFileName);
+                System.out.println(">>> Усі дані (з країною та спиртом) збережено у: " + outputFileName);
             }
 
         } catch (Exception e) {
-            System.err.println("Сталася помилка: " + e.getMessage());
             e.printStackTrace();
         }
     }
 
-    // Допоміжні методи для безпечного витягування (щоб уникнути NullPointerException)
+    // Метод для витягування характеристик (Країна, Спирт, Витримка)
+    private static void fetchAndAddDetails(String slug, JsonObject cleanItem) {
+        String detailsUrl = BASE_API_DETAILS_URL + slug;
+        String responseBody = sendGetRequest(detailsUrl);
+
+        if (responseBody == null) return;
+
+        try {
+            JsonObject root = JsonParser.parseString(responseBody).getAsJsonObject();
+            JsonArray groups = root.getAsJsonArray("attributeGroups");
+
+            if (groups != null) {
+                for (JsonElement groupEl : groups) {
+                    JsonObject group = groupEl.getAsJsonObject();
+
+                    // Шукаємо блок "Загальна інформація"
+                    if ("generalInfo".equals(getStringOrNull(group, "key"))) {
+                        JsonArray attributes = group.getAsJsonArray("attributes");
+
+                        for (JsonElement attrEl : attributes) {
+                            JsonObject attr = attrEl.getAsJsonObject();
+                            JsonObject attrKeyObj = attr.getAsJsonObject("attribute");
+                            JsonObject valueObj = attr.getAsJsonObject("value");
+
+                            if (attrKeyObj != null && valueObj != null) {
+                                String key = getStringOrNull(attrKeyObj, "key");
+                                String valueTitle = getStringOrNull(valueObj, "title");
+
+                                if (valueTitle != null) {
+                                    if ("country".equals(key)) {
+                                        cleanItem.addProperty("country", valueTitle);
+                                    } else if ("alcoholcontent".equals(key)) {
+                                        cleanItem.addProperty("alcohol", valueTitle + "%");
+                                    } else if ("strokvytrymky".equals(key)) {
+                                        cleanItem.addProperty("aging", valueTitle);
+                                    } else if ("color".equals(key)) {
+                                        cleanItem.addProperty("color", valueTitle);
+                                    }
+                                }
+                            }
+                        }
+                        break; // Знайшли потрібний блок, далі не шукаємо
+                    }
+                }
+            }
+        } catch (Exception e) {
+            System.err.println("Помилка парсингу деталей для " + slug);
+        }
+    }
+
+    // Універсальний метод для HTTP запитів з правильними заголовками
+    private static String sendGetRequest(String url) {
+        try {
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create(url))
+                    .header("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/126.0.0.0 Safari/537.36")
+                    .header("Accept", "application/json, text/plain, */*")
+                    .header("Referer", "https://silpo.ua/")
+                    .GET()
+                    .build();
+
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            if (response.statusCode() == 200) {
+                return response.body();
+            } else {
+                System.err.println("Помилка " + response.statusCode() + " на URL: " + url);
+            }
+        } catch (Exception e) {
+            System.err.println("Помилка з'єднання: " + e.getMessage());
+        }
+        return null;
+    }
+
     private static String getStringOrNull(JsonObject obj, String field) {
         if (obj.has(field) && !obj.get(field).isJsonNull()) {
             return obj.get(field).getAsString();
