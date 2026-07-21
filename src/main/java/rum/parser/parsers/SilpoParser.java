@@ -37,7 +37,6 @@ public class SilpoParser implements RumParser {
             RumProduct bestMatch = null;
             double bestScore = 0.0;
 
-            // Шукаємо збіг в існуючій базі (Color Block + Rum Ratings)
             for (RumProduct existingRum : rumSet) {
                 double score = calculateSimilarity(existingRum.getName(), silpoRum.getName());
                 if (score > bestScore) {
@@ -46,7 +45,6 @@ public class SilpoParser implements RumParser {
                 }
             }
 
-            // Якщо знайшли збіг (score > 0.82) - ДОПОВНЮЄМО існуючий об'єкт
             if (bestMatch != null && bestScore > 0.82) {
                 bestMatch.setSilpoMatch(new RumProduct.SilpoMatch(
                         silpoRum.getName(),
@@ -56,19 +54,16 @@ public class SilpoParser implements RumParser {
                         silpoRum.getProductUrl()
                 ));
 
-                // Переносимо оцінку Сільпо до існуючої пляшки
                 if (!silpoRum.getRatings().isEmpty()) {
                     bestMatch.getRatings().addAll(silpoRum.getRatings());
                 }
 
-                // Доповнюємо деталі, якщо їх не було
                 if (bestMatch.getRegion() == null) bestMatch.setRegion(silpoRum.getRegion());
                 if (bestMatch.getAbv() == null) bestMatch.setAbv(silpoRum.getAbv());
                 if (bestMatch.getAge() == null) bestMatch.setAge(silpoRum.getAge());
 
                 matchedCount++;
             } else {
-                // Якщо ЗБІГІВ НЕМАЄ - додаємо пляшку з Сільпо як абсолютно нову!
                 silpoRum.setSilpoMatch(new RumProduct.SilpoMatch(
                         silpoRum.getName(),
                         1.0,
@@ -112,7 +107,6 @@ public class SilpoParser implements RumParser {
                         rum.setPrice(getDoubleOrNull(item, "price"));
                         rum.setCategory("rum");
 
-                        // МНОЖИМО ОЦІНКУ НА 2
                         Double rawRating = getDoubleOrNull(item, "guestProductRating");
                         if (rawRating != null) {
                             rum.getRatings().add(new RumProduct.Rating("Silpo", rawRating * 2.0));
@@ -174,7 +168,6 @@ public class SilpoParser implements RumParser {
                                             rum.setAbv(Double.parseDouble(valueTitle.replace("%", "").trim()));
                                         } catch (Exception ignored) {}
                                     } else if ("strokvytrymky".equals(key)) {
-                                        // Витягуємо цифру віку з рядка типу "до 5 років"
                                         Matcher m = Pattern.compile("\\d+").matcher(valueTitle);
                                         if (m.find()) {
                                             rum.setAge(Double.parseDouble(m.group()));
@@ -215,7 +208,6 @@ public class SilpoParser implements RumParser {
         return null;
     }
 
-    // --- ЛОГІКА МЕТЧІНГУ ЗІ СТАРОГО SILPO PRICE SERVICE ---
     private double calculateSimilarity(String s1, String s2) {
         if (s1 == null || s2 == null) return 0.0;
 
