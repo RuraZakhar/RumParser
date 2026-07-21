@@ -19,7 +19,13 @@ import java.util.concurrent.Executors;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import java.util.LinkedHashSet;
+import java.util.Set;
+import beer.parser.utils.JsonUtils;
+
 public class FlaskerBeerParser implements BeerParser {
+
+    private static final Pattern UNTAPPD_PATTERN = Pattern.compile("Untappd:[\\s\\S]*?<strong>\\s*([0-9.,]+)\\s*/");
 
     private final HttpClient client = HttpClient.newBuilder()
             .connectTimeout(Duration.ofSeconds(10))
@@ -58,16 +64,16 @@ public class FlaskerBeerParser implements BeerParser {
                     JsonObject item = element.getAsJsonObject();
                     BeerProduct beer = new BeerProduct();
 
-                    beer.setName(getStringOrNull(item, "name"));
+                    beer.setName(JsonUtils.getStringOrNull(item, "name"));
                     if (beer.getName() != null) {
                         beer.setCleanName(beer.getName().toLowerCase());
                     }
 
-                    beer.setFlaskerUrl(getStringOrNull(item, "permalink"));
+                    beer.setFlaskerUrl(JsonUtils.getStringOrNull(item, "permalink"));
 
                     if (item.has("prices") && !item.get("prices").isJsonNull()) {
                         JsonObject prices = item.getAsJsonObject("prices");
-                        Double rawPrice = getDoubleOrNull(prices, "price");
+                        Double rawPrice = JsonUtils.getDoubleOrNull(prices, "price");
                         if (rawPrice != null) {
                             beer.setFlaskerPrice(rawPrice);
                         }
@@ -77,7 +83,7 @@ public class FlaskerBeerParser implements BeerParser {
                         JsonArray images = item.getAsJsonArray("images");
                         if (!images.isEmpty()) {
                             JsonObject firstImage = images.get(0).getAsJsonObject();
-                            beer.setImgUrl(getStringOrNull(firstImage, "src"));
+                            beer.setImgUrl(JsonUtils.getStringOrNull(firstImage, "src"));
                         }
                     }
 
@@ -85,11 +91,11 @@ public class FlaskerBeerParser implements BeerParser {
                         JsonArray attributes = item.getAsJsonArray("attributes");
                         for (JsonElement attrElement : attributes) {
                             JsonObject attr = attrElement.getAsJsonObject();
-                            String attrName = getStringOrNull(attr, "name");
+                            String attrName = JsonUtils.getStringOrNull(attr, "name");
                             if (attrName != null && (attrName.toLowerCase().contains("броварня") || attrName.toLowerCase().contains("виробник"))) {
                                 JsonArray terms = attr.getAsJsonArray("terms");
                                 if (terms != null && !terms.isEmpty()) {
-                                    beer.setBrand(getStringOrNull(terms.get(0).getAsJsonObject(), "name"));
+                                    beer.setBrand(JsonUtils.getStringOrNull(terms.get(0).getAsJsonObject(), "name"));
                                 }
                             }
                         }
@@ -108,32 +114,29 @@ public class FlaskerBeerParser implements BeerParser {
         ExecutorService executor = Executors.newFixedThreadPool(15);
         List<CompletableFuture<Void>> futures = new ArrayList<>();
 
-        for (BeerProduct beer : rawBeers) {
-            String permalink = beer.getFlaskerUrl();
-            if (permalink != null && !permalink.isEmpty()) {
-                CompletableFuture<Void> future = CompletableFuture.runAsync(() -> {
-                    Double rating = extractUntappdFromHtml(permalink);
-                    if (rating != null) {
-                        beer.setUntappdRating(rating);
-                        System.out.println("   [Flasker] Знайдено рейтинг: " + rating + " для " + beer.getName());
-                    }
-                }, executor);
+        try {
+            for (BeerProduct beer : rawBeers) {
+                String permalink = beer.getFlaskerUrl();
+                if (permalink != null && !permalink.isEmpty()) {
+                    CompletableFuture<Void> future = CompletableFuture.runAsync(() -> {
+                        Double rating = extractUntappdFromHtml(permalink);
+                        if (rating != null) {
+                            beer.setUntappdRating(rating);
+                            System.out.println("   [Flasker] Знайдено рейтинг: " + rating + " для " + beer.getName());
+                        }
+                    }, executor);
 
-                futures.add(future);
+                    futures.add(future);
+                }
             }
+
+            CompletableFuture.allOf(futures.toArray(new CompletableFuture[0])).join();
+        } finally {
+            executor.shutdown();
         }
 
-        CompletableFuture.allOf(futures.toArray(new CompletableFuture[0])).join();
-        executor.shutdown();
-
-        List<BeerProduct> allBeers = new ArrayList<>();
-        for (BeerProduct beer : rawBeers) {
-            if (!allBeers.contains(beer)) {
-                allBeers.add(beer);
-            }
-        }
-
-        return allBeers;
+        Set<BeerProduct> uniqueBeers = new LinkedHashSet<>(rawBeers);
+        return new ArrayList<>(uniqueBeers);
     }
 
     private Double extractUntappdFromHtml(String url) {
@@ -147,31 +150,14 @@ public class FlaskerBeerParser implements BeerParser {
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
             String html = response.body();
 
-            Pattern pattern = Pattern.compile("Untappd:[\\s\\S]*?<strong>\\s*([0-9.,]+)\\s*/");
-            Matcher matcher = pattern.matcher(html);
+            Matcher matcher = UNTAPPD_PATTERN.matcher(html);
 
             if (matcher.find()) {
                 String ratingStr = matcher.group(1).replace(",", ".");
                 return Double.parseDouble(ratingStr);
             }
-        } catch (Exception ignored) {}
-        return null;
-    }
-
-    private String getStringOrNull(JsonObject obj, String key) {
-        if (obj.has(key) && !obj.get(key).isJsonNull()) {
-            return obj.get(key).getAsString();
-        }
-        return null;
-    }
-
-    private Double getDoubleOrNull(JsonObject obj, String key) {
-        if (obj.has(key) && !obj.get(key).isJsonNull()) {
-            try {
-                return obj.get(key).getAsDouble();
-            } catch (Exception e) {
-                return null;
-            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         return null;
     }

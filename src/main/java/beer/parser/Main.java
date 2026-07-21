@@ -8,13 +8,17 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
+import java.io.Reader;
+import java.io.Writer;
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class Main {
@@ -26,7 +30,7 @@ public class Main {
                 new FlaskerBeerParser()
         );
 
-        List<BeerProduct> collectedBeers = new ArrayList<>();
+        Map<String, BeerProduct> collectedBeers = new HashMap<>();
 
         for (BeerParser parser : parsers) {
             String parserName = parser.getClass().getSimpleName();
@@ -40,7 +44,7 @@ public class Main {
 
         System.out.println(">>> Зібрано унікальних позицій до фільтрації: " + collectedBeers.size());
 
-        List<BeerProduct> topBeers = collectedBeers.stream()
+        List<BeerProduct> topBeers = collectedBeers.values().stream()
                 .filter(beer -> beer.getUntappdRating() != null && beer.getUntappdRating() >= 3.8)
                 .collect(Collectors.toList());
 
@@ -50,73 +54,58 @@ public class Main {
         updateJsonFile(topBeers, "top_beers.json");
     }
 
-    private static void mergeOrAdd(List<BeerProduct> list, BeerProduct newBeer) {
-        for (BeerProduct existing : list) {
-            if (existing.equals(newBeer)) {
-                if (newBeer.getSilpoPrice() != null) {
-                    existing.setSilpoPrice(newBeer.getSilpoPrice());
-                    existing.setSilpoUrl(newBeer.getSilpoUrl());
-                }
-                if (newBeer.getSilpoRating() != null) {
-                    existing.setSilpoRating(newBeer.getSilpoRating());
-                }
-                if (newBeer.getFlaskerPrice() != null) {
-                    existing.setFlaskerPrice(newBeer.getFlaskerPrice());
-                    existing.setFlaskerUrl(newBeer.getFlaskerUrl());
-                }
-                return;
-            }
+    private static void mergeOrAdd(Map<String, BeerProduct> map, BeerProduct newBeer) {
+        if (newBeer.getCleanName() == null) {
+            return; // Invalid product
         }
-        list.add(newBeer);
+        BeerProduct existing = map.get(newBeer.getCleanName());
+        if (existing != null) {
+            if (newBeer.getSilpoPrice() != null) {
+                existing.setSilpoPrice(newBeer.getSilpoPrice());
+                existing.setSilpoUrl(newBeer.getSilpoUrl());
+            }
+            if (newBeer.getSilpoRating() != null) {
+                existing.setSilpoRating(newBeer.getSilpoRating());
+            }
+            if (newBeer.getFlaskerPrice() != null) {
+                existing.setFlaskerPrice(newBeer.getFlaskerPrice());
+                existing.setFlaskerUrl(newBeer.getFlaskerUrl());
+            }
+        } else {
+            map.put(newBeer.getCleanName(), newBeer);
+        }
     }
 
     private static void updateJsonFile(List<BeerProduct> newBeers, String fileName) {
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         Path path = Path.of(fileName);
-        List<BeerProduct> existingBeers = new ArrayList<>();
+        Map<String, BeerProduct> allBeers = new HashMap<>();
 
         if (Files.exists(path)) {
-            try {
-                String jsonContent = Files.readString(path);
+            try (Reader reader = Files.newBufferedReader(path)) {
                 Type listType = new TypeToken<ArrayList<BeerProduct>>(){}.getType();
-                List<BeerProduct> readBeers = gson.fromJson(jsonContent, listType);
+                List<BeerProduct> readBeers = gson.fromJson(reader, listType);
                 if (readBeers != null) {
-                    existingBeers.addAll(readBeers);
+                    for (BeerProduct b : readBeers) {
+                        if (b.getCleanName() != null) {
+                            allBeers.put(b.getCleanName(), b);
+                        }
+                    }
                 }
             } catch (IOException e) {
                 System.err.println("Помилка читання існуючого файлу: " + e.getMessage());
             }
         }
 
-        int addedCount = 0;
+        int startSize = allBeers.size();
         for (BeerProduct newBeer : newBeers) {
-            boolean found = false;
-            for (BeerProduct existing : existingBeers) {
-                if (existing.equals(newBeer)) {
-                    if (newBeer.getSilpoPrice() != null) {
-                        existing.setSilpoPrice(newBeer.getSilpoPrice());
-                        existing.setSilpoUrl(newBeer.getSilpoUrl());
-                    }
-                    if (newBeer.getSilpoRating() != null) {
-                        existing.setSilpoRating(newBeer.getSilpoRating());
-                    }
-                    if (newBeer.getFlaskerPrice() != null) {
-                        existing.setFlaskerPrice(newBeer.getFlaskerPrice());
-                        existing.setFlaskerUrl(newBeer.getFlaskerUrl());
-                    }
-                    found = true;
-                    break;
-                }
-            }
-            if (!found) {
-                existingBeers.add(newBeer);
-                addedCount++;
-            }
+            mergeOrAdd(allBeers, newBeer);
         }
+        int addedCount = allBeers.size() - startSize;
 
-        try {
-            Files.writeString(path, gson.toJson(existingBeers));
-            System.out.println("=== ГОТОВО! Нових позицій додано: " + addedCount + ". Загалом у базі: " + existingBeers.size() + " ===");
+        try (Writer writer = Files.newBufferedWriter(path)) {
+            gson.toJson(new ArrayList<>(allBeers.values()), writer);
+            System.out.println("=== ГОТОВО! Нових позицій додано: " + addedCount + ". Загалом у базі: " + allBeers.size() + " ===");
         } catch (IOException e) {
             System.err.println("Помилка збереження файлу: " + e.getMessage());
         }
