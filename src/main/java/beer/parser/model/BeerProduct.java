@@ -69,11 +69,14 @@ public class BeerProduct {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         BeerProduct that = (BeerProduct) o;
+        if (this.cleanName == null || that.cleanName == null) {
+            return false;
+        }
         return Objects.equals(cleanName, that.cleanName);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(cleanName);
+        return cleanName != null ? Objects.hash(cleanName) : super.hashCode();
     }
 }
