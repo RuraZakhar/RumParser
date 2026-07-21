@@ -38,7 +38,6 @@ public class RumProduct {
     private String code;
     private Offer offer;
 
-    // Змінено з Object на типізований клас
     private SilpoMatch silpoMatch = null;
 
     private Integer yearDistilled;
@@ -169,7 +168,6 @@ public class RumProduct {
         return Objects.hash(normalizeName(name));
     }
 
-    // --- INNER CLASSES ---
 
     public static class Offer {
         private String id;
