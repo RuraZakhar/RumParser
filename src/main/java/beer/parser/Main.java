@@ -23,7 +23,6 @@ import java.util.stream.Collectors;
 
 public class Main {
 
-    // Поріг схожості (наприклад, 60% однакових значущих слів)
     private static final double SIMILARITY_THRESHOLD = 0.60;
 
     public static void main(String[] args) {
@@ -60,15 +59,13 @@ public class Main {
 
     private static void mergeOrAdd(List<BeerProduct> list, BeerProduct newBeer) {
         if (newBeer.getCleanName() == null) {
-            return; // Пропускаємо невалідні товари
+            return;
         }
 
         BeerProduct bestMatch = null;
         double highestScore = 0.0;
 
         for (BeerProduct existing : list) {
-            // ЗАХИСТ ВІД ЗЛИТТЯ В МЕЖАХ ОДНОГО МАГАЗИНУ:
-            // Якщо обидва товари з Сільпо АБО обидва з Фласкера — це різні SKU (пляшка/банка), не зливаємо!
             boolean bothFromSilpo = existing.getSilpoPrice() != null && newBeer.getSilpoPrice() != null;
             boolean bothFromFlasker = existing.getFlaskerPrice() != null && newBeer.getFlaskerPrice() != null;
 
@@ -84,7 +81,6 @@ public class Main {
             }
         }
 
-        // Якщо знайшли схожий товар і він проходить поріг
         if (bestMatch != null && highestScore >= SIMILARITY_THRESHOLD) {
             if (newBeer.getSilpoPrice() != null) {
                 bestMatch.setSilpoPrice(newBeer.getSilpoPrice());
@@ -98,19 +94,16 @@ public class Main {
                 bestMatch.setFlaskerUrl(newBeer.getFlaskerUrl());
             }
 
-            // Якщо у нового пива кращий або новий untappdRating - оновлюємо
             if (newBeer.getUntappdRating() != null) {
                 if (bestMatch.getUntappdRating() == null || newBeer.getUntappdRating() > bestMatch.getUntappdRating()) {
                     bestMatch.setUntappdRating(newBeer.getUntappdRating());
                 }
             }
         } else {
-            // Якщо схожих немає — додаємо як нове
             list.add(newBeer);
         }
     }
 
-    // --- БЛОК FUZZY MATCHING (НЕЧІТКИЙ ПОШУК) ---
     private static double calculateSimilarity(String name1, String name2) {
         String clean1 = removeGarbageWords(name1);
         String clean2 = removeGarbageWords(name2);
@@ -128,7 +121,7 @@ public class Main {
         }
 
         int union = words1.size() + words2.size() - intersection;
-        return (double) intersection / union; // Повертає значення від 0.0 до 1.0 (наприклад, 0.85)
+        return (double) intersection / union;
     }
 
     private static String removeGarbageWords(String name) {
@@ -147,10 +140,9 @@ public class Main {
                 .replaceAll("банка", "")
                 // Видаляємо об'єми та градуси (наприклад: 330ml, 0.33л, 5%, 10°)
                 .replaceAll("\\d+[.,]?\\d*\\s*(ml|мл|l|л|%|°)", "")
-                .replaceAll("[^a-zа-яіїєґ0-9]", " ") // Залишаємо лише літери та цифри
+                .replaceAll("[^a-zа-яіїєґ0-9]", " ")
                 .trim();
     }
-    // ---------------------------------------------
 
     private static void updateJsonFile(List<BeerProduct> newBeers, String fileName) {
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
@@ -175,7 +167,7 @@ public class Main {
 
         int startSize = allBeers.size();
         for (BeerProduct newBeer : newBeers) {
-            mergeOrAdd(allBeers, newBeer); // Тепер сюди теж застосовується нечіткий пошук!
+            mergeOrAdd(allBeers, newBeer);
         }
         int addedCount = allBeers.size() - startSize;
 
