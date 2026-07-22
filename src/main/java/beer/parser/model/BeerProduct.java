@@ -18,6 +18,9 @@ public class BeerProduct {
     private Double abv;
     private Integer ibu;
     private String untappdUrl;
+    private String country;
+    private String packaging;
+    private Double volume;
 
     public String getName() { return name; }
     public void setName(String name) { this.name = name; }
@@ -64,16 +67,28 @@ public class BeerProduct {
     public String getUntappdUrl() { return untappdUrl; }
     public void setUntappdUrl(String untappdUrl) { this.untappdUrl = untappdUrl; }
 
+    public String getCountry() { return country; }
+    public void setCountry(String country) { this.country = country; }
+
+    public String getPackaging() { return packaging; }
+    public void setPackaging(String packaging) { this.packaging = packaging; }
+
+    public Double getVolume() { return volume; }
+    public void setVolume(Double volume) { this.volume = volume; }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         BeerProduct that = (BeerProduct) o;
+        if (this.cleanName == null || that.cleanName == null) {
+            return false;
+        }
         return Objects.equals(cleanName, that.cleanName);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(cleanName);
+        return cleanName != null ? Objects.hash(cleanName) : super.hashCode();
     }
 }
