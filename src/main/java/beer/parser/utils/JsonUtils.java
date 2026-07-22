@@ -2,7 +2,7 @@ package beer.parser.utils;
 
 import com.google.gson.JsonObject;
 
-public class JsonUtils {
+public class    JsonUtils {
     public static String getStringOrNull(JsonObject obj, String key) {
         if (obj.has(key) && !obj.get(key).isJsonNull()) {
             return obj.get(key).getAsString();
