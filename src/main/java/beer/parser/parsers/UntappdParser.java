@@ -16,7 +16,7 @@ import java.util.regex.Pattern;
 
 public class UntappdParser {
 
-    private static final String API_KEY = "fc-096a43d3cf0b4f6598c08967ebecb843";
+    private static final String API_KEY = System.getenv("FIRECRAWL_API_KEY_1");
     private static final HttpClient client = HttpClient.newBuilder()
             .connectTimeout(Duration.ofSeconds(30))
             .build();

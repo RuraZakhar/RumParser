@@ -11,13 +11,22 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.Duration;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class RumRatingsParser implements RumParser {
 
-    private static final String FIRECRAWL_API_KEY = System.getenv("FIRECRAWL_API_KEY");
+    private static final String[] FIRECRAWL_API_KEYS = {
+            System.getenv("FIRECRAWL_API_KEY_1"),
+            System.getenv("FIRECRAWL_API_KEY_2")
+    };
     private static final String FIRECRAWL_SCRAPE_URL = "https://api.firecrawl.dev/v1/scrape";
     private static final String BASE_TARGET_URL = "https://rumratings.com/rum";
 
@@ -31,13 +40,14 @@ public class RumRatingsParser implements RumParser {
 
         Map<String, RumProduct> topRumsToScrape = new LinkedHashMap<>();
         int maxPages = 11;
+        String defaultApiKey = FIRECRAWL_API_KEYS[0];
 
         for (int page = 1; page <= maxPages; page++) {
             System.out.println(">>> Fetching RumRatings listing page " + page + "...");
             if (page > 1) waitBeforeNextRequest(2000);
 
             try {
-                JsonObject extractedData = scrapeListingPage(client, page);
+                JsonObject extractedData = scrapeListingPage(client, page, defaultApiKey);
                 if (extractedData == null) continue;
 
                 JsonArray rumsArray = getArray(extractedData, "rums");
@@ -76,37 +86,51 @@ public class RumRatingsParser implements RumParser {
         System.out.println("\n>>> Step 1 Completed. Found " + topRumsToScrape.size() + " top rums to deep-scrape.");
         System.out.println(">>> Moving to Step 2: Extracting deep details...\n");
 
-        int processed = 0;
+        ExecutorService executor = Executors.newFixedThreadPool(10);
+        List<CompletableFuture<Void>> futures = new ArrayList<>();
+        AtomicInteger count = new AtomicInteger(0);
 
         for (Map.Entry<String, RumProduct> entry : topRumsToScrape.entrySet()) {
             String productUrl = entry.getKey();
             RumProduct basicRum = entry.getValue();
 
-            processed++;
-            System.out.println("[" + processed + "/" + topRumsToScrape.size() + "] Deep scraping: " + basicRum.getName());
+            CompletableFuture<Void> future = CompletableFuture.runAsync(() -> {
+                try {
+                    int current = count.incrementAndGet();
+                    String currentApiKey = FIRECRAWL_API_KEYS[current % FIRECRAWL_API_KEYS.length];
 
-            if (processed > 1) waitBeforeNextRequest(2500);
+                    System.out.println("[" + current + "/" + topRumsToScrape.size() + "] Deep scraping: " + basicRum.getName() + " (Key: " + (current % FIRECRAWL_API_KEYS.length + 1) + ")");
 
-            try {
-                JsonObject detailedData = scrapeDetailPage(client, productUrl);
+                    waitBeforeNextRequest((int) (Math.random() * 1000));
 
-                if (detailedData != null) {
-                    enrichRumWithAiData(basicRum, detailedData);
+                    JsonObject detailedData = scrapeDetailPage(client, productUrl, currentApiKey);
+
+                    if (detailedData != null) {
+                        enrichRumWithAiData(basicRum, detailedData);
+                    }
+
+                    synchronized (rumSet) {
+                        mergeIntoSet(rumSet, basicRum);
+                    }
+
+                } catch (Exception e) {
+                    System.err.println("Error extracting details for " + productUrl + ": " + e.getMessage());
                 }
-                mergeIntoSet(rumSet, basicRum);
+            }, executor);
 
-            } catch (Exception e) {
-                System.err.println("Error extracting details for " + productUrl + ": " + e.getMessage());
-            }
+            futures.add(future);
         }
 
-        System.out.println("Finished RumRatings. Total top rums integrated: " + processed);
+        CompletableFuture.allOf(futures.toArray(new CompletableFuture[0])).join();
+        executor.shutdown();
+
+        System.out.println("Finished RumRatings. Total top rums integrated: " + count.get());
     }
 
-    private JsonObject scrapeListingPage(HttpClient client, int page) throws Exception {
+    private JsonObject scrapeListingPage(HttpClient client, int page, String apiKey) throws Exception {
         String currentUrl = BASE_TARGET_URL + "?page=" + page;
         JsonObject requestBody = buildListingRequestBody(currentUrl);
-        return sendFirecrawlRequest(client, requestBody, "Listing Page " + page);
+        return sendFirecrawlRequest(client, requestBody, "Listing Page " + page, apiKey);
     }
 
     private JsonObject buildListingRequestBody(String url) {
@@ -180,9 +204,9 @@ public class RumRatingsParser implements RumParser {
         return requestBody;
     }
 
-    private JsonObject scrapeDetailPage(HttpClient client, String url) throws Exception {
+    private JsonObject scrapeDetailPage(HttpClient client, String url, String apiKey) throws Exception {
         JsonObject requestBody = buildDetailRequestBody(url);
-        return sendFirecrawlRequest(client, requestBody, "Detail Page");
+        return sendFirecrawlRequest(client, requestBody, "Detail Page", apiKey);
     }
 
     private JsonObject buildDetailRequestBody(String url) {
@@ -255,12 +279,12 @@ public class RumRatingsParser implements RumParser {
         rum.enrichDerivedFields();
     }
 
-    private JsonObject sendFirecrawlRequest(HttpClient client, JsonObject requestBody, String logContext) {
+    private JsonObject sendFirecrawlRequest(HttpClient client, JsonObject requestBody, String logContext, String apiKey) {
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(FIRECRAWL_SCRAPE_URL))
                 .timeout(Duration.ofSeconds(120))
                 .header("Content-Type", "application/json")
-                .header("Authorization", "Bearer " + FIRECRAWL_API_KEY)
+                .header("Authorization", "Bearer " + apiKey)
                 .POST(HttpRequest.BodyPublishers.ofString(requestBody.toString()))
                 .build();
 
