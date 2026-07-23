@@ -4,5 +4,5 @@ import beer.parser.model.BeerProduct;
 import java.util.List;
 
 public interface BeerParser {
-    List<BeerProduct> parse();
+    List<BeerProduct> parse(List<BeerProduct> existingCache);
 }

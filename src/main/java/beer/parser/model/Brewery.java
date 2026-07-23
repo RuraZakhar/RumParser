@@ -4,12 +4,14 @@ import lombok.Getter;
 
 @Getter
 public class Brewery {
-    private String originalName;
+    private String name;
+    private String untappdUrl;
     private String searchKey;
 
-    public Brewery(String originalName) {
-        this.originalName = originalName;
-        this.searchKey = generateSearchKey(originalName);
+    public Brewery(String name, String untappdUrl) {
+        this.name = name;
+        this.untappdUrl = untappdUrl;
+        this.searchKey = generateSearchKey(name);
     }
 
     private String generateSearchKey(String name) {
@@ -24,6 +26,6 @@ public class Brewery {
 
     @Override
     public String toString() {
-        return originalName + " (Key: [" + searchKey + "])";
+        return name + " (" + untappdUrl + ")";
     }
 }

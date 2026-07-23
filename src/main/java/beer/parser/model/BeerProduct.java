@@ -25,7 +25,12 @@ public class BeerProduct {
     public String getName() { return name; }
     public void setName(String name) { this.name = name; }
 
-    public String getCleanName() { return cleanName; }
+    public String getCleanName() {
+        if (cleanName == null && name != null) {
+            cleanName = name.toLowerCase();
+        }
+        return cleanName;
+    }
     public void setCleanName(String cleanName) { this.cleanName = cleanName; }
 
     public String getBrand() { return brand; }
@@ -76,19 +81,52 @@ public class BeerProduct {
     public Double getVolume() { return volume; }
     public void setVolume(Double volume) { this.volume = volume; }
 
+    public void mergeFrom(BeerProduct incoming) {
+        if (incoming == null) return;
+
+        if (incoming.getSilpoPrice() != null) {
+            this.silpoPrice = incoming.getSilpoPrice();
+            this.silpoUrl = incoming.getSilpoUrl();
+        }
+        if (incoming.getFlaskerPrice() != null) {
+            this.flaskerPrice = incoming.getFlaskerPrice();
+            this.flaskerUrl = incoming.getFlaskerUrl();
+        }
+        if (incoming.getSilpoRating() != null) {
+            this.silpoRating = incoming.getSilpoRating();
+        }
+        if (incoming.getUntappdRating() != null) {
+            if (this.untappdRating == null || incoming.getUntappdRating() > this.untappdRating) {
+                this.untappdRating = incoming.getUntappdRating();
+            }
+        }
+
+        if (this.country == null) this.country = incoming.getCountry();
+        if (this.packaging == null) this.packaging = incoming.getPackaging();
+        if (this.volume == null) this.volume = incoming.getVolume();
+        if (this.abv == null) this.abv = incoming.getAbv();
+        if (this.ibu == null) this.ibu = incoming.getIbu();
+        if (this.style == null) this.style = incoming.getStyle();
+        if (this.imgUrl == null) this.imgUrl = incoming.getImgUrl();
+        if (this.brand == null) this.brand = incoming.getBrand();
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         BeerProduct that = (BeerProduct) o;
-        if (this.cleanName == null || that.cleanName == null) {
-            return false;
-        }
-        return Objects.equals(cleanName, that.cleanName);
+
+        if (this.silpoUrl != null && this.silpoUrl.equals(that.silpoUrl)) return true;
+        if (this.flaskerUrl != null && this.flaskerUrl.equals(that.flaskerUrl)) return true;
+
+        return Objects.equals(cleanName, that.cleanName) && Objects.equals(volume, that.volume);
     }
 
     @Override
     public int hashCode() {
-        return cleanName != null ? Objects.hash(cleanName) : super.hashCode();
+        return Objects.hash(cleanName, volume);
     }
+
 }
+

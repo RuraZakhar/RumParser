@@ -1,101 +1,199 @@
-No,Brewery Name,Country,Untappd Rating,Specialty
-1,Side Project Brewing,USA,4.41,Еталонні дикі елі та бочкові стаути
-2,Fidens Brewing Co.,USA,4.38,Королі сучасних NEIPA
-3,Brasserie Cantillon,Belgium,4.32,Справжні класичні гези та ламбіки
-4,Westvleteren,Belgium,4.31,Рідкісне траппістське пиво (XII)
-5,Toppling Goliath Brewing Co.,USA,4.29,Культові IPA (Pseudo Sue)
-6,Brouwerij 3 Fonteinen,Belgium,4.26,Традиційні купажовані ламбіки
-7,Other Half Brewing Co.,USA,4.22,Популярні каламутні хмелеві елі
-8,Tommie Sjef,Netherlands,4.15,Дикі кислі елі природного бродіння
-9,Equilibrium Brewery,USA,4.14,Науковий підхід до подвійних IPA
-10,The Veil Brewing Co.,USA,4.14,Потужні фруктові сауери та IPA
-11,Soma Beer,Spain,4.14,Лімітовані високооцінені хмелеві релізи
-12,Prairie Artisan Ales,USA,4.12,Імперські стаути з додатками
-13,Trillium Brewing Company,USA,4.11,Бостонський соковитий крафт
-14,Gueuzerie Tilquin,Belgium,4.10,Фруктові бельгійські ламбіки
-15,Verdant Brewing Co.,UK,4.08,Ароматні хмелеві елі з Корнуолла
-16,Deya Brewing Company,UK,4.05,М'які пале елі
-17,Strange Toys,USA,4.04,Експериментальні мікро-релізи
-18,Cloudwater Brew Co.,UK,4.04,Манчестерський інноваційний крафт
-19,Other Half (UK Selection),UK,4.02,Колаборації та хмелеві хіти
-20,Founders Brewing Co.,USA,4.01,"Потужні стаути (KBS), Pale Ale"
-21,Folkingebrew,Netherlands,4.01,Щільні Double IPA
-22,ATELIER VRAI,Germany,4.00,Сучасний німецький мікрокрафт
-23,De Struise Brouwers,Belgium,3.98,Міцні темні елі (Pannepot)
-24,Stamm Brewing,Import/Contract,3.95,Соковиті хмелеві сорти
-25,Sudden Death Brewing Co.,Germany,3.95,Охмелені релізи в американському стилі
-26,Moersleutel Craft Brewery,Netherlands,3.94,Важкі кондитерські стаути
-27,Põhjala,Estonia,3.94,Балтійські портери (Cellar Series)
-28,Firestone Walker,USA,3.92,Бочкові міцні елі (Parabola)
-29,Blech.Brut,Germany,3.92,Сучасні ароматні німецькі IPA
-30,Omnipollo,Sweden,3.91,"Пиво-морозиво, смузі-сауери"
-31,Pühaste,Estonia,3.91,Складні імперські стаути та кисляки
-32,FUERST WIACEK,Germany,3.91,Берлінські каламутні елі
-33,Northern Monk,UK,3.89,Серійний якісний крафт широкого спектра
-34,Garage Beer Co.,Spain,3.89,Барселонські лідери NEIPA в Європі
-35,Basqueland Brewing,Spain,3.88,Баскські яскраві хмелі
-36,FrauGruber Brewing,Germany,3.88,Сучасний баварський крафт
-37,Rochefort,Belgium,3.86,"Класичні темні траппісти (№6, 8, 10)"
-38,Amundsen Brewery,Norway,3.84,Десертні стаути (Dessert In A Can)
-39,Salama Brewing Co.,Finland,3.84,Скандинавський neon-крафт
-40,Stone Brewing,USA,3.82,Гіркі West Coast IPA
-41,Zichovec,Czech Republic,3.82,"Топовий чеський крафт (IPA, сауери)"
-42,Buxton Brewery,UK,3.81,Експерименти та стаути
-43,Lervig,Norway,3.81,Потужні норвезькі релізи (3-Way Stout)
-44,Brouwerij St.Bernardus,Belgium,3.79,Класичні абатські елі (Abt 12)
-45,Vibrant Forest Brewery,UK,3.78,Складні портери та кислі елі
-46,AF Brew,Import/Contract,3.78,Насичені стаути та гозе
-47,Brouwerij Het Anker,Belgium,3.73,Серія міцного пива Gouden Carolus
-48,Nøgne Ø,Norway,3.77,Безкомпромісний традиційний крафт
-49,Sibeeria,Czech Republic,3.76,Празький сучасний сезонний крафт
-50,Siren Craft Castle,UK,3.75,Стабільна хмелева та стаутна лінійка
-51,La Trappe,Netherlands,3.75,Голландські траппісти (Quadrupel)
-52,To Øl,Denmark,3.74,Технологічні хай-тек елі
-53,Chimay,Belgium,3.73,Найвідоміші у світі траппістські елі
-54,Duvel Moortgat,Belgium,3.72,Золотий стандарт бельгійського міцного
-55,Frontaal Brewing Co.,Netherlands,3.71,Збалансовані IPA та бочкові серії
-56,Orval,Belgium,3.69,Траппістське пиво з дикими дріжджами
-57,Brouwerij Rodenbach,Belgium,3.69,Фландрійські червоні кислі елі
-58,De Molen,Netherlands,3.69,Легендарні європейські імперські стаути
-59,Samuel Smith,UK,3.69,Стара органіка (Oatmeal Stout)
-60,Brouwerij Verhaeghe,Belgium,3.68,Кисло-солодкий Duchesse de Bourgogne
-61,Brasserie Dupont,Belgium,3.68,Еталонний фермерський стиль Saison
-62,Schlenkerla,Germany,3.67,Еталонне копчене пиво (Rauchbier)
-63,Brasserie d'Achouffe,Belgium,3.66,Міцні елі з гномом (La Chouffe)
-64,Mikkeller,Denmark,3.66,"Знаменитий фантомний крафт, якісний Б/А"
-65,Lagunitas Brewing Co.,USA,3.66,Доступні американські IPA з вираженою гіркотою
-66,Schneider Weisse,Germany,3.66,Найкращі німецькі пшеничні вайценбоки
-67,Ayinger Privatbrauerei,Germany,3.65,Зразкова баварська класика (Doppelbock)
-68,Wild Beer Co.,UK,3.65,Майстри дикого бродіння та бочок
-69,Augustiner-Bräu München,Germany,3.64,Культові мюнхенські табори (Edelstoff)
-70,Uiltje Brewing Company,Netherlands,3.63,"Комікс-дизайн банок, свіжі IPA"
-71,Rogue Ales,USA,3.61,Експериментальний американський крафт з Орегону
-72,Anderson Valley,USA,3.61,Зразкові американські фруктові гозе
-73,Fuller's,UK,3.61,Класичні лондонські елі (London Pride)
-74,Weihenstephan,Germany,3.61,"Найстаріша броварня світу, ідеальний вайсбір"
-75,Brouwerij De Ranke,Belgium,3.61,Натуральне пиво з цільними шишками хмелю
-76,Thornbridge Brewery,UK,3.60,Творці культового Jaipur IPA
-77,Tiny Rebel,UK,3.59,Яскравий уельський фруктовий крафт
-78,Brouwerij 't IJ,Netherlands,3.59,Крафтовий Амстердам біля вітряка
-79,Omer Vander Ghinste,Belgium,3.59,Традиційні бленди (Cuvée des Jacobins)
-80,Brouwerij Lindemans,Belgium,3.58,Популярні фруктові ламбіки (Kriek)
-81,Kees,Netherlands,3.58,Щільні міцні портери та IPA
-82,BrewDog,UK,3.58,Шотландський крафт-гігант (Punk IPA)
-83,Sierra Nevada,USA,3.56,Батьки американського крафту (Pale Ale)
-84,Huyghe Brewery,Belgium,3.55,Знаменитий міцний ель Delirium Tremens
-85,Brouwerij De Halve Maan,Belgium,3.55,Автентичне пиво з Брюгге (Straffe Hendrik)
-86,Brasserie de la Senne,Belgium,3.55,Сучасні сухі гіркі брюссельські елі
-87,Riegele BierManufaktur,Germany,3.55,Крафтова лінійка від старої класичної броварні
-88,Erdinger Weissbräu,Germany,3.55,Класичне масове німецьке пшеничне
-89,Brussels Beer Project,Belgium,3.54,Нова модернова хвиля бельгійського крафту
-90,Jopen,Netherlands,3.54,Крафтові традиції з міста Гарлем
-91,Belhaven Brewery,UK,3.52,"Шотландська класика, нітро-стаут"
-92,Maisel & Friends,Germany,3.51,Доступна німецька крафтова лінійка
-93,Paulaner Brauerei,Germany,3.51,Один із головних гігантів Октоберфесту
-94,Brooklyn Brewery,USA,3.49,Популярна нью-йоркська крафт-класика
-95,Lefebvre,Belgium,3.48,Пшеничне Blanche de Bruxelles
-96,St. Peter's Brewery,UK,3.48,Традиційні англійські елі в овальних пляшках
-97,Wychwood Brewery,UK,3.46,Відомий ель Hobgoblin
-98,Pivovar Matuška,Czech Republic,3.80,Авторитетний чеський мікрокрафт
-99,Pilsner Urquell,Czech Republic,3.37,Родоначальник усіх світлих лагерів у світі
-100,Budweiser Budvar,Czech Republic,3.29,Зразковий класичний чеський преміум-лагер
+Side Project Brewing, https://untappd.com/SideProjectBrewing
+
+Fidens Brewing Co., https://untappd.com/FidensBrewingCo
+
+Brasserie Cantillon, https://untappd.com/BrasserieCantillon
+
+Westvleteren, https://untappd.com/SintSixtusAbdijWestvleteren
+
+Toppling Goliath Brewing Co., https://untappd.com/topplinggoliathbrewing
+
+Brouwerij 3 Fonteinen, https://untappd.com/Brouwerij3Fonteinen
+
+Other Half Brewing Co., https://untappd.com/OtherHalfBrewingCompany
+
+Tommie Sjef, https://untappd.com/tommiesjef
+
+Equilibrium Brewery, https://untappd.com/EquilibriumBrewery
+
+The Veil Brewing Co., https://untappd.com/TheVeilBrewingCo
+
+Soma Beer, https://untappd.com/SOMABeer
+
+Prairie Artisan Ales, https://untappd.com/PrairieArtisanAles
+
+Trillium Brewing Company, https://untappd.com/trilliumbrewing
+
+Gueuzerie Tilquin, https://untappd.com/GueuzerieTilquin
+
+Verdant Brewing Co., https://untappd.com/VerdantBrewingCo
+
+Deya Brewing Company, https://untappd.com/deyabrewing
+
+Strange Toys, https://untappd.com/StrangeToys
+
+Cloudwater Brew Co., https://untappd.com/CloudwaterBrewCo
+
+Other Half (UK Selection), https://untappd.com/OtherHalfBrewingCompany
+
+Founders Brewing Co., https://untappd.com/foundersbrewing
+
+Folkingebrew, https://untappd.com/Folkingebrew
+
+ATELIER VRAI, https://untappd.com/AtelierVrai
+
+De Struise Brouwers, https://untappd.com/DeStruiseBrouwers
+
+Stamm Brewing, https://untappd.com/StammBeer
+
+Sudden Death Brewing Co., https://untappd.com/suddendeathbrewing_co
+
+Moersleutel Craft Brewery, https://untappd.com/DeMoersleutel
+
+Põhjala, https://untappd.com/Pohjala
+
+Firestone Walker, https://untappd.com/firestonewalker
+
+Blech.Brut, https://untappd.com/BlechBrut
+
+Omnipollo, https://untappd.com/Omnipollo
+
+Pühaste, https://untappd.com/PuhasteBrewery
+
+FUERST WIACEK, https://untappd.com/fuerstwiacekbrew
+
+Northern Monk, https://untappd.com/northernmonk
+
+Garage Beer Co., https://untappd.com/GarageBeerCo
+
+Basqueland Brewing, https://untappd.com/BasquelandBrewing
+
+FrauGruber Brewing, https://untappd.com/FrauGruberBrewing
+
+Rochefort, https://untappd.com/RochefortTrappist
+
+Amundsen Brewery, https://untappd.com/AmundsenBryggeri
+
+Salama Brewing Co., https://untappd.com/SalamaBrewingCo
+
+Stone Brewing, https://untappd.com/stonebrewing
+
+Zichovec, https://untappd.com/ZichoveckyPivovar
+
+Buxton Brewery, https://untappd.com/BuxtonBrewery
+
+Lervig, https://untappd.com/LervigAS
+
+Brouwerij St.Bernardus, https://untappd.com/BrouwerijStBernardus
+
+Vibrant Forest Brewery, https://untappd.com/VibrantForestBrewery
+
+AF Brew, https://untappd.com/AF_Brew
+
+Brouwerij Het Anker, https://untappd.com/BrouwerijHetAnker
+
+Nøgne Ø, https://untappd.com/nogneo
+
+Sibeeria, https://untappd.com/SibeeriaCZ
+
+Siren Craft Castle, https://untappd.com/SirenCraftBrew
+
+La Trappe, https://untappd.com/BierbrouwerijDeKoningshoeven
+
+To Øl, https://untappd.com/ToolBeer
+
+Chimay, https://untappd.com/BieresdeChimay
+
+Duvel Moortgat, https://untappd.com/DuvelMoortgat
+
+Frontaal Brewing Co., https://untappd.com/brouwerijfrontaal
+
+Orval, https://untappd.com/BrasseriedOrval
+
+Brouwerij Rodenbach, https://untappd.com/BrouwerijRodenbach
+
+De Molen, https://untappd.com/BrouwerijDeMolen
+
+Samuel Smith, https://untappd.com/SamuelSmithsOldBrewery
+
+Brouwerij Verhaeghe, https://untappd.com/BrouwerijVerhaeghe
+
+Brasserie Dupont, https://untappd.com/BrasserieDupont
+
+Schlenkerla, https://untappd.com/Schlenkerla
+
+Brasserie d'Achouffe, https://untappd.com/BrasseriedAchouffe
+
+Mikkeller, https://untappd.com/Mikkeller
+
+Lagunitas Brewing Co., https://untappd.com/lagunitas
+
+Schneider Weisse, https://untappd.com/SchneiderWeisse
+
+Ayinger Privatbrauerei, https://untappd.com/AyingerBrewery
+
+Wild Beer Co., https://untappd.com/WildBeerCo
+
+Augustiner-Bräu München, https://untappd.com/AugustinerBrauMuenchen
+
+Uiltje Brewing Company, https://untappd.com/UiltjeBrewingCompany
+
+Rogue Ales, https://untappd.com/rogueales
+
+Anderson Valley, https://untappd.com/andersonvalley
+
+Fuller's, https://untappd.com/fullers
+
+Weihenstephan, https://untappd.com/BayerischeStaatsbrauereiWeihenstephan
+
+Brouwerij De Ranke, https://untappd.com/BierenDeRanke
+
+Thornbridge Brewery, https://untappd.com/thornbridgebrewery
+
+Tiny Rebel, https://untappd.com/tinyrebel
+
+Brouwerij 't IJ, https://untappd.com/brouwerijtij
+
+Omer Vander Ghinste, https://untappd.com/OmerVanderGhinste
+
+Brouwerij Lindemans, https://untappd.com/BrouwerijLindemans
+
+Kees, https://untappd.com/BrouwerijKees
+
+BrewDog, https://untappd.com/brewdogbrewery
+
+Sierra Nevada, https://untappd.com/SierraNevada
+
+Huyghe Brewery, https://untappd.com/BrouwerijHuyghe
+
+Brouwerij De Halve Maan, https://untappd.com/BrouwerijDeHalveMaan
+
+Brasserie de la Senne, https://untappd.com/BrasseriedelaSenne
+
+Riegele BierManufaktur, https://untappd.com/BrauhausRiegele
+
+Erdinger Weissbräu, https://untappd.com/ErdingerWeissbraeu
+
+Brussels Beer Project, https://untappd.com/BrusselsBeerProject
+
+Jopen, https://untappd.com/jopen
+
+Belhaven Brewery, https://untappd.com/BelhavenBrewery
+
+Maisel & Friends, https://untappd.com/MaiselandFriends
+
+Paulaner Brauerei, https://untappd.com/PaulanerBrauerei
+
+Brooklyn Brewery, https://untappd.com/brooklynbrewery
+
+Lefebvre, https://untappd.com/BrasserieLefebvre
+
+St. Peter's Brewery, https://untappd.com/StPetersBreweryCo
+
+Wychwood Brewery, https://untappd.com/WychwoodBrewery
+
+Pivovar Matuška, https://untappd.com/PivovarMatuska
+
+Pilsner Urquell, https://untappd.com/pilsnerurquell
+
+Budweiser Budvar, https://untappd.com/BudweiserBudvar
