@@ -5,6 +5,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import rum.parser.model.RumProduct;
+import rum.parser.util.RumNameMatcher;
 
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -38,7 +39,7 @@ public class SilpoParser implements RumParser {
             double bestScore = 0.0;
 
             for (RumProduct existingRum : rumSet) {
-                double score = calculateSimilarity(existingRum.getName(), silpoRum.getName());
+                double score = RumNameMatcher.similarity(existingRum.getName(), silpoRum.getName());
                 if (score > bestScore) {
                     bestScore = score;
                     bestMatch = existingRum;
@@ -52,8 +53,9 @@ public class SilpoParser implements RumParser {
                         silpoRum.getPrice(),
                         silpoRum.getPrice() != null && silpoRum.getPrice() > 0,
                         silpoRum.getProductUrl()
-                ));
 
+                ));
+                bestMatch.addSourceUrl("Silpo", silpoRum.getProductUrl());
                 if (!silpoRum.getRatings().isEmpty()) {
                     bestMatch.getRatings().addAll(silpoRum.getRatings());
                 }
@@ -71,6 +73,7 @@ public class SilpoParser implements RumParser {
                         silpoRum.getPrice() != null && silpoRum.getPrice() > 0,
                         silpoRum.getProductUrl()
                 ));
+                silpoRum.addSourceUrl("Silpo", silpoRum.getProductUrl());
                 rumSet.add(silpoRum);
                 newAddedCount++;
             }
@@ -166,7 +169,8 @@ public class SilpoParser implements RumParser {
                                     } else if ("alcoholcontent".equals(key)) {
                                         try {
                                             rum.setAbv(Double.parseDouble(valueTitle.replace("%", "").trim()));
-                                        } catch (Exception ignored) {}
+                                        } catch (Exception ignored) {
+                                        }
                                     } else if ("strokvytrymky".equals(key)) {
                                         Matcher m = Pattern.compile("\\d+").matcher(valueTitle);
                                         if (m.find()) {
@@ -180,7 +184,8 @@ public class SilpoParser implements RumParser {
                     }
                 }
             }
-        } catch (Exception ignored) {}
+        } catch (Exception ignored) {
+        }
     }
 
     private String sendGetRequest(String url) {
@@ -194,7 +199,8 @@ public class SilpoParser implements RumParser {
 
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
             if (response.statusCode() == 200) return response.body();
-        } catch (Exception ignored) {}
+        } catch (Exception ignored) {
+        }
         return null;
     }
 
@@ -207,60 +213,6 @@ public class SilpoParser implements RumParser {
         if (obj.has(field) && !obj.get(field).isJsonNull()) return obj.get(field).getAsDouble();
         return null;
     }
-
-    private double calculateSimilarity(String s1, String s2) {
-        if (s1 == null || s2 == null) return 0.0;
-
-        String cleanS1 = s1.toLowerCase().replaceAll("[^\\p{L}\\p{N} ]", "").trim();
-        String cleanS2 = s2.toLowerCase()
-                .replaceAll("\\b\\d+[.,]?\\d*\\s*(л|мл|l|ml)\\b", "")
-                .replaceAll("\\b(ром|напій|на|основі|в|коробці|подарунковий|набір|rum)\\b", "")
-                .replaceAll("[^\\p{L}\\p{N} ]", "")
-                .trim();
-
-        if (cleanS1.isEmpty() || cleanS2.isEmpty()) return 0.0;
-        if (cleanS1.equals(cleanS2)) return 1.0;
-
-        String[] wordsFromDb = cleanS1.split("\\s+");
-        String[] wordsFromSilpo = cleanS2.split("\\s+");
-
-        int matchCount = 0;
-        int validWordsCount = 0;
-
-        for (String word : wordsFromDb) {
-            if (word.length() <= 2 && !word.matches("\\d+")) continue;
-            validWordsCount++;
-
-            for (String silpoWord : wordsFromSilpo) {
-                if (silpoWord.equals(word) || (silpoWord.length() > 4 && silpoWord.startsWith(word))) {
-                    matchCount++;
-                    break;
-                }
-            }
-        }
-
-        double wordMatchScore = validWordsCount > 0 ? (double) matchCount / validWordsCount : 0.0;
-        int maxLength = Math.max(cleanS1.length(), cleanS2.length());
-        int distance = computeLevenshteinDistance(cleanS1, cleanS2);
-        double levenshteinScore = 1.0 - ((double) distance / maxLength);
-
-        return Math.max(wordMatchScore, levenshteinScore);
-    }
-
-    private int computeLevenshteinDistance(String s1, String s2) {
-        int[][] dp = new int[s1.length() + 1][s2.length() + 1];
-        for (int i = 0; i <= s1.length(); i++) {
-            for (int j = 0; j <= s2.length(); j++) {
-                if (i == 0) dp[i][j] = j;
-                else if (j == 0) dp[i][j] = i;
-                else {
-                    dp[i][j] = Math.min(
-                            Math.min(dp[i - 1][j] + 1, dp[i][j - 1] + 1),
-                            dp[i - 1][j - 1] + (s1.charAt(i - 1) == s2.charAt(j - 1) ? 0 : 1)
-                    );
-                }
-            }
-        }
-        return dp[s1.length()][s2.length()];
-    }
 }
+
+

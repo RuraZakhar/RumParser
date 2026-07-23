@@ -5,7 +5,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-
+import rum.parser.util.RumNameMatcher;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -14,9 +14,12 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicInteger;
 
+
 public class RumHowlerParser implements RumParser {
 
     private static final String BASE_URL = "https://therumhowlerblog.com/rum-reviews/";
+    private static final String PROVIDER = "The Rum Howler Blog";
+    private static final double FUZZY_THRESHOLD = 0.90;
 
     @Override
     public void parse(Set<RumProduct> rumSet) {
@@ -61,12 +64,11 @@ public class RumHowlerParser implements RumParser {
                             RumProduct rum = new RumProduct();
                             rum.setName(rawName.trim());
                             rum.setProductUrl(rumUrl);
-
-                            RumProduct.Rating rating = new RumProduct.Rating("The Rum Howler Blog", ratingValue);
-                            rum.getRatings().add(rating);
+                            rum.addSourceUrl("The Rum Howler Blog", rumUrl);
+                            rum.getRatings().add(new RumProduct.Rating(PROVIDER, ratingValue));
 
                             synchronized (rumSet) {
-                                if (rumSet.add(rum)) {
+                                if (mergeIntoSet(rumSet, rum)) {
                                     count.incrementAndGet();
                                 }
                             }
@@ -82,11 +84,31 @@ public class RumHowlerParser implements RumParser {
             CompletableFuture.allOf(futures.toArray(new CompletableFuture[0])).join();
             executor.shutdown();
 
-            System.out.println("Finished Howler Blog. Total collected: " + count.get());
+            System.out.println("Finished Howler Blog. New items added: " + count.get());
 
         } catch (Exception e) {
             System.err.println("Critical error in RumHowlerParser: " + e.getMessage());
         }
+    }
+
+    private boolean mergeIntoSet(Set<RumProduct> rumSet, RumProduct incomingRum) {
+        // 1. Точний збіг нормалізованої назви
+        for (RumProduct existingRum : rumSet) {
+            if (existingRum.equals(incomingRum)) {
+                existingRum.mergeFrom(incomingRum);
+                return false;
+            }
+        }
+
+       
+        RumProduct fuzzyMatch = RumNameMatcher.findBestFuzzyMatch(incomingRum, rumSet, FUZZY_THRESHOLD);
+        if (fuzzyMatch != null) {
+            fuzzyMatch.mergeFrom(incomingRum);
+            return false;
+        }
+
+        rumSet.add(incomingRum);
+        return true;
     }
 
     private String extractRatingFromPage(String text) {

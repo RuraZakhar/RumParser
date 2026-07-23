@@ -1,9 +1,9 @@
 package rum.parser.parsers;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 import rum.parser.model.RumProduct;
 
 import java.net.URI;
@@ -11,110 +11,137 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.Duration;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.util.*;
+import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class RumRatingsParser implements RumParser {
 
-    private static final String[] FIRECRAWL_API_KEYS = {
-            System.getenv("FIRECRAWL_API_KEY_1"),
-            System.getenv("FIRECRAWL_API_KEY_2")
-    };
-    private static final String FIRECRAWL_SCRAPE_URL = "https://api.firecrawl.dev/v1/scrape";
-    private static final String BASE_TARGET_URL = "https://rumratings.com/rum";
+    private static final String LISTING_URL = "https://rumratings.com/brand_explorers";
+    private static final double MIN_RATING = 7.0;
+    private static final String USER_AGENT =
+            "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36";
+    private static final String PROVIDER = "RumRatings";
+
+    private static final int THREAD_POOL_SIZE = 3;
+    private static final long MIN_REQUEST_INTERVAL_MS = 600;
+    private static final int MAX_RETRIES = 5;
+
+    private final Object rateLimitLock = new Object();
+    private volatile long lastRequestTime = 0;
 
     @Override
     public void parse(Set<RumProduct> rumSet) {
         System.out.println("\n[2/3] Starting RumRatings Parser...");
 
         HttpClient client = HttpClient.newBuilder()
-                .connectTimeout(Duration.ofSeconds(120))
+                .connectTimeout(Duration.ofSeconds(30))
                 .build();
 
+        Map<RumProduct, RumProduct> existingIndex = new HashMap<>();
+        for (RumProduct p : rumSet) {
+            existingIndex.put(p, p);
+        }
+
         Map<String, RumProduct> topRumsToScrape = new LinkedHashMap<>();
-        int maxPages = 11;
-        String defaultApiKey = FIRECRAWL_API_KEYS[0];
+        int page = 1;
+        boolean keepGoing = true;
+        int skippedAlreadyScraped = 0;
 
-        for (int page = 1; page <= maxPages; page++) {
-            System.out.println(">>> Fetching RumRatings listing page " + page + "...");
-            if (page > 1) waitBeforeNextRequest(2000);
+        while (keepGoing) {
+            System.out.println(">>> Fetching listing page " + page + "...");
 
+            String html;
             try {
-                JsonObject extractedData = scrapeListingPage(client, page, defaultApiKey);
-                if (extractedData == null) continue;
+                html = fetchHtmlWithRetry(client, LISTING_URL
+                        + "?order_by=average_rating&min_rating=30&page=" + page + "&format=turbo_stream");
+            } catch (Exception e) {
+                System.err.println("Error fetching listing page " + page + ": " + e.getMessage());
+                break;
+            }
 
-                JsonArray rumsArray = getArray(extractedData, "rums");
-                if (rumsArray == null || rumsArray.isEmpty()) {
-                    System.out.println("No rum products returned. Stopping list extraction.");
+            Document doc = Jsoup.parse(html, "https://rumratings.com");
+            Elements bottles = doc.select(".brand-index-bottle");
+            if (bottles.isEmpty()) {
+                System.out.println("No more rums found. Stopping.");
+                break;
+            }
+
+            for (Element bottle : bottles) {
+                Element link = bottle.selectFirst("a[href^=/rum/]");
+                Element ratingEl = bottle.selectFirst(".brand-rating-icon p");
+                Element nameEl = bottle.selectFirst(".brand-title span");
+                if (link == null || ratingEl == null || nameEl == null) continue;
+
+                Double rating = parseDoubleSafe(ratingEl.text());
+                if (rating == null) continue;
+
+                if (rating < MIN_RATING) {
+                    keepGoing = false;
                     break;
                 }
 
-                for (JsonElement element : rumsArray) {
-                    if (!element.isJsonObject()) continue;
-                    JsonObject rumJson = element.getAsJsonObject();
+                String productUrl = link.absUrl("href");
+                String name = nameEl.text().trim();
 
-                    String name = getStringOrNull(rumJson, "name");
-                    String productUrl = getStringOrNull(rumJson, "productUrl");
-                    Double rating = getDoubleOrNull(rumJson, "rating");
+                RumProduct probe = new RumProduct();
+                probe.setName(name);
+                RumProduct existing = existingIndex.get(probe);
 
-                    if (name != null && productUrl != null && rating != null && rating >= 7.0) {
-                        RumProduct basicRum = new RumProduct();
-                        basicRum.setName(name);
-                        basicRum.setProductUrl(productUrl);
-                        basicRum.getRatings().add(new RumProduct.Rating("RumRatings", rating));
-
-                        topRumsToScrape.put(productUrl, basicRum);
+                if (existing != null && existing.getBrand() != null) {
+                    // Уже був повністю заскрапений раніше -- деталі не тягнемо повторно,
+                    // просто освіжаємо рейтинг і продовжуємо.
+                    upsertRating(existing, PROVIDER, rating);
+                    if (existing.getProductUrl() == null) {
+                        existing.setProductUrl(productUrl);
                     }
+                    skippedAlreadyScraped++;
+                    continue;
                 }
-            } catch (Exception e) {
-                System.err.println("Error parsing RumRatings listing page " + page + ": " + e.getMessage());
+
+                RumProduct basicRum = (existing != null) ? existing : new RumProduct();
+                basicRum.setName(name);
+                basicRum.setProductUrl(productUrl);
+                basicRum.addSourceUrl("RumRatings", productUrl);
+                upsertRating(basicRum, PROVIDER, rating);
+
+                topRumsToScrape.put(productUrl, basicRum);
             }
+
+            page++;
         }
 
+        System.out.println(">>> Пропущено (вже було заскрапено раніше): " + skippedAlreadyScraped);
+
         if (topRumsToScrape.isEmpty()) {
-            System.out.println("No rums with rating >= 7.0 found. Exiting.");
+            System.out.println("Немає нових ромів для deep-scrape.");
             return;
         }
 
-        System.out.println("\n>>> Step 1 Completed. Found " + topRumsToScrape.size() + " top rums to deep-scrape.");
+        System.out.println("\n>>> Step 1 Completed. Found " + topRumsToScrape.size() + " rums to deep-scrape.");
         System.out.println(">>> Moving to Step 2: Extracting deep details...\n");
 
-        ExecutorService executor = Executors.newFixedThreadPool(10);
+        ExecutorService executor = Executors.newFixedThreadPool(THREAD_POOL_SIZE);
         List<CompletableFuture<Void>> futures = new ArrayList<>();
         AtomicInteger count = new AtomicInteger(0);
 
-        for (Map.Entry<String, RumProduct> entry : topRumsToScrape.entrySet()) {
-            String productUrl = entry.getKey();
-            RumProduct basicRum = entry.getValue();
-
+        for (RumProduct basicRum : topRumsToScrape.values()) {
             CompletableFuture<Void> future = CompletableFuture.runAsync(() -> {
                 try {
                     int current = count.incrementAndGet();
-                    String currentApiKey = FIRECRAWL_API_KEYS[current % FIRECRAWL_API_KEYS.length];
+                    System.out.println("[" + current + "/" + topRumsToScrape.size() + "] Deep scraping: " + basicRum.getName());
 
-                    System.out.println("[" + current + "/" + topRumsToScrape.size() + "] Deep scraping: " + basicRum.getName() + " (Key: " + (current % FIRECRAWL_API_KEYS.length + 1) + ")");
-
-                    waitBeforeNextRequest((int) (Math.random() * 1000));
-
-                    JsonObject detailedData = scrapeDetailPage(client, productUrl, currentApiKey);
-
-                    if (detailedData != null) {
-                        enrichRumWithAiData(basicRum, detailedData);
-                    }
+                    String detailHtml = fetchHtmlWithRetry(client, basicRum.getProductUrl());
+                    Document detailDoc = Jsoup.parse(detailHtml, "https://rumratings.com");
+                    enrichRumFromDetailPage(basicRum, detailDoc);
 
                     synchronized (rumSet) {
                         mergeIntoSet(rumSet, basicRum);
                     }
-
                 } catch (Exception e) {
-                    System.err.println("Error extracting details for " + productUrl + ": " + e.getMessage());
+                    System.err.println("Error extracting details for " + basicRum.getProductUrl() + ": " + e.getMessage());
                 }
             }, executor);
 
@@ -124,192 +151,146 @@ public class RumRatingsParser implements RumParser {
         CompletableFuture.allOf(futures.toArray(new CompletableFuture[0])).join();
         executor.shutdown();
 
-        System.out.println("Finished RumRatings. Total top rums integrated: " + count.get());
+        System.out.println("Finished RumRatings. Total newly deep-scraped: " + count.get());
     }
 
-    private JsonObject scrapeListingPage(HttpClient client, int page, String apiKey) throws Exception {
-        String currentUrl = BASE_TARGET_URL + "?page=" + page;
-        JsonObject requestBody = buildListingRequestBody(currentUrl);
-        return sendFirecrawlRequest(client, requestBody, "Listing Page " + page, apiKey);
+    /**
+     * Оновлює рейтинг конкретного провайдера, замінюючи старе значення новим
+     * (Rating.equals() звіряє лише по provider, тому звичайний addAll() старе значення не оновить).
+     */
+    private void upsertRating(RumProduct product, String provider, double value) {
+        product.getRatings().removeIf(r -> provider.equals(r.getProvider()));
+        product.getRatings().add(new RumProduct.Rating(provider, value));
     }
 
-    private JsonObject buildListingRequestBody(String url) {
-        JsonObject requestBody = new JsonObject();
-        requestBody.addProperty("url", url);
-        requestBody.addProperty("waitFor", 3000);
-        requestBody.addProperty("onlyMainContent", true);
-
-        JsonArray actions = new JsonArray();
-
-        JsonObject clickRating = new JsonObject();
-        clickRating.addProperty("type", "click");
-        clickRating.addProperty("selector", "button[data-value=\"average_rating\"]");
-
-        JsonObject wait1 = new JsonObject();
-        wait1.addProperty("type", "wait");
-        wait1.addProperty("milliseconds", 2000);
-
-        JsonObject click50 = new JsonObject();
-        click50.addProperty("type", "click");
-        click50.addProperty("selector", "button[data-key=\"min_rating\"][data-value=\"50\"]");
-
-        JsonObject wait2 = new JsonObject();
-        wait2.addProperty("type", "wait");
-        wait2.addProperty("milliseconds", 3000);
-
-        actions.add(clickRating);
-        actions.add(wait1);
-        actions.add(click50);
-        actions.add(wait2);
-
-        requestBody.add("actions", actions);
-
-        JsonArray formats = new JsonArray();
-        formats.add("json");
-        requestBody.add("formats", formats);
-
-        JsonObject jsonOptions = new JsonObject();
-        jsonOptions.addProperty("prompt", """
-                Extract every rum product visible on this exact RumRatings listing page.
-                For each product return ONLY these 3 fields: exact name, product URL, and rating on the 0-10 scale.
-                """);
-
-        JsonObject itemProperties = new JsonObject();
-        itemProperties.add("name", stringSchema());
-        itemProperties.add("productUrl", stringSchema());
-        itemProperties.add("rating", numberSchema());
-
-        JsonObject item = new JsonObject();
-        item.addProperty("type", "object");
-        item.add("properties", itemProperties);
-        JsonArray required = new JsonArray();
-        required.add("name");
-        required.add("productUrl");
-        item.add("required", required);
-
-        JsonObject rums = new JsonObject();
-        rums.addProperty("type", "array");
-        rums.add("items", item);
-
-        JsonObject properties = new JsonObject();
-        properties.add("rums", rums);
-
-        JsonObject schema = new JsonObject();
-        schema.addProperty("type", "object");
-        schema.add("properties", properties);
-
-        jsonOptions.add("schema", schema);
-        requestBody.add("jsonOptions", jsonOptions);
-
-        return requestBody;
-    }
-
-    private JsonObject scrapeDetailPage(HttpClient client, String url, String apiKey) throws Exception {
-        JsonObject requestBody = buildDetailRequestBody(url);
-        return sendFirecrawlRequest(client, requestBody, "Detail Page", apiKey);
-    }
-
-    private JsonObject buildDetailRequestBody(String url) {
-        JsonObject requestBody = new JsonObject();
-        requestBody.addProperty("url", url);
-        requestBody.addProperty("waitFor", 1500);
-        requestBody.addProperty("onlyMainContent", true);
-
-        JsonArray formats = new JsonArray();
-        formats.add("json");
-        requestBody.add("formats", formats);
-
-        JsonObject jsonOptions = new JsonObject();
-        jsonOptions.addProperty("prompt", """
-                Extract the detailed characteristics of this specific rum.
-                Return ONLY available fields: description, brand, image URL, rum type, category, 
-                region/country, ABV percentage, age in years, year distilled, raw material, 
-                process, distillation method, women led (true/false), and volume/weight.
-                Do not invent values. If a field is missing, return null.
-                """);
-
-        JsonObject properties = new JsonObject();
-        properties.add("description", stringSchema());
-        properties.add("brand", stringSchema());
-        properties.add("imgUrl", stringSchema());
-        properties.add("type", stringSchema());
-        properties.add("category", stringSchema());
-        properties.add("region", stringSchema());
-        properties.add("abv", numberSchema());
-        properties.add("age", numberSchema());
-        properties.add("volumeWeight", stringSchema());
-        properties.add("yearDistilled", numberSchema());
-        properties.add("rawMaterial", stringSchema());
-        properties.add("process", stringSchema());
-        properties.add("distillationMethod", stringSchema());
-
-        JsonObject booleanSchema = new JsonObject();
-        booleanSchema.addProperty("type", "boolean");
-        properties.add("womenLed", booleanSchema);
-
-        JsonObject schema = new JsonObject();
-        schema.addProperty("type", "object");
-        schema.add("properties", properties);
-
-        jsonOptions.add("schema", schema);
-        requestBody.add("jsonOptions", jsonOptions);
-
-        return requestBody;
-    }
-
-    private void enrichRumWithAiData(RumProduct rum, JsonObject aiData) {
-        rum.setDescription(getStringOrNull(aiData, "description"));
-        rum.setBrand(getStringOrNull(aiData, "brand"));
-        rum.setType(getStringOrNull(aiData, "type"));
-        rum.setCategory(getStringOrNull(aiData, "category"));
-        rum.setRegion(getStringOrNull(aiData, "region"));
-        rum.setAbv(getDoubleOrNull(aiData, "abv"));
-        rum.setAge(getDoubleOrNull(aiData, "age"));
-        rum.setVolumeWeight(getStringOrNull(aiData, "volumeWeight"));
-        rum.setImgUrl(getStringOrNull(aiData, "imgUrl"));
-
-        rum.setYearDistilled(getIntegerOrNull(aiData, "yearDistilled"));
-        rum.setRawMaterial(getStringOrNull(aiData, "rawMaterial"));
-        rum.setProcess(getStringOrNull(aiData, "process"));
-        rum.setDistillationMethod(getStringOrNull(aiData, "distillationMethod"));
-
-        if (aiData.has("womenLed") && !aiData.get("womenLed").isJsonNull()) {
-            rum.setWomenLed(aiData.get("womenLed").getAsBoolean());
+    private void throttle() {
+        synchronized (rateLimitLock) {
+            long now = System.currentTimeMillis();
+            long elapsed = now - lastRequestTime;
+            long waitTime = MIN_REQUEST_INTERVAL_MS - elapsed;
+            if (waitTime > 0) {
+                try {
+                    Thread.sleep(waitTime);
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                }
+            }
+            lastRequestTime = System.currentTimeMillis();
         }
-        rum.enrichDerivedFields();
     }
 
-    private JsonObject sendFirecrawlRequest(HttpClient client, JsonObject requestBody, String logContext, String apiKey) {
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(FIRECRAWL_SCRAPE_URL))
-                .timeout(Duration.ofSeconds(120))
-                .header("Content-Type", "application/json")
-                .header("Authorization", "Bearer " + apiKey)
-                .POST(HttpRequest.BodyPublishers.ofString(requestBody.toString()))
-                .build();
+    private String fetchHtmlWithRetry(HttpClient client, String url) throws Exception {
+        Exception lastError = null;
 
-        int maxRetries = 3;
-        for (int attempt = 1; attempt <= maxRetries; attempt++) {
+        for (int attempt = 1; attempt <= MAX_RETRIES; attempt++) {
+            throttle();
+
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create(url))
+                    .timeout(Duration.ofSeconds(30))
+                    .header("User-Agent", USER_AGENT)
+                    .header("Accept", "text/html, application/xhtml+xml")
+                    .GET()
+                    .build();
+
             try {
                 HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
                 if (response.statusCode() == 200) {
-                    JsonObject responseJson = JsonParser.parseString(response.body()).getAsJsonObject();
-                    JsonObject data = getObject(responseJson, "data");
-                    return data == null ? null : getObject(data, "json");
-                } else {
-                    System.out.println("  API Error (" + response.statusCode() + ") for " + logContext + ". Retry " + attempt);
-                    if (attempt < maxRetries) waitBeforeNextRequest(4000);
+                    return response.body();
                 }
-            } catch (java.net.http.HttpTimeoutException e) {
-                System.out.println("  Timeout for " + logContext + ". Retry " + attempt);
-                if (attempt < maxRetries) waitBeforeNextRequest(4000);
-            } catch (Exception e) {
-                System.out.println("  Critical Error for " + logContext + ": " + e.getMessage());
-                break;
+
+                if (response.statusCode() == 429 || response.statusCode() >= 500) {
+                    long backoffMs = resolveBackoff(response, attempt);
+                    System.out.println("  HTTP " + response.statusCode() + " for " + url
+                            + " -- retry " + attempt + "/" + MAX_RETRIES + " after " + backoffMs + "ms");
+                    Thread.sleep(backoffMs);
+                    lastError = new RuntimeException("HTTP " + response.statusCode() + " for " + url);
+                    continue;
+                }
+
+                throw new RuntimeException("HTTP " + response.statusCode() + " for " + url);
+
+            } catch (java.io.IOException e) {
+                lastError = e;
+                Thread.sleep(1000L * attempt);
             }
         }
-        return null;
+
+        throw lastError != null ? lastError : new RuntimeException("Failed to fetch " + url);
+    }
+
+    private long resolveBackoff(HttpResponse<String> response, int attempt) {
+        Optional<String> retryAfter = response.headers().firstValue("Retry-After");
+        if (retryAfter.isPresent()) {
+            try {
+                return Long.parseLong(retryAfter.get().trim()) * 1000L;
+            } catch (NumberFormatException ignored) {}
+        }
+        return (long) Math.pow(2, attempt - 1) * 1000L;
+    }
+
+    private void enrichRumFromDetailPage(RumProduct rum, Document doc) {
+        Map<String, String> details = extractLabelValuePairs(doc);
+
+        rum.setBrand(details.get("Company"));
+        rum.setType(details.get("Type"));
+        rum.setRegion(details.get("Country"));
+        rum.setAbv(parseDoubleSafe(details.get("ABV")));
+        rum.setAge(parseDoubleSafe(details.get("Years Aged")));
+        rum.setYearDistilled(parseIntSafe(details.get("Yr Distilled")));
+        rum.setRawMaterial(details.get("Raw Material"));
+        rum.setProcess(details.get("Process"));
+        rum.setDistillationMethod(details.get("Distillation"));
+        rum.setCategory("rum");
+
+        String womenLed = details.get("Women Led");
+        if (womenLed != null) {
+            rum.setWomenLed(womenLed.trim().equalsIgnoreCase("Yes"));
+        }
+
+        Element descEl = doc.selectFirst("meta[name=description]");
+        if (descEl != null) {
+            rum.setDescription(descEl.attr("content").trim());
+        }
+
+        Element imgEl = doc.selectFirst("img[alt~=(?i)\\s+rum$]");
+        if (imgEl != null) {
+            rum.setImgUrl(imgEl.absUrl("src"));
+        }
+
+        rum.enrichDerivedFields();
+    }
+
+    private Map<String, String> extractLabelValuePairs(Document doc) {
+        Map<String, String> result = new LinkedHashMap<>();
+
+        Element heading = doc.selectFirst("h3:matchesOwn(^\\s*Rum Details\\s*$)");
+        if (heading == null) return result;
+
+        Element container = heading.nextElementSibling();
+        if (container == null) return result;
+
+        Elements rows = container.select("> div.flex.mb-2");
+        for (Element row : rows) {
+            Elements children = row.children();
+            if (children.size() < 2) continue;
+
+            Element labelContainer = children.first();
+            Element valueEl = children.last();
+
+            Element labelSpan = labelContainer.selectFirst("span.font-bold");
+            if (labelSpan == null) continue;
+
+            String label = labelSpan.text().replace(":", "").trim();
+            String value = valueEl.text().trim();
+
+            if (!value.isEmpty()) {
+                result.put(label, value);
+            }
+        }
+
+        return result;
     }
 
     private boolean mergeIntoSet(Set<RumProduct> rumSet, RumProduct incomingRum) {
@@ -323,61 +304,19 @@ public class RumRatingsParser implements RumParser {
         return false;
     }
 
-    private void waitBeforeNextRequest(int millis) {
-        try {
-            Thread.sleep(millis);
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
+    private Double parseDoubleSafe(String s) {
+        if (s == null) return null;
+        Matcher m = Pattern.compile("[\\d.]+").matcher(s);
+        if (m.find()) {
+            try {
+                return Double.parseDouble(m.group());
+            } catch (NumberFormatException ignored) {}
         }
+        return null;
     }
 
-    private JsonObject stringSchema() {
-        JsonObject schema = new JsonObject();
-        schema.addProperty("type", "string");
-        return schema;
-    }
-
-    private JsonObject numberSchema() {
-        JsonObject schema = new JsonObject();
-        schema.addProperty("type", "number");
-        return schema;
-    }
-
-    private JsonObject getObject(JsonObject parent, String field) {
-        JsonElement element = parent.get(field);
-        return element != null && element.isJsonObject() ? element.getAsJsonObject() : null;
-    }
-
-    private JsonArray getArray(JsonObject parent, String field) {
-        JsonElement element = parent.get(field);
-        return element != null && element.isJsonArray() ? element.getAsJsonArray() : null;
-    }
-
-    private String getStringOrNull(JsonObject object, String field) {
-        JsonElement element = object.get(field);
-        if (element == null || element.isJsonNull() || !element.isJsonPrimitive()) return null;
-        return element.getAsString().trim();
-    }
-
-    private Double getDoubleOrNull(JsonObject object, String field) {
-        JsonElement element = object.get(field);
-        if (element == null || element.isJsonNull()) return null;
-        try {
-            double value = element.getAsDouble();
-            return value == 0.0 ? null : value;
-        } catch (RuntimeException e) {
-            return null;
-        }
-    }
-
-    private Integer getIntegerOrNull(JsonObject object, String field) {
-        JsonElement element = object.get(field);
-        if (element == null || element.isJsonNull()) return null;
-        try {
-            int value = element.getAsInt();
-            return value == 0 ? null : value;
-        } catch (RuntimeException e) {
-            return null;
-        }
+    private Integer parseIntSafe(String s) {
+        Double d = parseDoubleSafe(s);
+        return d == null ? null : d.intValue();
     }
 }
