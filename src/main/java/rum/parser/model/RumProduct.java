@@ -5,8 +5,10 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.text.Normalizer;
+import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.regex.Matcher;
@@ -40,6 +42,8 @@ public class RumProduct {
 
     private SilpoMatch silpoMatch = null;
 
+    private Map<String, String> sourceUrls = new LinkedHashMap<>();
+
     private Integer yearDistilled;
     private String rawMaterial;
     private String process;
@@ -48,6 +52,12 @@ public class RumProduct {
 
     private Set<Rating> ratings = new LinkedHashSet<>();
     private Set<Review> reviews = new LinkedHashSet<>();
+
+    public void addSourceUrl(String provider, String url) {
+        if (provider != null && url != null && !url.isBlank()) {
+            sourceUrls.putIfAbsent(provider, url);
+        }
+    }
 
     public void mergeFrom(RumProduct incoming) {
         if (incoming == null) {
@@ -79,6 +89,12 @@ public class RumProduct {
         }
         if (silpoMatch == null && incoming.getSilpoMatch() != null) {
             silpoMatch = incoming.getSilpoMatch();
+        }
+
+        if (incoming.getSourceUrls() != null) {
+            for (Map.Entry<String, String> entry : incoming.getSourceUrls().entrySet()) {
+                sourceUrls.putIfAbsent(entry.getKey(), entry.getValue());
+            }
         }
 
         ratings.addAll(incoming.getRatings());
