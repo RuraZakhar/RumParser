@@ -34,8 +34,19 @@ public class FlaskerBeerParser implements BeerParser {
     );
 
     @Override
-    public List<BeerProduct> parse() {
+    public List<BeerProduct> parse(List<BeerProduct> existingCache) {
         List<BeerProduct> rawBeers = new ArrayList<>();
+        List<BeerProduct> beersNeedsDetails = new ArrayList<>();
+
+        java.util.Map<String, BeerProduct> cacheMap = new java.util.HashMap<>();
+        if (existingCache != null) {
+            for (BeerProduct b : existingCache) {
+                if (b.getFlaskerUrl() != null) {
+                    cacheMap.put(b.getFlaskerUrl(), b);
+                }
+            }
+        }
+
         int perPage = 100;
         int page = 1;
         boolean hasMore = true;
@@ -46,23 +57,13 @@ public class FlaskerBeerParser implements BeerParser {
             while (hasMore) {
                 String url = "https://flasker.com.ua/wp-json/wc/store/v1/products?per_page=" + perPage + "&page=" + page;
 
-                HttpRequest request = HttpRequest.newBuilder()
-                        .uri(URI.create(url))
-                        .GET()
-                        .build();
-
+                HttpRequest request = HttpRequest.newBuilder().uri(URI.create(url)).GET().build();
                 HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
-                if (response.statusCode() != 200) {
-                    break;
-                }
+                if (response.statusCode() != 200) break;
 
                 JsonArray items = JsonParser.parseString(response.body()).getAsJsonArray();
-
-                if (items.isEmpty()) {
-                    hasMore = false;
-                    continue;
-                }
+                if (items.isEmpty()) { hasMore = false; continue; }
 
                 for (JsonElement element : items) {
                     JsonObject item = element.getAsJsonObject();
@@ -77,9 +78,7 @@ public class FlaskerBeerParser implements BeerParser {
                             try {
                                 double v = Double.parseDouble(volMatcher.group(1).replace(",", "."));
                                 String unit = volMatcher.group(2).toLowerCase();
-                                if (unit.contains("м") || unit.contains("m")) {
-                                    v = v / 1000.0;
-                                }
+                                if (unit.contains("м") || unit.contains("m")) v = v / 1000.0;
                                 beer.setVolume(v);
                                 rawName = rawName.replace(volMatcher.group(0), "");
                             } catch (NumberFormatException ignored) {}
@@ -88,17 +87,12 @@ public class FlaskerBeerParser implements BeerParser {
                         Matcher abvMatcher = Pattern.compile("(?i)([0-9.,]+)\\s*(%|°)").matcher(rawName);
                         if (abvMatcher.find()) {
                             try {
-                                if (abvMatcher.group(2).equals("%")) {
-                                    beer.setAbv(Double.parseDouble(abvMatcher.group(1).replace(",", ".")));
-                                }
+                                if (abvMatcher.group(2).equals("%")) beer.setAbv(Double.parseDouble(abvMatcher.group(1).replace(",", ".")));
                                 rawName = rawName.replace(abvMatcher.group(0), "");
                             } catch (NumberFormatException ignored) {}
                         }
 
-                        rawName = rawName.replaceAll("(?i)\\s*-\\.?$", "");
-                        rawName = rawName.replaceAll("(?i)\\[\\d{4}\\]", "");
-                        rawName = rawName.replaceAll("\\s+", " ").trim();
-
+                        rawName = rawName.replaceAll("(?i)\\s*-\\.?$", "").replaceAll("(?i)\\[\\d{4}\\]", "").replaceAll("\\s+", " ").trim();
                         beer.setName(rawName);
                         beer.setCleanName(rawName.toLowerCase());
                     }
@@ -106,68 +100,59 @@ public class FlaskerBeerParser implements BeerParser {
                     beer.setFlaskerUrl(JsonUtils.getStringOrNull(item, "permalink"));
 
                     if (item.has("prices") && !item.get("prices").isJsonNull()) {
-                        JsonObject prices = item.getAsJsonObject("prices");
-                        Double rawPrice = JsonUtils.getDoubleOrNull(prices, "price");
-                        if (rawPrice != null) {
-                            beer.setFlaskerPrice(rawPrice);
-                        }
+                        Double rawPrice = JsonUtils.getDoubleOrNull(item.getAsJsonObject("prices"), "price");
+                        if (rawPrice != null) beer.setFlaskerPrice(rawPrice);
                     }
 
-                    if (item.has("images") && item.get("images").isJsonArray()) {
-                        JsonArray images = item.getAsJsonArray("images");
-                        if (!images.isEmpty()) {
-                            JsonObject firstImage = images.get(0).getAsJsonObject();
-                            beer.setImgUrl(JsonUtils.getStringOrNull(firstImage, "src"));
-                        }
+                    if (item.has("images") && item.get("images").isJsonArray() && !item.getAsJsonArray("images").isEmpty()) {
+                        beer.setImgUrl(JsonUtils.getStringOrNull(item.getAsJsonArray("images").get(0).getAsJsonObject(), "src"));
                     }
 
-                    if (item.has("brands") && item.get("brands").isJsonArray()) {
-                        JsonArray brands = item.getAsJsonArray("brands");
-                        if (!brands.isEmpty()) {
-                            beer.setBrand(unescapeHtml(JsonUtils.getStringOrNull(brands.get(0).getAsJsonObject(), "name")));
-                        }
+                    if (item.has("brands") && item.get("brands").isJsonArray() && !item.getAsJsonArray("brands").isEmpty()) {
+                        beer.setBrand(unescapeHtml(JsonUtils.getStringOrNull(item.getAsJsonArray("brands").get(0).getAsJsonObject(), "name")));
                     }
 
                     if (item.has("tags") && item.get("tags").isJsonArray()) {
-                        JsonArray tags = item.getAsJsonArray("tags");
-                        for (JsonElement tagEl : tags) {
+                        for (JsonElement tagEl : item.getAsJsonArray("tags")) {
                             String tagName = JsonUtils.getStringOrNull(tagEl.getAsJsonObject(), "name");
-                            if (tagName != null && KNOWN_COUNTRIES.contains(tagName.toLowerCase())) {
-                                beer.setCountry(tagName);
-                            }
+                            if (tagName != null && KNOWN_COUNTRIES.contains(tagName.toLowerCase())) beer.setCountry(tagName);
                         }
                     }
 
+                    if (beer.getFlaskerUrl() != null) {
+                        BeerProduct cachedBeer = cacheMap.get(beer.getFlaskerUrl());
+                        if (cachedBeer != null && (cachedBeer.getStyle() != null || cachedBeer.getUntappdRating() != null)) {
+                            beer.setStyle(cachedBeer.getStyle());
+                            beer.setIbu(cachedBeer.getIbu());
+                            beer.setUntappdRating(cachedBeer.getUntappdRating());
+                            System.out.println("   [Flasker] Знайдено в кеші (оновлено ціну): " + beer.getName());
+                        } else {
+                            beersNeedsDetails.add(beer);
+                        }
+                    }
                     rawBeers.add(beer);
                 }
                 page++;
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        } catch (Exception e) { e.printStackTrace(); }
 
-        System.out.println("   [Flasker] Зібрано " + rawBeers.size() + " позицій. Запуск пошуку IBU та Untappd...");
-
-        ExecutorService executor = Executors.newFixedThreadPool(15);
-        List<CompletableFuture<Void>> futures = new ArrayList<>();
-
-        try {
-            for (BeerProduct beer : rawBeers) {
-                String url = beer.getFlaskerUrl();
-                if (url != null && !url.isEmpty()) {
-                    CompletableFuture<Void> future = CompletableFuture.runAsync(() -> {
-                        fetchDetailsFromHtml(beer, url);
-                    }, executor);
-                    futures.add(future);
+        if (!beersNeedsDetails.isEmpty()) {
+            System.out.println("   [Flasker] Нових позицій без кешу: " + beersNeedsDetails.size() + ". Запуск глибокого пошуку IBU та Untappd...");
+            ExecutorService executor = Executors.newFixedThreadPool(15);
+            List<CompletableFuture<Void>> futures = new ArrayList<>();
+            try {
+                for (BeerProduct beer : beersNeedsDetails) {
+                    futures.add(CompletableFuture.runAsync(() -> fetchDetailsFromHtml(beer, beer.getFlaskerUrl()), executor));
                 }
+                CompletableFuture.allOf(futures.toArray(new CompletableFuture[0])).join();
+            } finally {
+                executor.shutdown();
             }
-            CompletableFuture.allOf(futures.toArray(new CompletableFuture[0])).join();
-        } finally {
-            executor.shutdown();
+        } else {
+            System.out.println("   [Flasker] Усі позиції знайдені в кеші! Глибокий парсинг не потрібен.");
         }
 
-        Set<BeerProduct> uniqueBeers = new LinkedHashSet<>(rawBeers);
-        return new ArrayList<>(uniqueBeers);
+        return new ArrayList<>(new LinkedHashSet<>(rawBeers));
     }
 
     private void fetchDetailsFromHtml(BeerProduct beer, String url) {

@@ -8,34 +8,50 @@ import java.util.List;
 
 public class BreweryLoader {
 
-    public static List<Brewery> loadWhitelist(String filePath) {
-        List<Brewery> whitelist = new ArrayList<>();
+    public static List<Brewery> loadBreweries(String filePath) {
+        List<Brewery> breweries = new ArrayList<>();
 
         try {
+            if (!Files.exists(Paths.get(filePath))) {
+                System.err.println("⚠️ [BreweryLoader] Файл не знайдено: " + filePath);
+                return breweries;
+            }
+
             List<String> lines = Files.readAllLines(Paths.get(filePath));
 
-            for (int i = 1; i < lines.size(); i++) {
-                String line = lines.get(i);
-                if (line.trim().isEmpty()) continue;
+            for (String line : lines) {
+                String trimmed = line.trim();
 
-                String[] columns = line.split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)");
+                if (trimmed.isEmpty() || trimmed.startsWith("#")) {
+                    continue;
+                }
 
-                if (columns.length >= 2) {
-                    String breweryName = columns[1].trim();
+                String[] parts = trimmed.split(",", 2);
 
-                    if (breweryName.startsWith("\"") && breweryName.endsWith("\"")) {
-                        breweryName = breweryName.substring(1, breweryName.length() - 1);
+                if (parts.length == 2) {
+                    String name = parts[0].trim().replaceAll("^\"|\"$", "");
+                    String url = parts[1].trim().replaceAll("^\"|\"$", "");
+
+                    if (url.toLowerCase().contains("untappd.com")) {
+
+                        if (url.endsWith("/")) {
+                            url = url.substring(0, url.length() - 1);
+                        }
+
+                        if (!url.endsWith("/beer")) {
+                            url = url + "/beer";
+                        }
+
+                        breweries.add(new Brewery(name, url));
                     }
-
-                    whitelist.add(new Brewery(breweryName));
                 }
             }
-            System.out.println(">>> Успішно завантажено " + whitelist.size() + " топових броварень у Білий список.");
+            System.out.println(">>> [BreweryLoader] Успішно завантажено " + breweries.size() + " броварень із файлу: " + filePath);
 
         } catch (Exception e) {
-            System.err.println("Помилка під час читання файлу броварень: " + e.getMessage());
+            System.err.println("❌ [BreweryLoader] Помилка читання файлу броварень: " + e.getMessage());
         }
 
-        return whitelist;
+        return breweries;
     }
 }

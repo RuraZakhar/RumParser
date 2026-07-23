@@ -36,9 +36,17 @@ public class SilpoBeerParser implements BeerParser {
     };
 
     @Override
-    public List<BeerProduct> parse() {
+    public List<BeerProduct> parse(List<BeerProduct> existingCache) {
         List<BeerProduct> rawBeers = new ArrayList<>();
-        List<String> slugs = new ArrayList<>();
+        List<BeerProduct> beersNeedsDetails = new ArrayList<>();
+        List<String> slugsForDetails = new ArrayList<>();
+
+        java.util.Map<String, BeerProduct> cacheMap = new java.util.HashMap<>();
+        for (BeerProduct b : existingCache) {
+            if (b.getSilpoUrl() != null) {
+                cacheMap.put(b.getSilpoUrl(), b);
+            }
+        }
 
         for (String categorySlug : CATEGORIES) {
             int limit = 100;
@@ -50,11 +58,7 @@ public class SilpoBeerParser implements BeerParser {
                     String url = "https://sf-ecom-api.silpo.ua/v1/uk/branches/00000000-0000-0000-0000-000000000000/products?" +
                             "limit=" + limit + "&offset=" + offset + "&deliveryType=DeliveryHome&category=" + categorySlug;
 
-                    HttpRequest request = HttpRequest.newBuilder()
-                            .uri(URI.create(url))
-                            .GET()
-                            .build();
-
+                    HttpRequest request = HttpRequest.newBuilder().uri(URI.create(url)).GET().build();
                     HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
                     if (response.statusCode() == 200) {
@@ -62,10 +66,7 @@ public class SilpoBeerParser implements BeerParser {
                         JsonArray items = rootObj.getAsJsonArray("items");
                         int fetchedSize = items.size();
 
-                        if (items.isEmpty()) {
-                            hasMore = false;
-                            continue;
-                        }
+                        if (items.isEmpty()) { hasMore = false; continue; }
 
                         for (JsonElement element : items) {
                             JsonObject item = element.getAsJsonObject();
@@ -73,77 +74,63 @@ public class SilpoBeerParser implements BeerParser {
 
                             beer.setName(getStringOrNull(item, "title"));
                             beer.setBrand(getStringOrNull(item, "brandTitle"));
-
-                            if (beer.getName() != null) {
-                                beer.setCleanName(beer.getName().toLowerCase());
-                            }
+                            if (beer.getName() != null) beer.setCleanName(beer.getName().toLowerCase());
 
                             Double guestRating = getDoubleOrNull(item, "guestProductRating");
-                            if (guestRating != null) {
-                                beer.setSilpoRating(guestRating);
-                            }
+                            if (guestRating != null) beer.setSilpoRating(guestRating);
 
                             Double untappd = getDoubleOrNull(item, "untappdRating");
-                            if (untappd != null) {
-                                beer.setUntappdRating(untappd);
-                            }
+                            if (untappd != null) beer.setUntappdRating(untappd);
 
                             beer.setSilpoPrice(getDoubleOrNull(item, "price"));
 
                             String icon = getStringOrNull(item, "icon");
-                            if (icon != null) {
-                                beer.setImgUrl(BASE_IMAGE_URL + icon);
-                            }
+                            if (icon != null) beer.setImgUrl(BASE_IMAGE_URL + icon);
 
                             String slug = getStringOrNull(item, "slug");
                             if (slug != null && !slug.isEmpty()) {
                                 beer.setSilpoUrl(BASE_PRODUCT_URL + slug);
-                                slugs.add(slug);
-                            } else {
-                                slugs.add("");
-                            }
 
+                                BeerProduct cachedBeer = cacheMap.get(beer.getSilpoUrl());
+                                if (cachedBeer != null && cachedBeer.getAbv() != null) {
+                                    beer.setAbv(cachedBeer.getAbv());
+                                    beer.setCountry(cachedBeer.getCountry());
+                                    beer.setPackaging(cachedBeer.getPackaging());
+                                    beer.setVolume(cachedBeer.getVolume());
+                                    System.out.println("   [Silpo] Знайдено в кеші (оновлено ціну): " + beer.getName());
+                                } else {
+                                    beersNeedsDetails.add(beer);
+                                    slugsForDetails.add(slug);
+                                }
+                            }
                             rawBeers.add(beer);
                         }
-
-                        if (fetchedSize < limit) {
-                            hasMore = false;
-                        } else {
-                            offset += limit;
-                        }
-                    } else {
-                        break;
-                    }
+                        if (fetchedSize < limit) hasMore = false;
+                        else offset += limit;
+                    } else break;
                 }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            } catch (Exception e) { e.printStackTrace(); }
         }
 
-        System.out.println("   [Silpo] Зібрано " + rawBeers.size() + " базових позицій. Запуск пошуку характеристик через API...");
-
-        ExecutorService executor = Executors.newFixedThreadPool(15);
-        List<CompletableFuture<Void>> futures = new ArrayList<>();
-
-        try {
-            for (int i = 0; i < rawBeers.size(); i++) {
-                BeerProduct beer = rawBeers.get(i);
-                String slug = slugs.get(i);
-
-                if (slug != null && !slug.isEmpty()) {
-                    CompletableFuture<Void> future = CompletableFuture.runAsync(() -> {
-                        fetchDetailsFromApi(beer, slug);
-                    }, executor);
-                    futures.add(future);
+        if (!beersNeedsDetails.isEmpty()) {
+            System.out.println("   [Silpo] Нових позицій без кешу: " + beersNeedsDetails.size() + ". Запуск глибокого парсингу...");
+            ExecutorService executor = Executors.newFixedThreadPool(15);
+            List<CompletableFuture<Void>> futures = new ArrayList<>();
+            try {
+                for (int i = 0; i < beersNeedsDetails.size(); i++) {
+                    BeerProduct beer = beersNeedsDetails.get(i);
+                    String slug = slugsForDetails.get(i);
+                    futures.add(CompletableFuture.runAsync(() -> fetchDetailsFromApi(beer, slug), executor));
                 }
+                CompletableFuture.allOf(futures.toArray(new CompletableFuture[0])).join();
+            } finally {
+                executor.shutdown();
             }
-            CompletableFuture.allOf(futures.toArray(new CompletableFuture[0])).join();
-        } finally {
-            executor.shutdown();
+        } else {
+            System.out.println("   [Silpo] Усі позиції знайдені в кеші! Глибокий парсинг не потрібен.");
         }
 
-        Set<BeerProduct> uniqueBeers = new LinkedHashSet<>(rawBeers);
-        return new ArrayList<>(uniqueBeers);
+        return new ArrayList<>(new LinkedHashSet<>(rawBeers));
     }
 
     private void fetchDetailsFromApi(BeerProduct beer, String slug) {
