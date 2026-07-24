@@ -49,9 +49,9 @@ public class RumProduct {
     private String process;
     private String distillationMethod;
     private Boolean womenLed;
+    private Long lastScrapedAt;
 
     private Set<Rating> ratings = new LinkedHashSet<>();
-    private Set<Review> reviews = new LinkedHashSet<>();
 
     public void addSourceUrl(String provider, String url) {
         if (provider != null && url != null && !url.isBlank()) {
@@ -62,6 +62,10 @@ public class RumProduct {
     public void mergeFrom(RumProduct incoming) {
         if (incoming == null) {
             return;
+        }
+        if (incoming.getLastScrapedAt() != null &&
+                (lastScrapedAt == null || incoming.getLastScrapedAt() > lastScrapedAt)) {
+            lastScrapedAt = incoming.getLastScrapedAt();
         }
 
         copyStringIfMissing(this::getDescription, this::setDescription, incoming.getDescription());
@@ -97,8 +101,10 @@ public class RumProduct {
             }
         }
 
-        ratings.addAll(incoming.getRatings());
-        reviews.addAll(incoming.getReviews());
+        for (Rating r : incoming.getRatings()) {
+            ratings.removeIf(existing -> Objects.equals(existing.getProvider(), r.getProvider()));
+            ratings.add(r);
+        }
         enrichDerivedFields();
     }
 

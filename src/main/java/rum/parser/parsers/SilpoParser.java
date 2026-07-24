@@ -39,6 +39,7 @@ public class SilpoParser implements RumParser {
             double bestScore = 0.0;
 
             for (RumProduct existingRum : rumSet) {
+                if (existingRum.getSourceUrls().containsKey("Silpo")) continue;
                 double score = RumNameMatcher.similarity(existingRum.getName(), silpoRum.getName());
                 if (score > bestScore) {
                     bestScore = score;
@@ -121,8 +122,8 @@ public class SilpoParser implements RumParser {
                         String slug = getStringOrNull(item, "slug");
                         if (slug != null && !slug.isEmpty()) {
                             rum.setProductUrl(BASE_PRODUCT_URL + slug);
-                            fetchAndAddDetails(slug, rum); // Точковий запит за деталями
-                            Thread.sleep(50); // Пауза, щоб не заблокували
+                            fetchAndAddDetails(slug, rum);
+                            Thread.sleep(50);
                         }
 
                         silpoList.add(rum);

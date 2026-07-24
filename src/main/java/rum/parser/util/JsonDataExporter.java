@@ -13,18 +13,12 @@ import java.util.Collection;
 
 public class JsonDataExporter {
 
-    /**
-     * Exports any collection of data into a pretty-printed JSON file.
-     *
-     * @param data     The collection to export (e.g., Set or List).
-     * @param fileName The output file path/name.
-     */
     public boolean exportToJson(Collection<?> data, String fileName) {
         System.out.println("\nExporting data to file: " + fileName + "...");
 
         Gson gson = new GsonBuilder()
                 .setPrettyPrinting()
-                .disableHtmlEscaping() // Prevents escaping characters like '=', '&', etc.
+                .disableHtmlEscaping()
                 .create();
 
         Path targetFile = Path.of(fileName).toAbsolutePath();
