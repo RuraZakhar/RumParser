@@ -28,10 +28,12 @@ public class RumRatingsParser implements RumParser {
     private static final int THREAD_POOL_SIZE = 3;
     private static final long MIN_REQUEST_INTERVAL_MS = 600;
     private static final int MAX_RETRIES = 5;
-
+    private static final long DETAILS_TTL_MS = 30L * 24 * 60 * 60 * 1000;
     private final Object rateLimitLock = new Object();
     private volatile long lastRequestTime = 0;
-
+    private static final long BLOCK_WAIT_MS = 11 * 60 * 1000L;
+    private static final int MAX_BLOCK_RETRIES = 3;
+    
     @Override
     public void parse(Set<RumProduct> rumSet) {
         System.out.println("\n[2/3] Starting RumRatings Parser...");
@@ -90,10 +92,14 @@ public class RumRatingsParser implements RumParser {
                 probe.setName(name);
                 RumProduct existing = existingIndex.get(probe);
 
-                if (existing != null && existing.getBrand() != null) {
-                    // Уже був повністю заскрапений раніше -- деталі не тягнемо повторно,
-                    // просто освіжаємо рейтинг і продовжуємо.
+                boolean detailsAreFresh = existing != null
+                        && existing.getBrand() != null
+                        && existing.getLastScrapedAt() != null
+                        && (System.currentTimeMillis() - existing.getLastScrapedAt()) < DETAILS_TTL_MS;
+
+                if (detailsAreFresh) {
                     upsertRating(existing, PROVIDER, rating);
+                    existing.addSourceUrl("RumRatings", productUrl);
                     if (existing.getProductUrl() == null) {
                         existing.setProductUrl(productUrl);
                     }
@@ -154,10 +160,6 @@ public class RumRatingsParser implements RumParser {
         System.out.println("Finished RumRatings. Total newly deep-scraped: " + count.get());
     }
 
-    /**
-     * Оновлює рейтинг конкретного провайдера, замінюючи старе значення новим
-     * (Rating.equals() звіряє лише по provider, тому звичайний addAll() старе значення не оновить).
-     */
     private void upsertRating(RumProduct product, String provider, double value) {
         product.getRatings().removeIf(r -> provider.equals(r.getProvider()));
         product.getRatings().add(new RumProduct.Rating(provider, value));
@@ -181,6 +183,7 @@ public class RumRatingsParser implements RumParser {
 
     private String fetchHtmlWithRetry(HttpClient client, String url) throws Exception {
         Exception lastError = null;
+        int blockRetries = 0;
 
         for (int attempt = 1; attempt <= MAX_RETRIES; attempt++) {
             throttle();
@@ -197,7 +200,30 @@ public class RumRatingsParser implements RumParser {
                 HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
                 if (response.statusCode() == 200) {
+                    if (isBlockedPage(response.body())) {
+                        if (blockRetries >= MAX_BLOCK_RETRIES) {
+                            throw new RuntimeException("Заблоковано навіть після довгих очікувань: " + url);
+                        }
+                        blockRetries++;
+                        System.out.println("  !!! Cloudflare block для " + url + ". Чекаю "
+                                + (BLOCK_WAIT_MS / 60000) + " хв (" + blockRetries + "/" + MAX_BLOCK_RETRIES + ")...");
+                        Thread.sleep(BLOCK_WAIT_MS);
+                        attempt--;
+                        continue;
+                    }
                     return response.body();
+                }
+
+                if (response.statusCode() == 403) {
+                    if (blockRetries >= MAX_BLOCK_RETRIES) {
+                        throw new RuntimeException("HTTP 403 навіть після довгих очікувань: " + url);
+                    }
+                    blockRetries++;
+                    System.out.println("  !!! HTTP 403 для " + url + ". Чекаю "
+                            + (BLOCK_WAIT_MS / 60000) + " хв (" + blockRetries + "/" + MAX_BLOCK_RETRIES + ")...");
+                    Thread.sleep(BLOCK_WAIT_MS);
+                    attempt--;
+                    continue;
                 }
 
                 if (response.statusCode() == 429 || response.statusCode() >= 500) {
@@ -218,6 +244,17 @@ public class RumRatingsParser implements RumParser {
         }
 
         throw lastError != null ? lastError : new RuntimeException("Failed to fetch " + url);
+    }
+
+    private boolean isBlockedPage(String body) {
+        if (body == null) return false;
+        String lower = body.toLowerCase(Locale.ROOT);
+        return lower.contains("just a moment")
+                || lower.contains("checking your browser")
+                || lower.contains("temporarily unavailable")
+                || lower.contains("cf-challenge")
+                || lower.contains("captcha")
+                || lower.contains("attention required");
     }
 
     private long resolveBackoff(HttpResponse<String> response, int attempt) {
@@ -260,6 +297,7 @@ public class RumRatingsParser implements RumParser {
         }
 
         rum.enrichDerivedFields();
+        rum.setLastScrapedAt(System.currentTimeMillis());
     }
 
     private Map<String, String> extractLabelValuePairs(Document doc) {

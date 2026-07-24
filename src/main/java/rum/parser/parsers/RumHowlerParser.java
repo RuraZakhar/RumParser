@@ -92,7 +92,6 @@ public class RumHowlerParser implements RumParser {
     }
 
     private boolean mergeIntoSet(Set<RumProduct> rumSet, RumProduct incomingRum) {
-        // 1. Точний збіг нормалізованої назви
         for (RumProduct existingRum : rumSet) {
             if (existingRum.equals(incomingRum)) {
                 existingRum.mergeFrom(incomingRum);
