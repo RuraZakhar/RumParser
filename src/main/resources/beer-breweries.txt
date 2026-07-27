@@ -1,10 +1,10 @@
-Side Project Brewing, https://untappd.com/SideProjectBrewing
+Side Project Brewing, https://untappd.com/SideProject
 
 Fidens Brewing Co., https://untappd.com/FidensBrewingCo
 
-Brasserie Cantillon, https://untappd.com/BrasserieCantillon
+Brasserie Cantillon, https://untappd.com/w/brasserie-cantillon/202
 
-Westvleteren, https://untappd.com/SintSixtusAbdijWestvleteren
+Westvleteren, https://untappd.com/w/brouwerij-de-sint-sixtusabdij-van-westvleteren/263
 
 Toppling Goliath Brewing Co., https://untappd.com/topplinggoliathbrewing
 
@@ -14,11 +14,11 @@ Other Half Brewing Co., https://untappd.com/OtherHalfBrewingCompany
 
 Tommie Sjef, https://untappd.com/tommiesjef
 
-Equilibrium Brewery, https://untappd.com/EquilibriumBrewery
+Equilibrium Brewery, https://untappd.com/EQBrew
 
 The Veil Brewing Co., https://untappd.com/TheVeilBrewingCo
 
-Soma Beer, https://untappd.com/SOMABeer
+Soma Beer, https://untappd.com/_Soma_Beer_
 
 Prairie Artisan Ales, https://untappd.com/PrairieArtisanAles
 
@@ -40,15 +40,15 @@ Founders Brewing Co., https://untappd.com/foundersbrewing
 
 Folkingebrew, https://untappd.com/Folkingebrew
 
-ATELIER VRAI, https://untappd.com/AtelierVrai
+ATELIER VRAI, https://untappd.com/AtelierDerBraukuenste
 
-De Struise Brouwers, https://untappd.com/DeStruiseBrouwers
+De Struise Brouwers, https://untappd.com/struise
 
 Stamm Brewing, https://untappd.com/StammBeer
 
-Sudden Death Brewing Co., https://untappd.com/suddendeathbrewing_co
+Sudden Death Brewing Co., https://untappd.com/Suddendeath_craftbeer
 
-Moersleutel Craft Brewery, https://untappd.com/DeMoersleutel
+Moersleutel Craft Brewery, https://untappd.com/Moersleutel
 
 Põhjala, https://untappd.com/Pohjala
 
@@ -66,7 +66,7 @@ Northern Monk, https://untappd.com/northernmonk
 
 Garage Beer Co., https://untappd.com/GarageBeerCo
 
-Basqueland Brewing, https://untappd.com/BasquelandBrewing
+Basqueland Brewing, https://untappd.com/basqueland_brew
 
 FrauGruber Brewing, https://untappd.com/FrauGruberBrewing
 
@@ -78,7 +78,7 @@ Salama Brewing Co., https://untappd.com/SalamaBrewingCo
 
 Stone Brewing, https://untappd.com/stonebrewing
 
-Zichovec, https://untappd.com/ZichoveckyPivovar
+Zichovec, https://untappd.com/pivovarZichovec
 
 Buxton Brewery, https://untappd.com/BuxtonBrewery
 
@@ -88,13 +88,13 @@ Brouwerij St.Bernardus, https://untappd.com/BrouwerijStBernardus
 
 Vibrant Forest Brewery, https://untappd.com/VibrantForestBrewery
 
-AF Brew, https://untappd.com/AF_Brew
+AF Brew, https://untappd.com/AntiFactory
 
 Brouwerij Het Anker, https://untappd.com/BrouwerijHetAnker
 
 Nøgne Ø, https://untappd.com/nogneo
 
-Sibeeria, https://untappd.com/SibeeriaCZ
+Sibeeria, https://untappd.com/sibeeria_cz
 
 Siren Craft Castle, https://untappd.com/SirenCraftBrew
 
@@ -104,39 +104,39 @@ To Øl, https://untappd.com/ToolBeer
 
 Chimay, https://untappd.com/BieresdeChimay
 
-Duvel Moortgat, https://untappd.com/DuvelMoortgat
+Duvel Moortgat, https://untappd.com/duvel
 
 Frontaal Brewing Co., https://untappd.com/brouwerijfrontaal
 
-Orval, https://untappd.com/BrasseriedOrval
+Orval, https://untappd.com/OrvalTrappist
 
-Brouwerij Rodenbach, https://untappd.com/BrouwerijRodenbach
+Brouwerij Rodenbach, https://untappd.com/palmbreweries
 
 De Molen, https://untappd.com/BrouwerijDeMolen
 
-Samuel Smith, https://untappd.com/SamuelSmithsOldBrewery
+Samuel Smith, https://untappd.com/SamuelSmiths
 
 Brouwerij Verhaeghe, https://untappd.com/BrouwerijVerhaeghe
 
-Brasserie Dupont, https://untappd.com/BrasserieDupont
+Brasserie Dupont, https://untappd.com/dupont
 
-Schlenkerla, https://untappd.com/Schlenkerla
+Schlenkerla, https://untappd.com/Schlenkerla-Brewery
 
 Brasserie d'Achouffe, https://untappd.com/BrasseriedAchouffe
 
-Mikkeller, https://untappd.com/Mikkeller
+Mikkeller, https://untappd.com/mikkellerbeer
 
-Lagunitas Brewing Co., https://untappd.com/lagunitas
+Lagunitas Brewing Co., https://untappd.com/LagunitasBrewingCo
 
 Schneider Weisse, https://untappd.com/SchneiderWeisse
 
 Ayinger Privatbrauerei, https://untappd.com/AyingerBrewery
 
-Wild Beer Co., https://untappd.com/WildBeerCo
+Wild Beer Co., https://untappd.com/TheWildBeerCo
 
-Augustiner-Bräu München, https://untappd.com/AugustinerBrauMuenchen
+Augustiner-Bräu München, https://untappd.com/w/augustiner-brau-munchen/8444
 
-Uiltje Brewing Company, https://untappd.com/UiltjeBrewingCompany
+Uiltje Brewing Company, https://untappd.com/uiltjebrewingco
 
 Rogue Ales, https://untappd.com/rogueales
 
@@ -144,7 +144,7 @@ Anderson Valley, https://untappd.com/andersonvalley
 
 Fuller's, https://untappd.com/fullers
 
-Weihenstephan, https://untappd.com/BayerischeStaatsbrauereiWeihenstephan
+Weihenstephan, https://untappd.com/weihenstephaner
 
 Brouwerij De Ranke, https://untappd.com/BierenDeRanke
 
@@ -152,11 +152,11 @@ Thornbridge Brewery, https://untappd.com/thornbridgebrewery
 
 Tiny Rebel, https://untappd.com/tinyrebel
 
-Brouwerij 't IJ, https://untappd.com/brouwerijtij
+Brouwerij 't IJ, https://untappd.com/Brouwerijhetij
 
 Omer Vander Ghinste, https://untappd.com/OmerVanderGhinste
 
-Brouwerij Lindemans, https://untappd.com/BrouwerijLindemans
+Brouwerij Lindemans, https://untappd.com/BreweryLindemans
 
 Kees, https://untappd.com/BrouwerijKees
 
@@ -168,21 +168,21 @@ Huyghe Brewery, https://untappd.com/BrouwerijHuyghe
 
 Brouwerij De Halve Maan, https://untappd.com/BrouwerijDeHalveMaan
 
-Brasserie de la Senne, https://untappd.com/BrasseriedelaSenne
+Brasserie de la Senne, https://untappd.com/w/brasserie-de-la-senne/176
 
 Riegele BierManufaktur, https://untappd.com/BrauhausRiegele
 
-Erdinger Weissbräu, https://untappd.com/ErdingerWeissbraeu
+Erdinger Weissbräu, https://untappd.com/w/erdinger-weissbrau/1019
 
-Brussels Beer Project, https://untappd.com/BrusselsBeerProject
+Brussels Beer Project, https://untappd.com/BeerProject_Bxl
 
 Jopen, https://untappd.com/jopen
 
 Belhaven Brewery, https://untappd.com/BelhavenBrewery
 
-Maisel & Friends, https://untappd.com/MaiselandFriends
+Maisel & Friends, https://untappd.com/Brauerei-Gebr-Maisel
 
-Paulaner Brauerei, https://untappd.com/PaulanerBrauerei
+Paulaner Brauerei, https://untappd.com/PaulanerGruppe
 
 Brooklyn Brewery, https://untappd.com/brooklynbrewery
 
@@ -194,6 +194,6 @@ Wychwood Brewery, https://untappd.com/WychwoodBrewery
 
 Pivovar Matuška, https://untappd.com/PivovarMatuska
 
-Pilsner Urquell, https://untappd.com/pilsnerurquell
+Pilsner Urquell, https://untappd.com/plzenskyprazdroj
 
-Budweiser Budvar, https://untappd.com/BudweiserBudvar
+Budweiser Budvar, https://untappd.com/BudjovickBudvar

@@ -180,39 +180,4 @@ public class Main {
                 .replaceAll("[^a-zа-яіїєґ0-9]", " ")
                 .trim();
     }
-
-    private static void updateJsonFile(List<BeerProduct> newBeers, String fileName) {
-        Gson gson = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
-        Path path = Path.of(fileName);
-        List<BeerProduct> allBeers = new ArrayList<>();
-
-        if (Files.exists(path)) {
-            try (Reader reader = Files.newBufferedReader(path)) {
-                Type listType = new TypeToken<ArrayList<BeerProduct>>(){}.getType();
-                List<BeerProduct> readBeers = gson.fromJson(reader, listType);
-                if (readBeers != null) {
-                    for (BeerProduct b : readBeers) {
-                        if (b.getCleanName() != null) {
-                            allBeers.add(b);
-                        }
-                    }
-                }
-            } catch (IOException e) {
-                System.err.println("Помилка читання існуючого файлу: " + e.getMessage());
-            }
-        }
-
-        int startSize = allBeers.size();
-        for (BeerProduct newBeer : newBeers) {
-            mergeOrAdd(allBeers, newBeer);
-        }
-        int addedCount = allBeers.size() - startSize;
-
-        try (Writer writer = Files.newBufferedWriter(path)) {
-            gson.toJson(allBeers, writer);
-            System.out.println("=== ГОТОВО! Нових позицій додано: " + addedCount + ". Загалом у базі: " + allBeers.size() + " ===");
-        } catch (IOException e) {
-            System.err.println("Помилка збереження файлу: " + e.getMessage());
-        }
-    }
 }

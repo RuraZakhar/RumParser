@@ -28,6 +28,8 @@ public class FlaskerBeerParser implements BeerParser {
             .connectTimeout(Duration.ofSeconds(10))
             .build();
 
+    private static final long DETAILS_TTL_MS = 30L * 24 * 60 * 60 * 1000;
+
     private static final List<String> KNOWN_COUNTRIES = Arrays.asList(
             "україна", "бельгія", "німеччина", "сша", "чехія", "британія",
             "польща", "нідерланди", "ірландія", "іспанія", "італія", "франція", "шотландія"
@@ -121,10 +123,16 @@ public class FlaskerBeerParser implements BeerParser {
 
                     if (beer.getFlaskerUrl() != null) {
                         BeerProduct cachedBeer = cacheMap.get(beer.getFlaskerUrl());
-                        if (cachedBeer != null && (cachedBeer.getStyle() != null || cachedBeer.getUntappdRating() != null)) {
+                        boolean detailsAreFresh = cachedBeer != null
+                                && cachedBeer.getStyle() != null
+                                && cachedBeer.getLastScrapedAt() != null
+                                && (System.currentTimeMillis() - cachedBeer.getLastScrapedAt()) < DETAILS_TTL_MS;
+
+                        if (detailsAreFresh) {
                             beer.setStyle(cachedBeer.getStyle());
                             beer.setIbu(cachedBeer.getIbu());
                             beer.setUntappdRating(cachedBeer.getUntappdRating());
+                            beer.setLastScrapedAt(cachedBeer.getLastScrapedAt());
                             System.out.println("   [Flasker] Знайдено в кеші (оновлено ціну): " + beer.getName());
                         } else {
                             beersNeedsDetails.add(beer);
@@ -195,6 +203,8 @@ public class FlaskerBeerParser implements BeerParser {
 
                 System.out.println("   [Flasker] Оброблено: " + beer.getName() +
                         " (Об'єм: " + volStr + ", ABV: " + abvStr + "%, IBU: " + ibuStr + ", Untappd: " + untappdStr + ")");
+
+                beer.setLastScrapedAt(System.currentTimeMillis());
                 return;
 
             } catch (java.net.http.HttpTimeoutException e) {

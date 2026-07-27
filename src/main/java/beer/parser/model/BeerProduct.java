@@ -21,6 +21,7 @@ public class BeerProduct {
     private String country;
     private String packaging;
     private Double volume;
+    private Long lastScrapedAt;
 
     public String getName() { return name; }
     public void setName(String name) { this.name = name; }
@@ -72,6 +73,9 @@ public class BeerProduct {
     public String getUntappdUrl() { return untappdUrl; }
     public void setUntappdUrl(String untappdUrl) { this.untappdUrl = untappdUrl; }
 
+    public Long getLastScrapedAt() { return lastScrapedAt; }
+    public void setLastScrapedAt(Long lastScrapedAt) { this.lastScrapedAt = lastScrapedAt; }
+
     public String getCountry() { return country; }
     public void setCountry(String country) { this.country = country; }
 
@@ -83,6 +87,11 @@ public class BeerProduct {
 
     public void mergeFrom(BeerProduct incoming) {
         if (incoming == null) return;
+
+        if (incoming.getLastScrapedAt() != null &&
+                (this.lastScrapedAt == null || incoming.getLastScrapedAt() > this.lastScrapedAt)) {
+            this.lastScrapedAt = incoming.getLastScrapedAt();
+        }
 
         if (incoming.getSilpoPrice() != null) {
             this.silpoPrice = incoming.getSilpoPrice();
@@ -116,10 +125,6 @@ public class BeerProduct {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         BeerProduct that = (BeerProduct) o;
-
-        if (this.silpoUrl != null && this.silpoUrl.equals(that.silpoUrl)) return true;
-        if (this.flaskerUrl != null && this.flaskerUrl.equals(that.flaskerUrl)) return true;
-
         return Objects.equals(cleanName, that.cleanName) && Objects.equals(volume, that.volume);
     }
 

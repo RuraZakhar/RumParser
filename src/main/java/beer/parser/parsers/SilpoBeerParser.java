@@ -15,9 +15,6 @@ import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -30,6 +27,8 @@ public class SilpoBeerParser implements BeerParser {
     private static final String BASE_PRODUCT_URL = "https://silpo.ua/product/";
     private static final String API_PRODUCT_DETAILS_URL = "https://sf-ecom-api.silpo.ua/v1/uk/branches/00000000-0000-0000-0000-000000000000/products/";
     private static final String BASE_IMAGE_URL = "https://s7g10.scene7.com/is/image/silpo/";
+    private static final String USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/126.0.0.0";
+    private static final long DETAILS_TTL_MS = 30L * 24 * 60 * 60 * 1000;
     private static final String[] CATEGORIES = {
             "kraftove-pyvo-4506",
             "importne-pyvo-4505"
@@ -58,12 +57,31 @@ public class SilpoBeerParser implements BeerParser {
                     String url = "https://sf-ecom-api.silpo.ua/v1/uk/branches/00000000-0000-0000-0000-000000000000/products?" +
                             "limit=" + limit + "&offset=" + offset + "&deliveryType=DeliveryHome&category=" + categorySlug;
 
-                    HttpRequest request = HttpRequest.newBuilder().uri(URI.create(url)).GET().build();
-                    HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+                    HttpRequest request = HttpRequest.newBuilder()
+                            .uri(URI.create(url))
+                            .header("User-Agent", USER_AGENT)
+                            .header("Referer", "https://silpo.ua/")
+                            .GET()
+                            .build();
+
+                    HttpResponse<String> response = null;
+                    int maxListingRetries = 3;
+                    for (int attempt = 1; attempt <= maxListingRetries; attempt++) {
+                        response = client.send(request, HttpResponse.BodyHandlers.ofString());
+                        if (response.statusCode() == 200 || attempt == maxListingRetries) break;
+                        System.out.println("   [Silpo] HTTP " + response.statusCode() + " на лістингу, спроба " + attempt + "/" + maxListingRetries);
+                        try { Thread.sleep(1000L * attempt); } catch (InterruptedException ignored) {}
+                    }
 
                     if (response.statusCode() == 200) {
                         JsonObject rootObj = JsonParser.parseString(response.body()).getAsJsonObject();
                         JsonArray items = rootObj.getAsJsonArray("items");
+
+                        if (items == null) {
+                            System.out.println("   [Silpo] Відповідь без поля 'items', пропускаю сторінку.");
+                            break;
+                        }
+
                         int fetchedSize = items.size();
 
                         if (items.isEmpty()) { hasMore = false; continue; }
@@ -92,11 +110,17 @@ public class SilpoBeerParser implements BeerParser {
                                 beer.setSilpoUrl(BASE_PRODUCT_URL + slug);
 
                                 BeerProduct cachedBeer = cacheMap.get(beer.getSilpoUrl());
-                                if (cachedBeer != null && cachedBeer.getAbv() != null) {
+                                boolean detailsAreFresh = cachedBeer != null
+                                        && cachedBeer.getAbv() != null
+                                        && cachedBeer.getLastScrapedAt() != null
+                                        && (System.currentTimeMillis() - cachedBeer.getLastScrapedAt()) < DETAILS_TTL_MS;
+
+                                if (detailsAreFresh) {
                                     beer.setAbv(cachedBeer.getAbv());
                                     beer.setCountry(cachedBeer.getCountry());
                                     beer.setPackaging(cachedBeer.getPackaging());
                                     beer.setVolume(cachedBeer.getVolume());
+                                    beer.setLastScrapedAt(cachedBeer.getLastScrapedAt());
                                     System.out.println("   [Silpo] Знайдено в кеші (оновлено ціну): " + beer.getName());
                                 } else {
                                     beersNeedsDetails.add(beer);
@@ -114,15 +138,15 @@ public class SilpoBeerParser implements BeerParser {
 
         if (!beersNeedsDetails.isEmpty()) {
             System.out.println("   [Silpo] Нових позицій без кешу: " + beersNeedsDetails.size() + ". Запуск глибокого парсингу...");
-            ExecutorService executor = Executors.newFixedThreadPool(15);
-            List<CompletableFuture<Void>> futures = new ArrayList<>();
+            java.util.concurrent.ExecutorService executor = java.util.concurrent.Executors.newFixedThreadPool(15);
+            List<java.util.concurrent.CompletableFuture<Void>> futures = new ArrayList<>();
             try {
                 for (int i = 0; i < beersNeedsDetails.size(); i++) {
                     BeerProduct beer = beersNeedsDetails.get(i);
                     String slug = slugsForDetails.get(i);
-                    futures.add(CompletableFuture.runAsync(() -> fetchDetailsFromApi(beer, slug), executor));
+                    futures.add(java.util.concurrent.CompletableFuture.runAsync(() -> fetchDetailsFromApi(beer, slug), executor));
                 }
-                CompletableFuture.allOf(futures.toArray(new CompletableFuture[0])).join();
+                java.util.concurrent.CompletableFuture.allOf(futures.toArray(new java.util.concurrent.CompletableFuture[0])).join();
             } finally {
                 executor.shutdown();
             }
@@ -142,6 +166,8 @@ public class SilpoBeerParser implements BeerParser {
                 HttpRequest request = HttpRequest.newBuilder()
                         .uri(URI.create(url))
                         .timeout(Duration.ofSeconds(10))
+                        .header("User-Agent", USER_AGENT)
+                        .header("Referer", "https://silpo.ua/")
                         .GET()
                         .build();
 
@@ -201,6 +227,7 @@ public class SilpoBeerParser implements BeerParser {
                     System.out.println("   [Silpo] Оброблено: " + beer.getName() +
                             " (Об'єм: " + volStr + ", ABV: " + abvStr + ", Країна: " + countryStr + ", Упаковка: " + packStr + ")");
 
+                    beer.setLastScrapedAt(System.currentTimeMillis());
                     return;
                 }
             } catch (java.net.http.HttpTimeoutException e) {
