@@ -15,6 +15,7 @@ import java.time.Duration;
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -34,12 +35,18 @@ public class UntappdBeerParser implements BeerParser {
     private static final int MAX_BLOCK_RETRIES = 3;
     private static final int MAX_PAGES_PER_BREWERY = 20;
 
+    private static final Pattern LEADING_NUMBER = Pattern.compile("[\\d.]+");
+
     private final HttpClient client = HttpClient.newBuilder()
             .connectTimeout(Duration.ofSeconds(30))
             .build();
 
     private final Object rateLimitLock = new Object();
     private volatile long lastRequestTime = 0;
+
+    // Shared across all worker threads so a detected block pauses the whole pool
+    // instead of each thread independently sleeping and then retrying in lockstep.
+    private final AtomicLong blockedUntil = new AtomicLong(0);
 
     @Override
     public List<BeerProduct> parse(List<BeerProduct> existingCache) {
@@ -61,7 +68,11 @@ public class UntappdBeerParser implements BeerParser {
             CompletableFuture<Void> future = CompletableFuture.runAsync(() -> {
                 int current = breweryCount.incrementAndGet();
                 System.out.println("[" + current + "/" + breweries.size() + "] Обробка броварні: " + brewery.getName());
-                scrapeBrewery(brewery, parsedBeers);
+                try {
+                    scrapeBrewery(brewery, parsedBeers);
+                } catch (Exception e) {
+                    System.err.println("   [" + brewery.getName() + "] ❌ Непередбачена помилка, броварню пропущено: " + e);
+                }
             }, executor);
 
             futures.add(future);
@@ -102,10 +113,21 @@ public class UntappdBeerParser implements BeerParser {
             }
 
             for (Element item : beerItems) {
-                BeerProduct beer = parseBeerItem(item, brewery.getName());
+                BeerProduct beer;
+                try {
+                    beer = parseBeerItem(item, brewery.getName());
+                } catch (Exception e) {
+                    System.err.println("      -> ⚠️ Помилка парсингу елемента: " + e.getMessage());
+                    continue;
+                }
                 if (beer == null) continue;
 
-                if (beer.getUntappdRating() == null || beer.getUntappdRating() < MIN_RATING) {
+                if (beer.getUntappdRating() == null) {
+                    System.out.println("      -> ⚠️ Пропуск (немає рейтингу): " + beer.getName());
+                    continue;
+                }
+
+                if (beer.getUntappdRating() < MIN_RATING) {
                     System.out.println("      -> 🛑 Стоп: пиво '" + beer.getName() + "' має рейтинг " + beer.getUntappdRating() + " (< " + MIN_RATING + ")");
                     keepGoing = false;
                     break;
@@ -183,6 +205,7 @@ public class UntappdBeerParser implements BeerParser {
         int blockRetries = 0;
 
         for (int attempt = 1; attempt <= MAX_RETRIES; attempt++) {
+            awaitIfBlocked();
             throttle();
 
             HttpRequest request = HttpRequest.newBuilder()
@@ -204,7 +227,7 @@ public class UntappdBeerParser implements BeerParser {
                         blockRetries++;
                         System.out.println("   !!! Виявлено блокування для " + url + ". Чекаю "
                                 + (BLOCK_WAIT_MS / 60000) + " хв (" + blockRetries + "/" + MAX_BLOCK_RETRIES + ")...");
-                        Thread.sleep(BLOCK_WAIT_MS);
+                        reportBlock();
                         attempt--;
                         continue;
                     }
@@ -218,7 +241,7 @@ public class UntappdBeerParser implements BeerParser {
                     blockRetries++;
                     System.out.println("   !!! HTTP 403 для " + url + ". Чекаю "
                             + (BLOCK_WAIT_MS / 60000) + " хв (" + blockRetries + "/" + MAX_BLOCK_RETRIES + ")...");
-                    Thread.sleep(BLOCK_WAIT_MS);
+                    reportBlock();
                     attempt--;
                     continue;
                 }
@@ -247,6 +270,18 @@ public class UntappdBeerParser implements BeerParser {
         throw lastError != null ? lastError : new RuntimeException("Failed to fetch " + url);
     }
 
+    private void awaitIfBlocked() throws InterruptedException {
+        long wait = blockedUntil.get() - System.currentTimeMillis();
+        if (wait > 0) {
+            Thread.sleep(wait + ThreadLocalRandom.current().nextLong(0, 5000));
+        }
+    }
+
+    private void reportBlock() {
+        long candidate = System.currentTimeMillis() + BLOCK_WAIT_MS;
+        blockedUntil.updateAndGet(prev -> Math.max(prev, candidate));
+    }
+
     private boolean isBlockedPage(String body) {
         if (body == null) return false;
         String lower = body.toLowerCase(Locale.ROOT);
@@ -270,7 +305,7 @@ public class UntappdBeerParser implements BeerParser {
 
     private Double parseLeadingDouble(String text) {
         if (text == null) return null;
-        Matcher m = Pattern.compile("[\\d.]+").matcher(text);
+        Matcher m = LEADING_NUMBER.matcher(text);
         if (m.find()) {
             try {
                 return Double.parseDouble(m.group());

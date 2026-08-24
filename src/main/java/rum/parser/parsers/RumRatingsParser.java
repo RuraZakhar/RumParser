@@ -25,7 +25,7 @@ public class RumRatingsParser implements RumParser {
             "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36";
     private static final String PROVIDER = "RumRatings";
 
-    private static final int THREAD_POOL_SIZE = 3;
+    private static final int THREAD_POOL_SIZE = 1;
     private static final long MIN_REQUEST_INTERVAL_MS = 600;
     private static final int MAX_RETRIES = 5;
     private static final long DETAILS_TTL_MS = 30L * 24 * 60 * 60 * 1000;

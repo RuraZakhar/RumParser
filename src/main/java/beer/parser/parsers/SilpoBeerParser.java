@@ -1,6 +1,7 @@
 package beer.parser.parsers;
 
 import beer.parser.model.BeerProduct;
+import beer.parser.utils.JsonUtils;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -33,6 +34,7 @@ public class SilpoBeerParser implements BeerParser {
             "kraftove-pyvo-4506",
             "importne-pyvo-4505"
     };
+    private static final Pattern VOLUME_PATTERN = Pattern.compile("(?i)([0-9.,]+)\\s*(мл|ml|л|l)");
 
     @Override
     public List<BeerProduct> parse(List<BeerProduct> existingCache) {
@@ -90,22 +92,22 @@ public class SilpoBeerParser implements BeerParser {
                             JsonObject item = element.getAsJsonObject();
                             BeerProduct beer = new BeerProduct();
 
-                            beer.setName(getStringOrNull(item, "title"));
-                            beer.setBrand(getStringOrNull(item, "brandTitle"));
+                            beer.setName(JsonUtils.getStringOrNull(item, "title"));
+                            beer.setBrand(JsonUtils.getStringOrNull(item, "brandTitle"));
                             if (beer.getName() != null) beer.setCleanName(beer.getName().toLowerCase());
 
-                            Double guestRating = getDoubleOrNull(item, "guestProductRating");
+                            Double guestRating = JsonUtils.getDoubleOrNull(item, "guestProductRating");
                             if (guestRating != null) beer.setSilpoRating(guestRating);
 
-                            Double untappd = getDoubleOrNull(item, "untappdRating");
+                            Double untappd = JsonUtils.getDoubleOrNull(item, "untappdRating");
                             if (untappd != null) beer.setUntappdRating(untappd);
 
-                            beer.setSilpoPrice(getDoubleOrNull(item, "price"));
+                            beer.setSilpoPrice(JsonUtils.getDoubleOrNull(item, "price"));
 
-                            String icon = getStringOrNull(item, "icon");
+                            String icon = JsonUtils.getStringOrNull(item, "icon");
                             if (icon != null) beer.setImgUrl(BASE_IMAGE_URL + icon);
 
-                            String slug = getStringOrNull(item, "slug");
+                            String slug = JsonUtils.getStringOrNull(item, "slug");
                             if (slug != null && !slug.isEmpty()) {
                                 beer.setSilpoUrl(BASE_PRODUCT_URL + slug);
 
@@ -176,7 +178,7 @@ public class SilpoBeerParser implements BeerParser {
                 if (response.statusCode() == 200) {
                     JsonObject rootObj = JsonParser.parseString(response.body()).getAsJsonObject();
 
-                    String displayRatio = getStringOrNull(rootObj, "displayRatio");
+                    String displayRatio = JsonUtils.getStringOrNull(rootObj, "displayRatio");
                     if (displayRatio != null) {
                         extractVolumeFromString(beer, displayRatio);
                     }
@@ -189,7 +191,7 @@ public class SilpoBeerParser implements BeerParser {
                     if (attributeGroups != null) {
                         for (JsonElement groupEl : attributeGroups) {
                             JsonObject group = groupEl.getAsJsonObject();
-                            if ("generalInfo".equals(getStringOrNull(group, "key"))) {
+                            if ("generalInfo".equals(JsonUtils.getStringOrNull(group, "key"))) {
                                 JsonArray attributes = group.getAsJsonArray("attributes");
                                 if (attributes != null) {
                                     for (JsonElement attrEl : attributes) {
@@ -198,7 +200,7 @@ public class SilpoBeerParser implements BeerParser {
                                         JsonObject valueItem = attrObj.getAsJsonObject("value");
 
                                         if (attrItem != null && valueItem != null) {
-                                            String attrId = getStringOrNull(attrItem, "id");
+                                            String attrId = JsonUtils.getStringOrNull(attrItem, "id");
 
                                             if ("alcoholcontent".equals(attrId)) {
                                                 if (valueItem.has("title") && !valueItem.get("title").isJsonNull()) {
@@ -207,9 +209,9 @@ public class SilpoBeerParser implements BeerParser {
                                                     } catch (Exception ignored) {}
                                                 }
                                             } else if ("country".equals(attrId)) {
-                                                beer.setCountry(getStringOrNull(valueItem, "title"));
+                                                beer.setCountry(JsonUtils.getStringOrNull(valueItem, "title"));
                                             } else if ("typupakovky".equals(attrId)) {
-                                                beer.setPackaging(getStringOrNull(valueItem, "title"));
+                                                beer.setPackaging(JsonUtils.getStringOrNull(valueItem, "title"));
                                             }
                                         }
                                     }
@@ -230,6 +232,15 @@ public class SilpoBeerParser implements BeerParser {
                     beer.setLastScrapedAt(System.currentTimeMillis());
                     return;
                 }
+
+                if (attempt < maxRetries) {
+                    System.out.println("   [Silpo] HTTP " + response.statusCode() + " для: " + slug + " (Спроба " + attempt + " з " + maxRetries + "). Чекаю перед повтором...");
+                    try {
+                        Thread.sleep(500L * attempt);
+                    } catch (InterruptedException ignored) {}
+                } else {
+                    System.out.println("   [Silpo] Всі " + maxRetries + " спроби вичерпано (HTTP " + response.statusCode() + ") для: " + slug);
+                }
             } catch (java.net.http.HttpTimeoutException e) {
                 if (attempt < maxRetries) {
                     System.out.println("   [Silpo] Таймаут для: " + slug + " (Спроба " + attempt + " з " + maxRetries + "). Пробуємо ще раз...");
@@ -247,7 +258,7 @@ public class SilpoBeerParser implements BeerParser {
     }
 
     private void extractVolumeFromString(BeerProduct beer, String text) {
-        Matcher volMatcher = Pattern.compile("(?i)([0-9.,]+)\\s*(мл|ml|л|l)").matcher(text);
+        Matcher volMatcher = VOLUME_PATTERN.matcher(text);
         if (volMatcher.find()) {
             try {
                 double v = Double.parseDouble(volMatcher.group(1).replace(",", "."));
@@ -257,19 +268,5 @@ public class SilpoBeerParser implements BeerParser {
                 beer.setVolume(v);
             } catch (NumberFormatException ignored) {}
         }
-    }
-
-    private String getStringOrNull(JsonObject obj, String key) {
-        if (obj.has(key) && !obj.get(key).isJsonNull()) {
-            return obj.get(key).getAsString();
-        }
-        return null;
-    }
-
-    private Double getDoubleOrNull(JsonObject obj, String key) {
-        if (obj.has(key) && !obj.get(key).isJsonNull()) {
-            return obj.get(key).getAsDouble();
-        }
-        return null;
     }
 }

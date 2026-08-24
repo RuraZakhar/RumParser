@@ -125,12 +125,12 @@ public class BeerProduct {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         BeerProduct that = (BeerProduct) o;
-        return Objects.equals(cleanName, that.cleanName) && Objects.equals(volume, that.volume);
+        return Objects.equals(getCleanName(), that.getCleanName()) && Objects.equals(volume, that.volume);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(cleanName, volume);
+        return Objects.hash(getCleanName(), volume);
     }
 
 }

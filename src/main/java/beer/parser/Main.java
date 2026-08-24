@@ -20,11 +20,27 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public class Main {
 
     private static final double SIMILARITY_THRESHOLD = 0.60;
+
+    private static final Pattern P_PYVO = Pattern.compile("пиво");
+    private static final Pattern P_SVITLE = Pattern.compile("світле");
+    private static final Pattern P_TEMNE = Pattern.compile("темне");
+    private static final Pattern P_NAPIVTEMNE = Pattern.compile("напівтемне");
+    private static final Pattern P_NEFILTROVANE = Pattern.compile("нефільтроване");
+    private static final Pattern P_FILTROVANE = Pattern.compile("фільтроване");
+    private static final Pattern P_PASTERYZOVANE = Pattern.compile("пастеризоване");
+    private static final Pattern P_NEPASTERYZOVANE = Pattern.compile("непастеризоване");
+    private static final Pattern P_ZB = Pattern.compile("з/б");
+    private static final Pattern P_ROZLYVNE = Pattern.compile("розливне");
+    private static final Pattern P_PLYASHKA = Pattern.compile("пляшка");
+    private static final Pattern P_BANKA = Pattern.compile("банка");
+    private static final Pattern P_UNIT_SUFFIX = Pattern.compile("\\d+[.,]?\\d*\\s*(ml|мл|l|л|%|°)");
+    private static final Pattern P_NON_ALNUM = Pattern.compile("[^a-zа-яіїєґ0-9]");
 
     public static void main(String[] args) {
         System.out.println("=== Запуск парсера крафтового пива ===");
@@ -140,11 +156,8 @@ public class Main {
     }
 
     private static double calculateSimilarity(String name1, String name2) {
-        String clean1 = removeGarbageWords(name1);
-        String clean2 = removeGarbageWords(name2);
-
-        Set<String> words1 = new HashSet<>(Arrays.asList(clean1.split("\\s+")));
-        Set<String> words2 = new HashSet<>(Arrays.asList(clean2.split("\\s+")));
+        Set<String> words1 = tokenize(removeGarbageWords(name1));
+        Set<String> words2 = tokenize(removeGarbageWords(name2));
 
         if (words1.isEmpty() || words2.isEmpty()) return 0.0;
 
@@ -159,25 +172,35 @@ public class Main {
         return (double) intersection / union;
     }
 
+    private static Set<String> tokenize(String cleaned) {
+        Set<String> words = new HashSet<>();
+        for (String w : cleaned.split("\\s+")) {
+            if (!w.isEmpty()) {
+                words.add(w);
+            }
+        }
+        return words;
+    }
+
     private static String removeGarbageWords(String name) {
         if (name == null) {
             return "";
         }
-        return name.toLowerCase()
-                .replaceAll("пиво", "")
-                .replaceAll("світле", "")
-                .replaceAll("темне", "")
-                .replaceAll("напівтемне", "")
-                .replaceAll("нефільтроване", "")
-                .replaceAll("фільтроване", "")
-                .replaceAll("пастеризоване", "")
-                .replaceAll("непастеризоване", "")
-                .replaceAll("з/б", "")
-                .replaceAll("розливне", "")
-                .replaceAll("пляшка", "")
-                .replaceAll("банка", "")
-                .replaceAll("\\d+[.,]?\\d*\\s*(ml|мл|l|л|%|°)", "")
-                .replaceAll("[^a-zа-яіїєґ0-9]", " ")
-                .trim();
+        String s = name.toLowerCase();
+        s = P_PYVO.matcher(s).replaceAll("");
+        s = P_SVITLE.matcher(s).replaceAll("");
+        s = P_TEMNE.matcher(s).replaceAll("");
+        s = P_NAPIVTEMNE.matcher(s).replaceAll("");
+        s = P_NEFILTROVANE.matcher(s).replaceAll("");
+        s = P_FILTROVANE.matcher(s).replaceAll("");
+        s = P_PASTERYZOVANE.matcher(s).replaceAll("");
+        s = P_NEPASTERYZOVANE.matcher(s).replaceAll("");
+        s = P_ZB.matcher(s).replaceAll("");
+        s = P_ROZLYVNE.matcher(s).replaceAll("");
+        s = P_PLYASHKA.matcher(s).replaceAll("");
+        s = P_BANKA.matcher(s).replaceAll("");
+        s = P_UNIT_SUFFIX.matcher(s).replaceAll("");
+        s = P_NON_ALNUM.matcher(s).replaceAll(" ");
+        return s.trim();
     }
 }

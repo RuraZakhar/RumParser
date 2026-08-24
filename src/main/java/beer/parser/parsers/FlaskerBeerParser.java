@@ -35,6 +35,16 @@ public class FlaskerBeerParser implements BeerParser {
             "польща", "нідерланди", "ірландія", "іспанія", "італія", "франція", "шотландія"
     );
 
+    private static final Pattern NAME_VOLUME_PATTERN = Pattern.compile("(?i)([0-9.,]+)\\s*(мл|ml|л|l)\\b");
+    private static final Pattern NAME_ABV_PATTERN = Pattern.compile("(?i)([0-9.,]+)\\s*(%|°)");
+    private static final Pattern TRAILING_DASH_PATTERN = Pattern.compile("(?i)\\s*-\\.?$");
+    private static final Pattern YEAR_BRACKET_PATTERN = Pattern.compile("(?i)\\[\\d{4}\\]");
+    private static final Pattern WHITESPACE_PATTERN = Pattern.compile("\\s+");
+    private static final Pattern IBU_PATTERN = Pattern.compile("(?i)IBU\\s*(\\d+)");
+    private static final Pattern UNTAPPD_PATTERN_A = Pattern.compile("(?i)Untappd:[^<]*<[^>]+>\\s*([0-9.,]+)\\s*<");
+    private static final Pattern UNTAPPD_PATTERN_B = Pattern.compile("(?i)Untappd:[\\s\\S]*?([0-9.,]+)\\s*/\\s*5");
+    private static final Pattern STYLE_PATTERN = Pattern.compile("(?i)Стиль:\\s*([^<]+)");
+
     @Override
     public List<BeerProduct> parse(List<BeerProduct> existingCache) {
         List<BeerProduct> rawBeers = new ArrayList<>();
@@ -60,7 +70,15 @@ public class FlaskerBeerParser implements BeerParser {
                 String url = "https://flasker.com.ua/wp-json/wc/store/v1/products?per_page=" + perPage + "&page=" + page;
 
                 HttpRequest request = HttpRequest.newBuilder().uri(URI.create(url)).GET().build();
-                HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+                HttpResponse<String> response = null;
+                int maxListingRetries = 3;
+                for (int attempt = 1; attempt <= maxListingRetries; attempt++) {
+                    response = client.send(request, HttpResponse.BodyHandlers.ofString());
+                    if (response.statusCode() == 200 || attempt == maxListingRetries) break;
+                    System.out.println("   [Flasker] HTTP " + response.statusCode() + " на лістингу, спроба " + attempt + "/" + maxListingRetries);
+                    try { Thread.sleep(1000L * attempt); } catch (InterruptedException ignored) {}
+                }
 
                 if (response.statusCode() != 200) break;
 
@@ -75,7 +93,7 @@ public class FlaskerBeerParser implements BeerParser {
                     if (rawName != null) {
                         rawName = unescapeHtml(rawName);
 
-                        Matcher volMatcher = Pattern.compile("(?i)([0-9.,]+)\\s*(мл|ml|л|l)\\b").matcher(rawName);
+                        Matcher volMatcher = NAME_VOLUME_PATTERN.matcher(rawName);
                         if (volMatcher.find()) {
                             try {
                                 double v = Double.parseDouble(volMatcher.group(1).replace(",", "."));
@@ -86,7 +104,7 @@ public class FlaskerBeerParser implements BeerParser {
                             } catch (NumberFormatException ignored) {}
                         }
 
-                        Matcher abvMatcher = Pattern.compile("(?i)([0-9.,]+)\\s*(%|°)").matcher(rawName);
+                        Matcher abvMatcher = NAME_ABV_PATTERN.matcher(rawName);
                         if (abvMatcher.find()) {
                             try {
                                 if (abvMatcher.group(2).equals("%")) beer.setAbv(Double.parseDouble(abvMatcher.group(1).replace(",", ".")));
@@ -94,7 +112,9 @@ public class FlaskerBeerParser implements BeerParser {
                             } catch (NumberFormatException ignored) {}
                         }
 
-                        rawName = rawName.replaceAll("(?i)\\s*-\\.?$", "").replaceAll("(?i)\\[\\d{4}\\]", "").replaceAll("\\s+", " ").trim();
+                        rawName = TRAILING_DASH_PATTERN.matcher(rawName).replaceAll("");
+                        rawName = YEAR_BRACKET_PATTERN.matcher(rawName).replaceAll("");
+                        rawName = WHITESPACE_PATTERN.matcher(rawName).replaceAll(" ").trim();
                         beer.setName(rawName);
                         beer.setCleanName(rawName.toLowerCase());
                     }
@@ -175,23 +195,34 @@ public class FlaskerBeerParser implements BeerParser {
                         .build();
 
                 HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+                if (response.statusCode() != 200) {
+                    if (attempt < maxRetries) {
+                        System.out.println("   [Flasker] HTTP " + response.statusCode() + " для: " + url + " (Спроба " + attempt + " з " + maxRetries + "). Чекаю перед повтором...");
+                        try { Thread.sleep(500L * attempt); } catch (InterruptedException ignored) {}
+                    } else {
+                        System.out.println("   [Flasker] Всі " + maxRetries + " спроби вичерпано (HTTP " + response.statusCode() + ") для: " + url);
+                    }
+                    continue;
+                }
+
                 String html = response.body();
 
-                Matcher ibuMatcher = Pattern.compile("(?i)IBU\\s*(\\d+)").matcher(html);
+                Matcher ibuMatcher = IBU_PATTERN.matcher(html);
                 if (ibuMatcher.find()) {
                     beer.setIbu(Integer.parseInt(ibuMatcher.group(1)));
                 }
 
-                Matcher untappdMatcher = Pattern.compile("(?i)Untappd:[^<]*<[^>]+>\\s*([0-9.,]+)\\s*<").matcher(html);
+                Matcher untappdMatcher = UNTAPPD_PATTERN_A.matcher(html);
                 if (!untappdMatcher.find()) {
-                    untappdMatcher = Pattern.compile("(?i)Untappd:[\\s\\S]*?([0-9.,]+)\\s*/\\s*5").matcher(html);
+                    untappdMatcher = UNTAPPD_PATTERN_B.matcher(html);
                 }
 
                 if (untappdMatcher.find()) {
                     beer.setUntappdRating(Double.parseDouble(untappdMatcher.group(1).replace(",", ".")));
                 }
 
-                Matcher styleMatcher = Pattern.compile("(?i)Стиль:\\s*([^<]+)").matcher(html);
+                Matcher styleMatcher = STYLE_PATTERN.matcher(html);
                 if (styleMatcher.find()) {
                     beer.setStyle(unescapeHtml(styleMatcher.group(1).trim()));
                 }
