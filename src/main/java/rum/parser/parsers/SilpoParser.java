@@ -23,6 +23,7 @@ public class SilpoParser implements RumParser {
     private static final String BASE_IMAGE_URL = "https://images.silpo.ua/products/1600x1600/webp/";
     private static final String BASE_PRODUCT_URL = "https://silpo.ua/product/";
     private static final String BASE_API_DETAILS_URL = "https://sf-ecom-api.silpo.ua/v1/uk/branches/00000000-0000-0000-0000-000000000000/products/";
+    private static final Pattern AGE_DIGITS_PATTERN = Pattern.compile("\\d+");
 
     @Override
     public void parse(Set<RumProduct> rumSet) {
@@ -173,7 +174,7 @@ public class SilpoParser implements RumParser {
                                         } catch (Exception ignored) {
                                         }
                                     } else if ("strokvytrymky".equals(key)) {
-                                        Matcher m = Pattern.compile("\\d+").matcher(valueTitle);
+                                        Matcher m = AGE_DIGITS_PATTERN.matcher(valueTitle);
                                         if (m.find()) {
                                             rum.setAge(Double.parseDouble(m.group()));
                                         }
@@ -190,17 +191,27 @@ public class SilpoParser implements RumParser {
     }
 
     private String sendGetRequest(String url) {
-        try {
-            HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create(url))
-                    .header("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/126.0.0.0")
-                    .header("Referer", "https://silpo.ua/")
-                    .GET()
-                    .build();
+        int maxRetries = 3;
 
-            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-            if (response.statusCode() == 200) return response.body();
-        } catch (Exception ignored) {
+        for (int attempt = 1; attempt <= maxRetries; attempt++) {
+            try {
+                HttpRequest request = HttpRequest.newBuilder()
+                        .uri(URI.create(url))
+                        .header("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/126.0.0.0")
+                        .header("Referer", "https://silpo.ua/")
+                        .GET()
+                        .build();
+
+                HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+                if (response.statusCode() == 200) return response.body();
+            } catch (Exception ignored) {
+            }
+
+            if (attempt < maxRetries) {
+                try {
+                    Thread.sleep(500L * attempt);
+                } catch (InterruptedException ignored) {}
+            }
         }
         return null;
     }

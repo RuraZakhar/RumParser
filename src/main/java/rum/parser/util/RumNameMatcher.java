@@ -14,6 +14,9 @@ public class RumNameMatcher {
     private static final Pattern NOISE_WORDS =
             Pattern.compile("\\b(ром|напій|на|основі|в|коробці|подарунковий|набір|rum)\\b", Pattern.CASE_INSENSITIVE);
     private static final Pattern DIGIT_PATTERN = Pattern.compile("\\d+");
+    private static final Pattern DIACRITICS_PATTERN = Pattern.compile("\\p{M}");
+    private static final Pattern NON_ALNUM_SPACE_PATTERN = Pattern.compile("[^\\p{L}\\p{N} ]");
+    private static final Pattern WHITESPACE_PATTERN = Pattern.compile("\\s+");
 
     private static final Set<String> STOPWORDS = Set.of(
             "в", "на", "el", "la", "de", "of", "in", "and", "the", "&"
@@ -87,13 +90,13 @@ public class RumNameMatcher {
     }
 
     private static String clean(String value) {
-        String normalized = Normalizer.normalize(value, Normalizer.Form.NFD)
-                .replaceAll("\\p{M}", "")
-                .toLowerCase(Locale.ROOT);
+        String normalized = DIACRITICS_PATTERN.matcher(Normalizer.normalize(value, Normalizer.Form.NFD)).replaceAll("");
+        normalized = normalized.toLowerCase(Locale.ROOT);
         normalized = VOLUME_PATTERN.matcher(normalized).replaceAll("");
         normalized = NOISE_WORDS.matcher(normalized).replaceAll("");
-        normalized = normalized.replaceAll("[^\\p{L}\\p{N} ]", "");
-        return normalized.trim().replaceAll("\\s+", " ");
+        normalized = NON_ALNUM_SPACE_PATTERN.matcher(normalized).replaceAll("");
+        normalized = normalized.trim();
+        return WHITESPACE_PATTERN.matcher(normalized).replaceAll(" ");
     }
 
     private static int levenshteinDistance(String s1, String s2) {

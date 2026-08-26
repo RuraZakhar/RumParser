@@ -9,10 +9,13 @@ import rum.parser.util.RumNameMatcher;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.Callable;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 public class RumHowlerParser implements RumParser {
@@ -20,15 +23,17 @@ public class RumHowlerParser implements RumParser {
     private static final String BASE_URL = "https://therumhowlerblog.com/rum-reviews/";
     private static final String PROVIDER = "The Rum Howler Blog";
     private static final double FUZZY_THRESHOLD = 0.90;
+    private static final int MAX_FETCH_RETRIES = 3;
+    private static final Pattern RATING_PATTERN = Pattern.compile("\\b([789]\\d(\\.\\d)?|100)\\b");
 
     @Override
     public void parse(Set<RumProduct> rumSet) {
         System.out.println("[1/3] Scanning first source (The Rum Howler Blog)...");
 
         try {
-            Document mainPage = Jsoup.connect(BASE_URL)
+            Document mainPage = fetchWithRetry(() -> Jsoup.connect(BASE_URL)
                     .userAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36")
-                    .get();
+                    .get());
 
             Elements links = mainPage.select("article a[href*=/rum-reviews/]");
             if (links.isEmpty()) {
@@ -50,10 +55,10 @@ public class RumHowlerParser implements RumParser {
 
                 CompletableFuture<Void> future = CompletableFuture.runAsync(() -> {
                     try {
-                        Document itemPage = Jsoup.connect(rumUrl)
+                        Document itemPage = fetchWithRetry(() -> Jsoup.connect(rumUrl)
                                 .userAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36")
                                 .timeout(5000)
-                                .get();
+                                .get());
 
                         String pageText = itemPage.text();
                         String ratingStr = extractRatingFromPage(pageText);
@@ -111,11 +116,27 @@ public class RumHowlerParser implements RumParser {
     }
 
     private String extractRatingFromPage(String text) {
-        java.util.regex.Pattern pattern = java.util.regex.Pattern.compile("\\b([789]\\d(\\.\\d)?|100)\\b");
-        java.util.regex.Matcher matcher = pattern.matcher(text);
+        Matcher matcher = RATING_PATTERN.matcher(text);
         if (matcher.find()) {
             return matcher.group(1);
         }
         return null;
+    }
+
+    private Document fetchWithRetry(Callable<Document> fetcher) throws Exception {
+        Exception lastError = null;
+        for (int attempt = 1; attempt <= MAX_FETCH_RETRIES; attempt++) {
+            try {
+                return fetcher.call();
+            } catch (Exception e) {
+                lastError = e;
+                if (attempt < MAX_FETCH_RETRIES) {
+                    try {
+                        Thread.sleep(500L * attempt);
+                    } catch (InterruptedException ignored) {}
+                }
+            }
+        }
+        throw lastError;
     }
 }

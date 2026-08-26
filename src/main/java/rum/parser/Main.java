@@ -53,7 +53,11 @@ public class Main {
         parsers.add(new SilpoParser());
 
         for (RumParser parser : parsers) {
-            parser.parse(rumSet);
+            try {
+                parser.parse(rumSet);
+            } catch (Exception e) {
+                System.err.println("Parser " + parser.getClass().getSimpleName() + " failed, skipping it: " + e.getMessage());
+            }
         }
 
         System.out.println("\nTotal unique rums in memory: " + rumSet.size());

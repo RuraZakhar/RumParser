@@ -21,6 +21,9 @@ public class RumProduct {
     private static final Pattern AGE_PATTERN = Pattern.compile(
             "(?i)\\b(\\d{1,2})\\s*(?:year|years|yr|yo|років|роки|річний)\\b"
     );
+    private static final Pattern DIACRITICS_PATTERN = Pattern.compile("\\p{M}");
+    private static final Pattern NAME_NOISE_PATTERN = Pattern.compile("(?iu)\\b(?:rum|ром|напій|drink)\\b");
+    private static final Pattern NON_ALNUM_PATTERN = Pattern.compile("[^\\p{L}\\p{N}]");
 
     private String name;
     private String description;
@@ -134,12 +137,11 @@ public class RumProduct {
         if (value == null) {
             return "";
         }
-        return Normalizer.normalize(value, Normalizer.Form.NFD)
-                .replaceAll("\\p{M}", "")
-                .toLowerCase(Locale.ROOT)
-                .replaceAll("(?iu)\\b(?:rum|ром|напій|drink)\\b", " ")
-                .replaceAll("[^\\p{L}\\p{N}]", "")
-                .trim();
+        String normalized = DIACRITICS_PATTERN.matcher(Normalizer.normalize(value, Normalizer.Form.NFD)).replaceAll("");
+        normalized = normalized.toLowerCase(Locale.ROOT);
+        normalized = NAME_NOISE_PATTERN.matcher(normalized).replaceAll(" ");
+        normalized = NON_ALNUM_PATTERN.matcher(normalized).replaceAll("");
+        return normalized.trim();
     }
 
     private static boolean isBlank(String value) {

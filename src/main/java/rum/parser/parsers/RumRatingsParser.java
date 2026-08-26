@@ -5,6 +5,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import rum.parser.model.RumProduct;
+import rum.parser.util.RumNameMatcher;
 
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -33,7 +34,9 @@ public class RumRatingsParser implements RumParser {
     private volatile long lastRequestTime = 0;
     private static final long BLOCK_WAIT_MS = 11 * 60 * 1000L;
     private static final int MAX_BLOCK_RETRIES = 3;
-    
+    private static final Pattern LEADING_NUMBER = Pattern.compile("[\\d.]+");
+    private static final double FUZZY_THRESHOLD = 0.90;
+
     @Override
     public void parse(Set<RumProduct> rumSet) {
         System.out.println("\n[2/3] Starting RumRatings Parser...");
@@ -72,48 +75,52 @@ public class RumRatingsParser implements RumParser {
             }
 
             for (Element bottle : bottles) {
-                Element link = bottle.selectFirst("a[href^=/rum/]");
-                Element ratingEl = bottle.selectFirst(".brand-rating-icon p");
-                Element nameEl = bottle.selectFirst(".brand-title span");
-                if (link == null || ratingEl == null || nameEl == null) continue;
+                try {
+                    Element link = bottle.selectFirst("a[href^=/rum/]");
+                    Element ratingEl = bottle.selectFirst(".brand-rating-icon p");
+                    Element nameEl = bottle.selectFirst(".brand-title span");
+                    if (link == null || ratingEl == null || nameEl == null) continue;
 
-                Double rating = parseDoubleSafe(ratingEl.text());
-                if (rating == null) continue;
+                    Double rating = parseDoubleSafe(ratingEl.text());
+                    if (rating == null) continue;
 
-                if (rating < MIN_RATING) {
-                    keepGoing = false;
-                    break;
-                }
-
-                String productUrl = link.absUrl("href");
-                String name = nameEl.text().trim();
-
-                RumProduct probe = new RumProduct();
-                probe.setName(name);
-                RumProduct existing = existingIndex.get(probe);
-
-                boolean detailsAreFresh = existing != null
-                        && existing.getBrand() != null
-                        && existing.getLastScrapedAt() != null
-                        && (System.currentTimeMillis() - existing.getLastScrapedAt()) < DETAILS_TTL_MS;
-
-                if (detailsAreFresh) {
-                    upsertRating(existing, PROVIDER, rating);
-                    existing.addSourceUrl("RumRatings", productUrl);
-                    if (existing.getProductUrl() == null) {
-                        existing.setProductUrl(productUrl);
+                    if (rating < MIN_RATING) {
+                        keepGoing = false;
+                        break;
                     }
-                    skippedAlreadyScraped++;
-                    continue;
+
+                    String productUrl = link.absUrl("href");
+                    String name = nameEl.text().trim();
+
+                    RumProduct probe = new RumProduct();
+                    probe.setName(name);
+                    RumProduct existing = existingIndex.get(probe);
+
+                    boolean detailsAreFresh = existing != null
+                            && existing.getBrand() != null
+                            && existing.getLastScrapedAt() != null
+                            && (System.currentTimeMillis() - existing.getLastScrapedAt()) < DETAILS_TTL_MS;
+
+                    if (detailsAreFresh) {
+                        upsertRating(existing, PROVIDER, rating);
+                        existing.addSourceUrl("RumRatings", productUrl);
+                        if (existing.getProductUrl() == null) {
+                            existing.setProductUrl(productUrl);
+                        }
+                        skippedAlreadyScraped++;
+                        continue;
+                    }
+
+                    RumProduct basicRum = (existing != null) ? existing : new RumProduct();
+                    basicRum.setName(name);
+                    basicRum.setProductUrl(productUrl);
+                    basicRum.addSourceUrl("RumRatings", productUrl);
+                    upsertRating(basicRum, PROVIDER, rating);
+
+                    topRumsToScrape.put(productUrl, basicRum);
+                } catch (Exception e) {
+                    System.err.println("Error parsing a listing entry, skipping it: " + e.getMessage());
                 }
-
-                RumProduct basicRum = (existing != null) ? existing : new RumProduct();
-                basicRum.setName(name);
-                basicRum.setProductUrl(productUrl);
-                basicRum.addSourceUrl("RumRatings", productUrl);
-                upsertRating(basicRum, PROVIDER, rating);
-
-                topRumsToScrape.put(productUrl, basicRum);
             }
 
             page++;
@@ -332,19 +339,26 @@ public class RumRatingsParser implements RumParser {
     }
 
     private boolean mergeIntoSet(Set<RumProduct> rumSet, RumProduct incomingRum) {
-        if (rumSet.add(incomingRum)) return true;
         for (RumProduct existingRum : rumSet) {
             if (existingRum.equals(incomingRum)) {
                 existingRum.mergeFrom(incomingRum);
                 return false;
             }
         }
-        return false;
+
+        RumProduct fuzzyMatch = RumNameMatcher.findBestFuzzyMatch(incomingRum, rumSet, FUZZY_THRESHOLD);
+        if (fuzzyMatch != null) {
+            fuzzyMatch.mergeFrom(incomingRum);
+            return false;
+        }
+
+        rumSet.add(incomingRum);
+        return true;
     }
 
     private Double parseDoubleSafe(String s) {
         if (s == null) return null;
-        Matcher m = Pattern.compile("[\\d.]+").matcher(s);
+        Matcher m = LEADING_NUMBER.matcher(s);
         if (m.find()) {
             try {
                 return Double.parseDouble(m.group());
