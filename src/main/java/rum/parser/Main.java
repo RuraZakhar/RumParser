@@ -8,7 +8,7 @@ import rum.parser.parsers.RumHowlerParser;
 import rum.parser.parsers.RumParser;
 import rum.parser.parsers.RumRatingsParser;
 import rum.parser.parsers.SilpoParser;
-import rum.parser.util.JsonDataExporter;
+import common.parser.util.JsonExporter;
 
 import java.io.File;
 import java.io.FileReader;
@@ -45,7 +45,7 @@ public class Main {
             }
         }
 
-        System.out.println("=== RUNNING RUM PARSER ===");
+        System.out.println("Running rum parser...");
 
         List<RumParser> parsers = new ArrayList<>();
         parsers.add(new RumHowlerParser());
@@ -71,10 +71,10 @@ public class Main {
 
         System.out.println("Top products (rating >= " + MIN_RATING + "): " + ratedRumList.size());
 
-        JsonDataExporter exporter = new JsonDataExporter();
+        JsonExporter exporter = new JsonExporter();
         exporter.exportToJson(ratedRumList, FILTERED_OUTPUT_FILE);
 
-        System.out.println("=== PARSING PROCESS COMPLETED SUCCESSFULLY ===");
+        System.out.println("Parsing process completed successfully.");
     }
 
     private static double highestRating(RumProduct rum) {

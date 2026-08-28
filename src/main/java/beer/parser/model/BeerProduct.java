@@ -3,25 +3,28 @@ package beer.parser.model;
 import java.util.Objects;
 
 public class BeerProduct {
-    private String name;
-    private transient String cleanName;
-    private String brand;
-    private Double untappdRating;
-    private String imgUrl;
-    private String untappdSearchUrl;
-    private Double silpoPrice;
-    private String silpoUrl;
-    private Double flaskerPrice;
-    private String flaskerUrl;
-    private Double silpoRating;
-    private String style;
-    private Double abv;
-    private Integer ibu;
-    private String untappdUrl;
-    private String country;
-    private String packaging;
-    private Double volume;
-    private Long lastScrapedAt;
+    // Merge-policy categories per parser-conventions.md §1. Categories in play here:
+    // ALWAYS_REFRESH, MAX_WINS, FILL_IF_MISSING, IDENTITY, and UNCATEGORIZED for the
+    // two fields mergeFrom() never touches at all (flagged, not silently fixed).
+    private String name; // IDENTITY -- never updated by mergeFrom(); open decision, see §1.1
+    private transient String cleanName; // IDENTITY -- derived from name; same open decision as name
+    private String brand; // FILL_IF_MISSING -- §1.1 flags brand as identity-adjacent (open: PREFER_SOURCE?)
+    private Double untappdRating; // MAX_WINS
+    private String imgUrl; // FILL_IF_MISSING
+    private String untappdSearchUrl; // UNCATEGORIZED -- never touched by mergeFrom(); see refactor report
+    private Double silpoPrice; // ALWAYS_REFRESH
+    private String silpoUrl; // ALWAYS_REFRESH -- kept in lockstep with silpoPrice
+    private Double flaskerPrice; // ALWAYS_REFRESH
+    private String flaskerUrl; // ALWAYS_REFRESH -- kept in lockstep with flaskerPrice
+    private Double silpoRating; // ALWAYS_REFRESH
+    private String style; // FILL_IF_MISSING
+    private Double abv; // FILL_IF_MISSING
+    private Integer ibu; // FILL_IF_MISSING
+    private String untappdUrl; // UNCATEGORIZED -- never touched by mergeFrom(); see refactor report
+    private String country; // FILL_IF_MISSING
+    private String packaging; // FILL_IF_MISSING
+    private Double volume; // FILL_IF_MISSING
+    private Long lastScrapedAt; // MAX_WINS -- newest timestamp wins
 
     public String getName() { return name; }
     public void setName(String name) { this.name = name; }

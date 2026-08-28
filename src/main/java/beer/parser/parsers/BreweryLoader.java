@@ -13,7 +13,7 @@ public class BreweryLoader {
 
         try {
             if (!Files.exists(Paths.get(filePath))) {
-                System.err.println("⚠️ [BreweryLoader] Файл не знайдено: " + filePath);
+                System.err.println("[BreweryLoader] File not found: " + filePath);
                 return breweries;
             }
 
@@ -46,10 +46,10 @@ public class BreweryLoader {
                     }
                 }
             }
-            System.out.println(">>> [BreweryLoader] Успішно завантажено " + breweries.size() + " броварень із файлу: " + filePath);
+            System.out.println("[BreweryLoader] Successfully loaded " + breweries.size() + " breweries from file: " + filePath);
 
         } catch (Exception e) {
-            System.err.println("❌ [BreweryLoader] Помилка читання файлу броварень: " + e.getMessage());
+            System.err.println("[BreweryLoader] Error reading breweries file: " + e.getMessage());
         }
 
         return breweries;

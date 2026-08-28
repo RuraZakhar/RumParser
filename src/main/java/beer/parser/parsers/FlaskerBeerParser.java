@@ -5,28 +5,22 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import java.net.URI;
+import common.parser.http.HttpRetry;
+import common.parser.util.JsonUtils;
+
 import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import beer.parser.utils.JsonUtils;
 
 public class FlaskerBeerParser implements BeerParser {
-
-    private final HttpClient client = HttpClient.newBuilder()
-            .connectTimeout(Duration.ofSeconds(10))
-            .build();
 
     private static final long DETAILS_TTL_MS = 30L * 24 * 60 * 60 * 1000;
 
@@ -45,16 +39,19 @@ public class FlaskerBeerParser implements BeerParser {
     private static final Pattern UNTAPPD_PATTERN_B = Pattern.compile("(?i)Untappd:[\\s\\S]*?([0-9.,]+)\\s*/\\s*5");
     private static final Pattern STYLE_PATTERN = Pattern.compile("(?i)Стиль:\\s*([^<]+)");
 
+    private final HttpRetry httpRetry = new HttpRetry(
+            HttpClient.newBuilder().connectTimeout(Duration.ofSeconds(10)).build(), 3);
+
     @Override
     public List<BeerProduct> parse(List<BeerProduct> existingCache) {
         List<BeerProduct> rawBeers = new ArrayList<>();
         List<BeerProduct> beersNeedsDetails = new ArrayList<>();
 
-        java.util.Map<String, BeerProduct> cacheMap = new java.util.HashMap<>();
+        java.util.Map<String, BeerProduct> existingIndex = new java.util.HashMap<>();
         if (existingCache != null) {
             for (BeerProduct b : existingCache) {
                 if (b.getFlaskerUrl() != null) {
-                    cacheMap.put(b.getFlaskerUrl(), b);
+                    existingIndex.put(b.getFlaskerUrl(), b);
                 }
             }
         }
@@ -63,26 +60,15 @@ public class FlaskerBeerParser implements BeerParser {
         int page = 1;
         boolean hasMore = true;
 
-        System.out.println("   [Flasker] Збір бази через API...");
+        System.out.println("   [Flasker] Collecting catalog via API...");
 
         try {
             while (hasMore) {
                 String url = "https://flasker.com.ua/wp-json/wc/store/v1/products?per_page=" + perPage + "&page=" + page;
 
-                HttpRequest request = HttpRequest.newBuilder().uri(URI.create(url)).GET().build();
+                String responseBody = httpRetry.fetch(url, builder -> {});
 
-                HttpResponse<String> response = null;
-                int maxListingRetries = 3;
-                for (int attempt = 1; attempt <= maxListingRetries; attempt++) {
-                    response = client.send(request, HttpResponse.BodyHandlers.ofString());
-                    if (response.statusCode() == 200 || attempt == maxListingRetries) break;
-                    System.out.println("   [Flasker] HTTP " + response.statusCode() + " на лістингу, спроба " + attempt + "/" + maxListingRetries);
-                    try { Thread.sleep(1000L * attempt); } catch (InterruptedException ignored) {}
-                }
-
-                if (response.statusCode() != 200) break;
-
-                JsonArray items = JsonParser.parseString(response.body()).getAsJsonArray();
+                JsonArray items = JsonParser.parseString(responseBody).getAsJsonArray();
                 if (items.isEmpty()) { hasMore = false; continue; }
 
                 for (JsonElement element : items) {
@@ -142,7 +128,7 @@ public class FlaskerBeerParser implements BeerParser {
                     }
 
                     if (beer.getFlaskerUrl() != null) {
-                        BeerProduct cachedBeer = cacheMap.get(beer.getFlaskerUrl());
+                        BeerProduct cachedBeer = existingIndex.get(beer.getFlaskerUrl());
                         boolean detailsAreFresh = cachedBeer != null
                                 && cachedBeer.getStyle() != null
                                 && cachedBeer.getLastScrapedAt() != null
@@ -153,7 +139,7 @@ public class FlaskerBeerParser implements BeerParser {
                             beer.setIbu(cachedBeer.getIbu());
                             beer.setUntappdRating(cachedBeer.getUntappdRating());
                             beer.setLastScrapedAt(cachedBeer.getLastScrapedAt());
-                            System.out.println("   [Flasker] Знайдено в кеші (оновлено ціну): " + beer.getName());
+                            System.out.println("   [Flasker] Found in cache (price refreshed): " + beer.getName());
                         } else {
                             beersNeedsDetails.add(beer);
                         }
@@ -165,7 +151,7 @@ public class FlaskerBeerParser implements BeerParser {
         } catch (Exception e) { e.printStackTrace(); }
 
         if (!beersNeedsDetails.isEmpty()) {
-            System.out.println("   [Flasker] Нових позицій без кешу: " + beersNeedsDetails.size() + ". Запуск глибокого пошуку IBU та Untappd...");
+            System.out.println("   [Flasker] New items without cache: " + beersNeedsDetails.size() + ". Starting deep search for IBU and Untappd...");
             ExecutorService executor = Executors.newFixedThreadPool(15);
             List<CompletableFuture<Void>> futures = new ArrayList<>();
             try {
@@ -177,74 +163,52 @@ public class FlaskerBeerParser implements BeerParser {
                 executor.shutdown();
             }
         } else {
-            System.out.println("   [Flasker] Усі позиції знайдені в кеші! Глибокий парсинг не потрібен.");
+            System.out.println("   [Flasker] All items found in cache! Deep parsing not needed.");
         }
 
         return new ArrayList<>(new LinkedHashSet<>(rawBeers));
     }
 
     private void fetchDetailsFromHtml(BeerProduct beer, String url) {
-        int maxRetries = 3;
+        String html;
+        try {
+            html = httpRetry.fetch(url, builder -> builder.timeout(Duration.ofSeconds(10)));
+        } catch (Exception e) {
+            System.out.println("   [Flasker] Giving up on details for: " + url + " (" + e.getMessage() + ")");
+            return;
+        }
 
-        for (int attempt = 1; attempt <= maxRetries; attempt++) {
-            try {
-                HttpRequest request = HttpRequest.newBuilder()
-                        .uri(URI.create(url))
-                        .timeout(Duration.ofSeconds(10))
-                        .GET()
-                        .build();
-
-                HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-
-                if (response.statusCode() != 200) {
-                    if (attempt < maxRetries) {
-                        System.out.println("   [Flasker] HTTP " + response.statusCode() + " для: " + url + " (Спроба " + attempt + " з " + maxRetries + "). Чекаю перед повтором...");
-                        try { Thread.sleep(500L * attempt); } catch (InterruptedException ignored) {}
-                    } else {
-                        System.out.println("   [Flasker] Всі " + maxRetries + " спроби вичерпано (HTTP " + response.statusCode() + ") для: " + url);
-                    }
-                    continue;
-                }
-
-                String html = response.body();
-
-                Matcher ibuMatcher = IBU_PATTERN.matcher(html);
-                if (ibuMatcher.find()) {
-                    beer.setIbu(Integer.parseInt(ibuMatcher.group(1)));
-                }
-
-                Matcher untappdMatcher = UNTAPPD_PATTERN_A.matcher(html);
-                if (!untappdMatcher.find()) {
-                    untappdMatcher = UNTAPPD_PATTERN_B.matcher(html);
-                }
-
-                if (untappdMatcher.find()) {
-                    beer.setUntappdRating(Double.parseDouble(untappdMatcher.group(1).replace(",", ".")));
-                }
-
-                Matcher styleMatcher = STYLE_PATTERN.matcher(html);
-                if (styleMatcher.find()) {
-                    beer.setStyle(unescapeHtml(styleMatcher.group(1).trim()));
-                }
-
-                String volStr = beer.getVolume() != null ? beer.getVolume() + "л" : "-";
-                String abvStr = beer.getAbv() != null ? beer.getAbv() + "%" : "-";
-                String ibuStr = beer.getIbu() != null ? String.valueOf(beer.getIbu()) : "-";
-                String untappdStr = beer.getUntappdRating() != null ? String.valueOf(beer.getUntappdRating()) : "-";
-
-                System.out.println("   [Flasker] Оброблено: " + beer.getName() +
-                        " (Об'єм: " + volStr + ", ABV: " + abvStr + "%, IBU: " + ibuStr + ", Untappd: " + untappdStr + ")");
-
-                beer.setLastScrapedAt(System.currentTimeMillis());
-                return;
-
-            } catch (java.net.http.HttpTimeoutException e) {
-                if (attempt < maxRetries) {
-                    try { Thread.sleep(1000); } catch (InterruptedException ignored) {}
-                }
-            } catch (Exception e) {
-                break;
+        try {
+            Matcher ibuMatcher = IBU_PATTERN.matcher(html);
+            if (ibuMatcher.find()) {
+                beer.setIbu(Integer.parseInt(ibuMatcher.group(1)));
             }
+
+            Matcher untappdMatcher = UNTAPPD_PATTERN_A.matcher(html);
+            if (!untappdMatcher.find()) {
+                untappdMatcher = UNTAPPD_PATTERN_B.matcher(html);
+            }
+
+            if (untappdMatcher.find()) {
+                beer.setUntappdRating(Double.parseDouble(untappdMatcher.group(1).replace(",", ".")));
+            }
+
+            Matcher styleMatcher = STYLE_PATTERN.matcher(html);
+            if (styleMatcher.find()) {
+                beer.setStyle(unescapeHtml(styleMatcher.group(1).trim()));
+            }
+
+            String volStr = beer.getVolume() != null ? String.valueOf(beer.getVolume()) : "-";
+            String abvStr = beer.getAbv() != null ? beer.getAbv() + "%" : "-";
+            String ibuStr = beer.getIbu() != null ? String.valueOf(beer.getIbu()) : "-";
+            String untappdStr = beer.getUntappdRating() != null ? String.valueOf(beer.getUntappdRating()) : "-";
+
+            System.out.println("   [Flasker] Processed: " + beer.getName() +
+                    " (volume: " + volStr + ", ABV: " + abvStr + "%, IBU: " + ibuStr + ", Untappd: " + untappdStr + ")");
+
+            beer.setLastScrapedAt(System.currentTimeMillis());
+        } catch (Exception e) {
+            System.out.println("   [Flasker] Failed to parse details for: " + url + " (" + e.getMessage() + ")");
         }
     }
 

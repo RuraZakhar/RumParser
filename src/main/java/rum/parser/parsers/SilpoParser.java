@@ -6,11 +6,10 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import rum.parser.model.RumProduct;
 import rum.parser.util.RumNameMatcher;
+import common.parser.http.HttpRetry;
+import common.parser.util.JsonUtils;
 
-import java.net.URI;
 import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -19,71 +18,88 @@ import java.util.regex.Pattern;
 
 public class SilpoParser implements RumParser {
 
-    private static final HttpClient client = HttpClient.newHttpClient();
     private static final String BASE_IMAGE_URL = "https://images.silpo.ua/products/1600x1600/webp/";
     private static final String BASE_PRODUCT_URL = "https://silpo.ua/product/";
     private static final String BASE_API_DETAILS_URL = "https://sf-ecom-api.silpo.ua/v1/uk/branches/00000000-0000-0000-0000-000000000000/products/";
     private static final Pattern AGE_DIGITS_PATTERN = Pattern.compile("\\d+");
+
+    // Note: distinct from FUZZY_THRESHOLD (0.90) in RumHowlerParser/RumRatingsParser --
+    // pre-existing, previously hardcoded inline here. Left at its original value per
+    // this refactor's constraints (thresholds are out of scope); only named for clarity.
+    private static final double FUZZY_THRESHOLD = 0.82;
+
+    private final HttpRetry httpRetry = new HttpRetry(HttpClient.newHttpClient(), 3);
 
     @Override
     public void parse(Set<RumProduct> rumSet) {
         System.out.println("\n[3/3] Starting Silpo Parser...");
 
         List<RumProduct> silpoRums = fetchAllSilpoRums();
-        System.out.println(">>> Зібрано " + silpoRums.size() + " ромів з Сільпо. Починаю метчінг...");
+        System.out.println("Collected " + silpoRums.size() + " rums from Silpo. Starting matching...");
 
         int matchedCount = 0;
         int newAddedCount = 0;
 
         for (RumProduct silpoRum : silpoRums) {
-            RumProduct bestMatch = null;
-            double bestScore = 0.0;
-
-            for (RumProduct existingRum : rumSet) {
-                if (existingRum.getSourceUrls().containsKey("Silpo")) continue;
-                double score = RumNameMatcher.similarity(existingRum.getName(), silpoRum.getName());
-                if (score > bestScore) {
-                    bestScore = score;
-                    bestMatch = existingRum;
-                }
-            }
-
-            if (bestMatch != null && bestScore > 0.82) {
-                bestMatch.setSilpoMatch(new RumProduct.SilpoMatch(
-                        silpoRum.getName(),
-                        bestScore,
-                        silpoRum.getPrice(),
-                        silpoRum.getPrice() != null && silpoRum.getPrice() > 0,
-                        silpoRum.getProductUrl()
-
-                ));
-                bestMatch.addSourceUrl("Silpo", silpoRum.getProductUrl());
-                if (!silpoRum.getRatings().isEmpty()) {
-                    bestMatch.getRatings().addAll(silpoRum.getRatings());
-                }
-
-                if (bestMatch.getRegion() == null) bestMatch.setRegion(silpoRum.getRegion());
-                if (bestMatch.getAbv() == null) bestMatch.setAbv(silpoRum.getAbv());
-                if (bestMatch.getAge() == null) bestMatch.setAge(silpoRum.getAge());
-
-                matchedCount++;
-            } else {
-                silpoRum.setSilpoMatch(new RumProduct.SilpoMatch(
-                        silpoRum.getName(),
-                        1.0,
-                        silpoRum.getPrice(),
-                        silpoRum.getPrice() != null && silpoRum.getPrice() > 0,
-                        silpoRum.getProductUrl()
-                ));
-                silpoRum.addSourceUrl("Silpo", silpoRum.getProductUrl());
-                rumSet.add(silpoRum);
+            if (mergeIntoCollection(silpoRum, rumSet)) {
                 newAddedCount++;
+            } else {
+                matchedCount++;
             }
         }
 
-        System.out.println(">>> Silpo Parser завершив роботу!");
-        System.out.println("   Знайдено збігів: " + matchedCount);
-        System.out.println("   Додано нових (тільки з Сільпо): " + newAddedCount);
+        System.out.println("Silpo Parser finished!");
+        System.out.println("   Matches found: " + matchedCount);
+        System.out.println("   New items added (Silpo only): " + newAddedCount);
+    }
+
+    // Fuzzy-only by design: Silpo items are being matched against entries from other
+    // sources that were parsed first, so there is no source-specific URL to exact-match
+    // against yet (unlike beer.parser.Main / RumHowlerParser / RumRatingsParser, which
+    // all have an existing identifier to check before falling back to fuzzy matching).
+    private boolean mergeIntoCollection(RumProduct silpoRum, Set<RumProduct> rumSet) {
+        RumProduct bestMatch = null;
+        double bestScore = 0.0;
+
+        for (RumProduct existingRum : rumSet) {
+            if (existingRum.getSourceUrls().containsKey("Silpo")) continue;
+            double score = RumNameMatcher.similarity(existingRum.getName(), silpoRum.getName());
+            if (score > bestScore) {
+                bestScore = score;
+                bestMatch = existingRum;
+            }
+        }
+
+        if (bestMatch != null && bestScore > FUZZY_THRESHOLD) {
+            bestMatch.setSilpoMatch(new RumProduct.SilpoMatch(
+                    silpoRum.getName(),
+                    bestScore,
+                    silpoRum.getPrice(),
+                    silpoRum.getPrice() != null && silpoRum.getPrice() > 0,
+                    silpoRum.getProductUrl()
+            ));
+            bestMatch.addSourceUrl("Silpo", silpoRum.getProductUrl());
+            if (!silpoRum.getRatings().isEmpty()) {
+                bestMatch.getRatings().addAll(silpoRum.getRatings());
+            }
+
+            if (bestMatch.getRegion() == null) bestMatch.setRegion(silpoRum.getRegion());
+            if (bestMatch.getAbv() == null) bestMatch.setAbv(silpoRum.getAbv());
+            if (bestMatch.getAge() == null) bestMatch.setAge(silpoRum.getAge());
+
+            return false;
+        }
+
+        silpoRum.setSilpoMatch(new RumProduct.SilpoMatch(
+                silpoRum.getName(),
+                1.0,
+                silpoRum.getPrice(),
+                silpoRum.getPrice() != null && silpoRum.getPrice() > 0,
+                silpoRum.getProductUrl()
+        ));
+        silpoRum.addSourceUrl("Silpo", silpoRum.getProductUrl());
+        rumSet.add(silpoRum);
+        return true;
     }
 
     private List<RumProduct> fetchAllSilpoRums() {
@@ -94,6 +110,7 @@ public class SilpoParser implements RumParser {
 
         try {
             while (hasMore) {
+                System.out.println("   [Silpo] Reading page (offset=" + offset + ", limit=" + limit + ")...");
                 String catalogUrl = "https://sf-ecom-api.silpo.ua/v1/uk/branches/00000000-0000-0000-0000-000000000000/products?limit=" + limit + "&offset=" + offset + "&deliveryType=DeliveryHome&category=rom-4468&includeChildCategories=true&sortBy=popularity&sortDirection=desc&inStock=false";
                 String responseBody = sendGetRequest(catalogUrl);
 
@@ -106,21 +123,21 @@ public class SilpoParser implements RumParser {
                         JsonObject item = element.getAsJsonObject();
                         RumProduct rum = new RumProduct();
 
-                        rum.setName(getStringOrNull(item, "title"));
-                        rum.setBrand(getStringOrNull(item, "brandTitle"));
-                        rum.setVolumeWeight(getStringOrNull(item, "displayRatio"));
-                        rum.setPrice(getDoubleOrNull(item, "price"));
+                        rum.setName(JsonUtils.getStringOrNull(item, "title"));
+                        rum.setBrand(JsonUtils.getStringOrNull(item, "brandTitle"));
+                        rum.setVolumeWeight(JsonUtils.getStringOrNull(item, "displayRatio"));
+                        rum.setPrice(JsonUtils.getDoubleOrNull(item, "price"));
                         rum.setCategory("rum");
 
-                        Double rawRating = getDoubleOrNull(item, "guestProductRating");
+                        Double rawRating = JsonUtils.getDoubleOrNull(item, "guestProductRating");
                         if (rawRating != null) {
                             rum.getRatings().add(new RumProduct.Rating("Silpo", rawRating * 2.0));
                         }
 
-                        String icon = getStringOrNull(item, "icon");
+                        String icon = JsonUtils.getStringOrNull(item, "icon");
                         if (icon != null) rum.setImgUrl(BASE_IMAGE_URL + icon);
 
-                        String slug = getStringOrNull(item, "slug");
+                        String slug = JsonUtils.getStringOrNull(item, "slug");
                         if (slug != null && !slug.isEmpty()) {
                             rum.setProductUrl(BASE_PRODUCT_URL + slug);
                             fetchAndAddDetails(slug, rum);
@@ -130,9 +147,13 @@ public class SilpoParser implements RumParser {
                         silpoList.add(rum);
                     }
 
+                    System.out.println("   [Silpo] Page (offset=" + offset + "): received " + fetchedSize
+                            + " items (total collected: " + silpoList.size() + ")");
+
                     if (fetchedSize < limit) hasMore = false;
                     else offset += limit;
                 } else {
+                    System.out.println("   [Silpo] No response from server at offset=" + offset + ", stopping pagination.");
                     break;
                 }
             }
@@ -154,7 +175,7 @@ public class SilpoParser implements RumParser {
             if (groups != null) {
                 for (JsonElement groupEl : groups) {
                     JsonObject group = groupEl.getAsJsonObject();
-                    if ("generalInfo".equals(getStringOrNull(group, "key"))) {
+                    if ("generalInfo".equals(JsonUtils.getStringOrNull(group, "key"))) {
                         JsonArray attributes = group.getAsJsonArray("attributes");
                         for (JsonElement attrEl : attributes) {
                             JsonObject attr = attrEl.getAsJsonObject();
@@ -162,8 +183,8 @@ public class SilpoParser implements RumParser {
                             JsonObject valueObj = attr.getAsJsonObject("value");
 
                             if (attrKeyObj != null && valueObj != null) {
-                                String key = getStringOrNull(attrKeyObj, "key");
-                                String valueTitle = getStringOrNull(valueObj, "title");
+                                String key = JsonUtils.getStringOrNull(attrKeyObj, "key");
+                                String valueTitle = JsonUtils.getStringOrNull(valueObj, "title");
 
                                 if (valueTitle != null) {
                                     if ("country".equals(key)) {
@@ -191,40 +212,12 @@ public class SilpoParser implements RumParser {
     }
 
     private String sendGetRequest(String url) {
-        int maxRetries = 3;
-
-        for (int attempt = 1; attempt <= maxRetries; attempt++) {
-            try {
-                HttpRequest request = HttpRequest.newBuilder()
-                        .uri(URI.create(url))
-                        .header("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/126.0.0.0")
-                        .header("Referer", "https://silpo.ua/")
-                        .GET()
-                        .build();
-
-                HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-                if (response.statusCode() == 200) return response.body();
-            } catch (Exception ignored) {
-            }
-
-            if (attempt < maxRetries) {
-                try {
-                    Thread.sleep(500L * attempt);
-                } catch (InterruptedException ignored) {}
-            }
+        try {
+            return httpRetry.fetch(url, builder -> builder
+                    .header("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/126.0.0.0")
+                    .header("Referer", "https://silpo.ua/"));
+        } catch (Exception e) {
+            return null;
         }
-        return null;
-    }
-
-    private String getStringOrNull(JsonObject obj, String field) {
-        if (obj.has(field) && !obj.get(field).isJsonNull()) return obj.get(field).getAsString();
-        return null;
-    }
-
-    private Double getDoubleOrNull(JsonObject obj, String field) {
-        if (obj.has(field) && !obj.get(field).isJsonNull()) return obj.get(field).getAsDouble();
-        return null;
     }
 }
-
-

@@ -6,11 +6,9 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import rum.parser.model.RumProduct;
 import rum.parser.util.RumNameMatcher;
+import common.parser.http.HttpRetry;
 
-import java.net.URI;
 import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
 import java.time.Duration;
 import java.util.*;
 import java.util.concurrent.*;
@@ -30,20 +28,19 @@ public class RumRatingsParser implements RumParser {
     private static final long MIN_REQUEST_INTERVAL_MS = 600;
     private static final int MAX_RETRIES = 5;
     private static final long DETAILS_TTL_MS = 30L * 24 * 60 * 60 * 1000;
-    private final Object rateLimitLock = new Object();
-    private volatile long lastRequestTime = 0;
     private static final long BLOCK_WAIT_MS = 11 * 60 * 1000L;
     private static final int MAX_BLOCK_RETRIES = 3;
     private static final Pattern LEADING_NUMBER = Pattern.compile("[\\d.]+");
     private static final double FUZZY_THRESHOLD = 0.90;
 
+    private final HttpRetry httpRetry = new HttpRetry(
+            HttpClient.newBuilder().connectTimeout(Duration.ofSeconds(30)).followRedirects(HttpClient.Redirect.NORMAL).build(),
+            MAX_RETRIES, MIN_REQUEST_INTERVAL_MS, BLOCK_WAIT_MS, MAX_BLOCK_RETRIES,
+            true, false, (statusCode, body) -> HttpRetry.looksLikeBlockedPage(body));
+
     @Override
     public void parse(Set<RumProduct> rumSet) {
         System.out.println("\n[2/3] Starting RumRatings Parser...");
-
-        HttpClient client = HttpClient.newBuilder()
-                .connectTimeout(Duration.ofSeconds(30))
-                .build();
 
         Map<RumProduct, RumProduct> existingIndex = new HashMap<>();
         for (RumProduct p : rumSet) {
@@ -56,12 +53,11 @@ public class RumRatingsParser implements RumParser {
         int skippedAlreadyScraped = 0;
 
         while (keepGoing) {
-            System.out.println(">>> Fetching listing page " + page + "...");
+            System.out.println("Fetching listing page " + page + "...");
 
             String html;
             try {
-                html = fetchHtmlWithRetry(client, LISTING_URL
-                        + "?order_by=average_rating&min_rating=30&page=" + page + "&format=turbo_stream");
+                html = fetchHtml(LISTING_URL + "?order_by=average_rating&min_rating=30&page=" + page + "&format=turbo_stream");
             } catch (Exception e) {
                 System.err.println("Error fetching listing page " + page + ": " + e.getMessage());
                 break;
@@ -73,6 +69,7 @@ public class RumRatingsParser implements RumParser {
                 System.out.println("No more rums found. Stopping.");
                 break;
             }
+            System.out.println("Page " + page + ": found " + bottles.size() + " bottles.");
 
             for (Element bottle : bottles) {
                 try {
@@ -126,15 +123,15 @@ public class RumRatingsParser implements RumParser {
             page++;
         }
 
-        System.out.println(">>> Пропущено (вже було заскрапено раніше): " + skippedAlreadyScraped);
+        System.out.println("Skipped (already scraped before): " + skippedAlreadyScraped);
 
         if (topRumsToScrape.isEmpty()) {
-            System.out.println("Немає нових ромів для deep-scrape.");
+            System.out.println("No new rums to deep-scrape.");
             return;
         }
 
-        System.out.println("\n>>> Step 1 Completed. Found " + topRumsToScrape.size() + " rums to deep-scrape.");
-        System.out.println(">>> Moving to Step 2: Extracting deep details...\n");
+        System.out.println("\nStep 1 completed. Found " + topRumsToScrape.size() + " rums to deep-scrape.");
+        System.out.println("Moving to step 2: extracting deep details...\n");
 
         ExecutorService executor = Executors.newFixedThreadPool(THREAD_POOL_SIZE);
         List<CompletableFuture<Void>> futures = new ArrayList<>();
@@ -146,12 +143,12 @@ public class RumRatingsParser implements RumParser {
                     int current = count.incrementAndGet();
                     System.out.println("[" + current + "/" + topRumsToScrape.size() + "] Deep scraping: " + basicRum.getName());
 
-                    String detailHtml = fetchHtmlWithRetry(client, basicRum.getProductUrl());
+                    String detailHtml = fetchHtml(basicRum.getProductUrl());
                     Document detailDoc = Jsoup.parse(detailHtml, "https://rumratings.com");
                     enrichRumFromDetailPage(basicRum, detailDoc);
 
                     synchronized (rumSet) {
-                        mergeIntoSet(rumSet, basicRum);
+                        mergeIntoCollection(rumSet, basicRum);
                     }
                 } catch (Exception e) {
                     System.err.println("Error extracting details for " + basicRum.getProductUrl() + ": " + e.getMessage());
@@ -172,106 +169,11 @@ public class RumRatingsParser implements RumParser {
         product.getRatings().add(new RumProduct.Rating(provider, value));
     }
 
-    private void throttle() {
-        synchronized (rateLimitLock) {
-            long now = System.currentTimeMillis();
-            long elapsed = now - lastRequestTime;
-            long waitTime = MIN_REQUEST_INTERVAL_MS - elapsed;
-            if (waitTime > 0) {
-                try {
-                    Thread.sleep(waitTime);
-                } catch (InterruptedException e) {
-                    Thread.currentThread().interrupt();
-                }
-            }
-            lastRequestTime = System.currentTimeMillis();
-        }
-    }
-
-    private String fetchHtmlWithRetry(HttpClient client, String url) throws Exception {
-        Exception lastError = null;
-        int blockRetries = 0;
-
-        for (int attempt = 1; attempt <= MAX_RETRIES; attempt++) {
-            throttle();
-
-            HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create(url))
-                    .timeout(Duration.ofSeconds(30))
-                    .header("User-Agent", USER_AGENT)
-                    .header("Accept", "text/html, application/xhtml+xml")
-                    .GET()
-                    .build();
-
-            try {
-                HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-
-                if (response.statusCode() == 200) {
-                    if (isBlockedPage(response.body())) {
-                        if (blockRetries >= MAX_BLOCK_RETRIES) {
-                            throw new RuntimeException("Заблоковано навіть після довгих очікувань: " + url);
-                        }
-                        blockRetries++;
-                        System.out.println("  !!! Cloudflare block для " + url + ". Чекаю "
-                                + (BLOCK_WAIT_MS / 60000) + " хв (" + blockRetries + "/" + MAX_BLOCK_RETRIES + ")...");
-                        Thread.sleep(BLOCK_WAIT_MS);
-                        attempt--;
-                        continue;
-                    }
-                    return response.body();
-                }
-
-                if (response.statusCode() == 403) {
-                    if (blockRetries >= MAX_BLOCK_RETRIES) {
-                        throw new RuntimeException("HTTP 403 навіть після довгих очікувань: " + url);
-                    }
-                    blockRetries++;
-                    System.out.println("  !!! HTTP 403 для " + url + ". Чекаю "
-                            + (BLOCK_WAIT_MS / 60000) + " хв (" + blockRetries + "/" + MAX_BLOCK_RETRIES + ")...");
-                    Thread.sleep(BLOCK_WAIT_MS);
-                    attempt--;
-                    continue;
-                }
-
-                if (response.statusCode() == 429 || response.statusCode() >= 500) {
-                    long backoffMs = resolveBackoff(response, attempt);
-                    System.out.println("  HTTP " + response.statusCode() + " for " + url
-                            + " -- retry " + attempt + "/" + MAX_RETRIES + " after " + backoffMs + "ms");
-                    Thread.sleep(backoffMs);
-                    lastError = new RuntimeException("HTTP " + response.statusCode() + " for " + url);
-                    continue;
-                }
-
-                throw new RuntimeException("HTTP " + response.statusCode() + " for " + url);
-
-            } catch (java.io.IOException e) {
-                lastError = e;
-                Thread.sleep(1000L * attempt);
-            }
-        }
-
-        throw lastError != null ? lastError : new RuntimeException("Failed to fetch " + url);
-    }
-
-    private boolean isBlockedPage(String body) {
-        if (body == null) return false;
-        String lower = body.toLowerCase(Locale.ROOT);
-        return lower.contains("just a moment")
-                || lower.contains("checking your browser")
-                || lower.contains("temporarily unavailable")
-                || lower.contains("cf-challenge")
-                || lower.contains("captcha")
-                || lower.contains("attention required");
-    }
-
-    private long resolveBackoff(HttpResponse<String> response, int attempt) {
-        Optional<String> retryAfter = response.headers().firstValue("Retry-After");
-        if (retryAfter.isPresent()) {
-            try {
-                return Long.parseLong(retryAfter.get().trim()) * 1000L;
-            } catch (NumberFormatException ignored) {}
-        }
-        return (long) Math.pow(2, attempt - 1) * 1000L;
+    private String fetchHtml(String url) throws Exception {
+        return httpRetry.fetch(url, builder -> builder
+                .timeout(Duration.ofSeconds(30))
+                .header("User-Agent", USER_AGENT)
+                .header("Accept", "text/html, application/xhtml+xml"));
     }
 
     private void enrichRumFromDetailPage(RumProduct rum, Document doc) {
@@ -338,7 +240,7 @@ public class RumRatingsParser implements RumParser {
         return result;
     }
 
-    private boolean mergeIntoSet(Set<RumProduct> rumSet, RumProduct incomingRum) {
+    private boolean mergeIntoCollection(Set<RumProduct> rumSet, RumProduct incomingRum) {
         for (RumProduct existingRum : rumSet) {
             if (existingRum.equals(incomingRum)) {
                 existingRum.mergeFrom(incomingRum);

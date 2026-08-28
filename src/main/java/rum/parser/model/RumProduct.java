@@ -25,36 +25,44 @@ public class RumProduct {
     private static final Pattern NAME_NOISE_PATTERN = Pattern.compile("(?iu)\\b(?:rum|ром|напій|drink)\\b");
     private static final Pattern NON_ALNUM_PATTERN = Pattern.compile("[^\\p{L}\\p{N}]");
 
-    private String name;
-    private String description;
-    private Double abv;
-    private Double age;
+    // Merge-policy categories per parser-conventions.md §1. Categories in play here:
+    // MAX_WINS, FILL_IF_MISSING, IDENTITY, and one flagged case (price) where the
+    // current FILL_IF_MISSING behavior looks like it should arguably be ALWAYS_REFRESH
+    // instead -- see refactor report rather than a silent behavior change here.
+    private String name; // IDENTITY -- never updated by mergeFrom(); open decision, see §1.1
+    private String description; // FILL_IF_MISSING
+    private Double abv; // FILL_IF_MISSING
+    private Double age; // FILL_IF_MISSING
 
     @SerializedName(value = "region", alternate = {"country"})
-    private String region;
+    private String region; // FILL_IF_MISSING
 
-    private String brand;
-    private String type;
-    private String category;
-    private Double price;
-    private String volumeWeight;
-    private String imgUrl;
-    private String productUrl;
-    private String code;
-    private Offer offer;
+    private String brand; // FILL_IF_MISSING -- §1.1 flags brand as identity-adjacent (open: PREFER_SOURCE?)
+    private String type; // FILL_IF_MISSING
+    private String category; // FILL_IF_MISSING (also defaulted to "rum" in enrichDerivedFields() if blank)
+    private Double price; // FILL_IF_MISSING -- flagged: price is volatile like beer.parser's silpoPrice
+                           // (ALWAYS_REFRESH there); currently dormant since SilpoParser never
+                           // routes its own price updates through mergeFrom(). See refactor report.
+    private String volumeWeight; // FILL_IF_MISSING
+    private String imgUrl; // FILL_IF_MISSING
+    private String productUrl; // FILL_IF_MISSING
+    private String code; // FILL_IF_MISSING -- currently never populated by any parser (dormant)
+    private Offer offer; // FILL_IF_MISSING -- currently never populated by any parser (dormant)
 
-    private SilpoMatch silpoMatch = null;
+    private SilpoMatch silpoMatch = null; // FILL_IF_MISSING in mergeFrom(), but SilpoParser bypasses
+                                           // mergeFrom() for its own updates and overwrites this directly
+                                           // every run -- see refactor report
 
-    private Map<String, String> sourceUrls = new LinkedHashMap<>();
+    private Map<String, String> sourceUrls = new LinkedHashMap<>(); // FILL_IF_MISSING per map key
 
-    private Integer yearDistilled;
-    private String rawMaterial;
-    private String process;
-    private String distillationMethod;
-    private Boolean womenLed;
-    private Long lastScrapedAt;
+    private Integer yearDistilled; // FILL_IF_MISSING
+    private String rawMaterial; // FILL_IF_MISSING
+    private String process; // FILL_IF_MISSING
+    private String distillationMethod; // FILL_IF_MISSING
+    private Boolean womenLed; // FILL_IF_MISSING
+    private Long lastScrapedAt; // MAX_WINS -- newest timestamp wins
 
-    private Set<Rating> ratings = new LinkedHashSet<>();
+    private Set<Rating> ratings = new LinkedHashSet<>(); // ALWAYS_REFRESH per provider (remove+add keyed on Rating.provider)
 
     public void addSourceUrl(String provider, String url) {
         if (provider != null && url != null && !url.isBlank()) {

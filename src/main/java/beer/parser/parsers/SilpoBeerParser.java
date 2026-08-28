@@ -1,29 +1,22 @@
 package beer.parser.parsers;
 
 import beer.parser.model.BeerProduct;
-import beer.parser.utils.JsonUtils;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import common.parser.http.HttpRetry;
+import common.parser.util.JsonUtils;
 
-import java.net.URI;
 import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class SilpoBeerParser implements BeerParser {
-
-    private final HttpClient client = HttpClient.newBuilder()
-            .connectTimeout(Duration.ofSeconds(10))
-            .build();
 
     private static final String BASE_PRODUCT_URL = "https://silpo.ua/product/";
     private static final String API_PRODUCT_DETAILS_URL = "https://sf-ecom-api.silpo.ua/v1/uk/branches/00000000-0000-0000-0000-000000000000/products/";
@@ -36,16 +29,19 @@ public class SilpoBeerParser implements BeerParser {
     };
     private static final Pattern VOLUME_PATTERN = Pattern.compile("(?i)([0-9.,]+)\\s*(мл|ml|л|l)");
 
+    private final HttpRetry httpRetry = new HttpRetry(
+            HttpClient.newBuilder().connectTimeout(Duration.ofSeconds(10)).build(), 3);
+
     @Override
     public List<BeerProduct> parse(List<BeerProduct> existingCache) {
         List<BeerProduct> rawBeers = new ArrayList<>();
         List<BeerProduct> beersNeedsDetails = new ArrayList<>();
         List<String> slugsForDetails = new ArrayList<>();
 
-        java.util.Map<String, BeerProduct> cacheMap = new java.util.HashMap<>();
+        java.util.Map<String, BeerProduct> existingIndex = new java.util.HashMap<>();
         for (BeerProduct b : existingCache) {
             if (b.getSilpoUrl() != null) {
-                cacheMap.put(b.getSilpoUrl(), b);
+                existingIndex.put(b.getSilpoUrl(), b);
             }
         }
 
@@ -59,87 +55,73 @@ public class SilpoBeerParser implements BeerParser {
                     String url = "https://sf-ecom-api.silpo.ua/v1/uk/branches/00000000-0000-0000-0000-000000000000/products?" +
                             "limit=" + limit + "&offset=" + offset + "&deliveryType=DeliveryHome&category=" + categorySlug;
 
-                    HttpRequest request = HttpRequest.newBuilder()
-                            .uri(URI.create(url))
+                    String responseBody = httpRetry.fetch(url, builder -> builder
                             .header("User-Agent", USER_AGENT)
-                            .header("Referer", "https://silpo.ua/")
-                            .GET()
-                            .build();
+                            .header("Referer", "https://silpo.ua/"));
 
-                    HttpResponse<String> response = null;
-                    int maxListingRetries = 3;
-                    for (int attempt = 1; attempt <= maxListingRetries; attempt++) {
-                        response = client.send(request, HttpResponse.BodyHandlers.ofString());
-                        if (response.statusCode() == 200 || attempt == maxListingRetries) break;
-                        System.out.println("   [Silpo] HTTP " + response.statusCode() + " на лістингу, спроба " + attempt + "/" + maxListingRetries);
-                        try { Thread.sleep(1000L * attempt); } catch (InterruptedException ignored) {}
+                    JsonObject rootObj = JsonParser.parseString(responseBody).getAsJsonObject();
+                    JsonArray items = rootObj.getAsJsonArray("items");
+
+                    if (items == null) {
+                        System.out.println("   [Silpo] Response has no 'items' field, skipping page.");
+                        break;
                     }
 
-                    if (response.statusCode() == 200) {
-                        JsonObject rootObj = JsonParser.parseString(response.body()).getAsJsonObject();
-                        JsonArray items = rootObj.getAsJsonArray("items");
+                    int fetchedSize = items.size();
 
-                        if (items == null) {
-                            System.out.println("   [Silpo] Відповідь без поля 'items', пропускаю сторінку.");
-                            break;
-                        }
+                    if (items.isEmpty()) { hasMore = false; continue; }
 
-                        int fetchedSize = items.size();
+                    for (JsonElement element : items) {
+                        JsonObject item = element.getAsJsonObject();
+                        BeerProduct beer = new BeerProduct();
 
-                        if (items.isEmpty()) { hasMore = false; continue; }
+                        beer.setName(JsonUtils.getStringOrNull(item, "title"));
+                        beer.setBrand(JsonUtils.getStringOrNull(item, "brandTitle"));
+                        if (beer.getName() != null) beer.setCleanName(beer.getName().toLowerCase());
 
-                        for (JsonElement element : items) {
-                            JsonObject item = element.getAsJsonObject();
-                            BeerProduct beer = new BeerProduct();
+                        Double guestRating = JsonUtils.getDoubleOrNull(item, "guestProductRating");
+                        if (guestRating != null) beer.setSilpoRating(guestRating);
 
-                            beer.setName(JsonUtils.getStringOrNull(item, "title"));
-                            beer.setBrand(JsonUtils.getStringOrNull(item, "brandTitle"));
-                            if (beer.getName() != null) beer.setCleanName(beer.getName().toLowerCase());
+                        Double untappd = JsonUtils.getDoubleOrNull(item, "untappdRating");
+                        if (untappd != null) beer.setUntappdRating(untappd);
 
-                            Double guestRating = JsonUtils.getDoubleOrNull(item, "guestProductRating");
-                            if (guestRating != null) beer.setSilpoRating(guestRating);
+                        beer.setSilpoPrice(JsonUtils.getDoubleOrNull(item, "price"));
 
-                            Double untappd = JsonUtils.getDoubleOrNull(item, "untappdRating");
-                            if (untappd != null) beer.setUntappdRating(untappd);
+                        String icon = JsonUtils.getStringOrNull(item, "icon");
+                        if (icon != null) beer.setImgUrl(BASE_IMAGE_URL + icon);
 
-                            beer.setSilpoPrice(JsonUtils.getDoubleOrNull(item, "price"));
+                        String slug = JsonUtils.getStringOrNull(item, "slug");
+                        if (slug != null && !slug.isEmpty()) {
+                            beer.setSilpoUrl(BASE_PRODUCT_URL + slug);
 
-                            String icon = JsonUtils.getStringOrNull(item, "icon");
-                            if (icon != null) beer.setImgUrl(BASE_IMAGE_URL + icon);
+                            BeerProduct cachedBeer = existingIndex.get(beer.getSilpoUrl());
+                            boolean detailsAreFresh = cachedBeer != null
+                                    && cachedBeer.getAbv() != null
+                                    && cachedBeer.getLastScrapedAt() != null
+                                    && (System.currentTimeMillis() - cachedBeer.getLastScrapedAt()) < DETAILS_TTL_MS;
 
-                            String slug = JsonUtils.getStringOrNull(item, "slug");
-                            if (slug != null && !slug.isEmpty()) {
-                                beer.setSilpoUrl(BASE_PRODUCT_URL + slug);
-
-                                BeerProduct cachedBeer = cacheMap.get(beer.getSilpoUrl());
-                                boolean detailsAreFresh = cachedBeer != null
-                                        && cachedBeer.getAbv() != null
-                                        && cachedBeer.getLastScrapedAt() != null
-                                        && (System.currentTimeMillis() - cachedBeer.getLastScrapedAt()) < DETAILS_TTL_MS;
-
-                                if (detailsAreFresh) {
-                                    beer.setAbv(cachedBeer.getAbv());
-                                    beer.setCountry(cachedBeer.getCountry());
-                                    beer.setPackaging(cachedBeer.getPackaging());
-                                    beer.setVolume(cachedBeer.getVolume());
-                                    beer.setLastScrapedAt(cachedBeer.getLastScrapedAt());
-                                    System.out.println("   [Silpo] Знайдено в кеші (оновлено ціну): " + beer.getName());
-                                } else {
-                                    beersNeedsDetails.add(beer);
-                                    slugsForDetails.add(slug);
-                                }
+                            if (detailsAreFresh) {
+                                beer.setAbv(cachedBeer.getAbv());
+                                beer.setCountry(cachedBeer.getCountry());
+                                beer.setPackaging(cachedBeer.getPackaging());
+                                beer.setVolume(cachedBeer.getVolume());
+                                beer.setLastScrapedAt(cachedBeer.getLastScrapedAt());
+                                System.out.println("   [Silpo] Found in cache (price refreshed): " + beer.getName());
+                            } else {
+                                beersNeedsDetails.add(beer);
+                                slugsForDetails.add(slug);
                             }
-                            rawBeers.add(beer);
                         }
-                        if (fetchedSize < limit) hasMore = false;
-                        else offset += limit;
-                    } else break;
+                        rawBeers.add(beer);
+                    }
+                    if (fetchedSize < limit) hasMore = false;
+                    else offset += limit;
                 }
             } catch (Exception e) { e.printStackTrace(); }
         }
 
         if (!beersNeedsDetails.isEmpty()) {
-            System.out.println("   [Silpo] Нових позицій без кешу: " + beersNeedsDetails.size() + ". Запуск глибокого парсингу...");
+            System.out.println("   [Silpo] New items without cache: " + beersNeedsDetails.size() + ". Starting deep parsing...");
             java.util.concurrent.ExecutorService executor = java.util.concurrent.Executors.newFixedThreadPool(15);
             List<java.util.concurrent.CompletableFuture<Void>> futures = new ArrayList<>();
             try {
@@ -153,7 +135,7 @@ public class SilpoBeerParser implements BeerParser {
                 executor.shutdown();
             }
         } else {
-            System.out.println("   [Silpo] Усі позиції знайдені в кеші! Глибокий парсинг не потрібен.");
+            System.out.println("   [Silpo] All items found in cache! Deep parsing not needed.");
         }
 
         return new ArrayList<>(new LinkedHashSet<>(rawBeers));
@@ -161,99 +143,75 @@ public class SilpoBeerParser implements BeerParser {
 
     private void fetchDetailsFromApi(BeerProduct beer, String slug) {
         String url = API_PRODUCT_DETAILS_URL + slug;
-        int maxRetries = 3;
 
-        for (int attempt = 1; attempt <= maxRetries; attempt++) {
-            try {
-                HttpRequest request = HttpRequest.newBuilder()
-                        .uri(URI.create(url))
-                        .timeout(Duration.ofSeconds(10))
-                        .header("User-Agent", USER_AGENT)
-                        .header("Referer", "https://silpo.ua/")
-                        .GET()
-                        .build();
+        String responseBody;
+        try {
+            responseBody = httpRetry.fetch(url, builder -> builder
+                    .timeout(Duration.ofSeconds(10))
+                    .header("User-Agent", USER_AGENT)
+                    .header("Referer", "https://silpo.ua/"));
+        } catch (Exception e) {
+            System.out.println("   [Silpo] Giving up on details for: " + slug + " (" + e.getMessage() + ")");
+            return;
+        }
 
-                HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        try {
+            JsonObject rootObj = JsonParser.parseString(responseBody).getAsJsonObject();
 
-                if (response.statusCode() == 200) {
-                    JsonObject rootObj = JsonParser.parseString(response.body()).getAsJsonObject();
+            String displayRatio = JsonUtils.getStringOrNull(rootObj, "displayRatio");
+            if (displayRatio != null) {
+                extractVolumeFromString(beer, displayRatio);
+            }
 
-                    String displayRatio = JsonUtils.getStringOrNull(rootObj, "displayRatio");
-                    if (displayRatio != null) {
-                        extractVolumeFromString(beer, displayRatio);
-                    }
+            if (beer.getVolume() == null && beer.getName() != null) {
+                extractVolumeFromString(beer, beer.getName());
+            }
 
-                    if (beer.getVolume() == null && beer.getName() != null) {
-                        extractVolumeFromString(beer, beer.getName());
-                    }
+            JsonArray attributeGroups = rootObj.getAsJsonArray("attributeGroups");
+            if (attributeGroups != null) {
+                for (JsonElement groupEl : attributeGroups) {
+                    JsonObject group = groupEl.getAsJsonObject();
+                    if ("generalInfo".equals(JsonUtils.getStringOrNull(group, "key"))) {
+                        JsonArray attributes = group.getAsJsonArray("attributes");
+                        if (attributes != null) {
+                            for (JsonElement attrEl : attributes) {
+                                JsonObject attrObj = attrEl.getAsJsonObject();
+                                JsonObject attrItem = attrObj.getAsJsonObject("attribute");
+                                JsonObject valueItem = attrObj.getAsJsonObject("value");
 
-                    JsonArray attributeGroups = rootObj.getAsJsonArray("attributeGroups");
-                    if (attributeGroups != null) {
-                        for (JsonElement groupEl : attributeGroups) {
-                            JsonObject group = groupEl.getAsJsonObject();
-                            if ("generalInfo".equals(JsonUtils.getStringOrNull(group, "key"))) {
-                                JsonArray attributes = group.getAsJsonArray("attributes");
-                                if (attributes != null) {
-                                    for (JsonElement attrEl : attributes) {
-                                        JsonObject attrObj = attrEl.getAsJsonObject();
-                                        JsonObject attrItem = attrObj.getAsJsonObject("attribute");
-                                        JsonObject valueItem = attrObj.getAsJsonObject("value");
+                                if (attrItem != null && valueItem != null) {
+                                    String attrId = JsonUtils.getStringOrNull(attrItem, "id");
 
-                                        if (attrItem != null && valueItem != null) {
-                                            String attrId = JsonUtils.getStringOrNull(attrItem, "id");
-
-                                            if ("alcoholcontent".equals(attrId)) {
-                                                if (valueItem.has("title") && !valueItem.get("title").isJsonNull()) {
-                                                    try {
-                                                        beer.setAbv(valueItem.get("title").getAsDouble());
-                                                    } catch (Exception ignored) {}
-                                                }
-                                            } else if ("country".equals(attrId)) {
-                                                beer.setCountry(JsonUtils.getStringOrNull(valueItem, "title"));
-                                            } else if ("typupakovky".equals(attrId)) {
-                                                beer.setPackaging(JsonUtils.getStringOrNull(valueItem, "title"));
-                                            }
+                                    if ("alcoholcontent".equals(attrId)) {
+                                        if (valueItem.has("title") && !valueItem.get("title").isJsonNull()) {
+                                            try {
+                                                beer.setAbv(valueItem.get("title").getAsDouble());
+                                            } catch (Exception ignored) {}
                                         }
+                                    } else if ("country".equals(attrId)) {
+                                        beer.setCountry(JsonUtils.getStringOrNull(valueItem, "title"));
+                                    } else if ("typupakovky".equals(attrId)) {
+                                        beer.setPackaging(JsonUtils.getStringOrNull(valueItem, "title"));
                                     }
                                 }
-                                break;
                             }
                         }
+                        break;
                     }
-
-                    String abvStr = beer.getAbv() != null ? beer.getAbv() + "%" : "-";
-                    String countryStr = beer.getCountry() != null ? beer.getCountry() : "-";
-                    String packStr = beer.getPackaging() != null ? beer.getPackaging() : "-";
-                    String volStr = beer.getVolume() != null ? beer.getVolume() + "л" : "-";
-
-                    System.out.println("   [Silpo] Оброблено: " + beer.getName() +
-                            " (Об'єм: " + volStr + ", ABV: " + abvStr + ", Країна: " + countryStr + ", Упаковка: " + packStr + ")");
-
-                    beer.setLastScrapedAt(System.currentTimeMillis());
-                    return;
                 }
-
-                if (attempt < maxRetries) {
-                    System.out.println("   [Silpo] HTTP " + response.statusCode() + " для: " + slug + " (Спроба " + attempt + " з " + maxRetries + "). Чекаю перед повтором...");
-                    try {
-                        Thread.sleep(500L * attempt);
-                    } catch (InterruptedException ignored) {}
-                } else {
-                    System.out.println("   [Silpo] Всі " + maxRetries + " спроби вичерпано (HTTP " + response.statusCode() + ") для: " + slug);
-                }
-            } catch (java.net.http.HttpTimeoutException e) {
-                if (attempt < maxRetries) {
-                    System.out.println("   [Silpo] Таймаут для: " + slug + " (Спроба " + attempt + " з " + maxRetries + "). Пробуємо ще раз...");
-                    try {
-                        Thread.sleep(1000);
-                    } catch (InterruptedException ignored) {}
-                } else {
-                    System.out.println("   [Silpo] Всі " + maxRetries + " спроби вичерпано (таймаут) для: " + slug);
-                }
-            } catch (Exception e) {
-                System.out.println("   [Silpo] Помилка з'єднання: " + e.getMessage() + " для: " + slug);
-                break;
             }
+
+            String abvStr = beer.getAbv() != null ? beer.getAbv() + "%" : "-";
+            String countryStr = beer.getCountry() != null ? beer.getCountry() : "-";
+            String packStr = beer.getPackaging() != null ? beer.getPackaging() : "-";
+            String volStr = beer.getVolume() != null ? String.valueOf(beer.getVolume()) : "-";
+
+            System.out.println("   [Silpo] Processed: " + beer.getName() +
+                    " (volume: " + volStr + "l, ABV: " + abvStr + ", country: " + countryStr + ", packaging: " + packStr + ")");
+
+            beer.setLastScrapedAt(System.currentTimeMillis());
+        } catch (Exception e) {
+            System.out.println("   [Silpo] Failed to parse details for: " + slug + " (" + e.getMessage() + ")");
         }
     }
 

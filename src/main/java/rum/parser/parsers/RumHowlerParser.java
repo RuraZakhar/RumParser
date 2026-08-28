@@ -6,10 +6,10 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import rum.parser.util.RumNameMatcher;
+import common.parser.http.HttpRetry;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
-import java.util.concurrent.Callable;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -31,7 +31,7 @@ public class RumHowlerParser implements RumParser {
         System.out.println("[1/3] Scanning first source (The Rum Howler Blog)...");
 
         try {
-            Document mainPage = fetchWithRetry(() -> Jsoup.connect(BASE_URL)
+            Document mainPage = HttpRetry.retryWithBackoff(MAX_FETCH_RETRIES, () -> Jsoup.connect(BASE_URL)
                     .userAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36")
                     .get());
 
@@ -55,7 +55,7 @@ public class RumHowlerParser implements RumParser {
 
                 CompletableFuture<Void> future = CompletableFuture.runAsync(() -> {
                     try {
-                        Document itemPage = fetchWithRetry(() -> Jsoup.connect(rumUrl)
+                        Document itemPage = HttpRetry.retryWithBackoff(MAX_FETCH_RETRIES, () -> Jsoup.connect(rumUrl)
                                 .userAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36")
                                 .timeout(5000)
                                 .get());
@@ -73,7 +73,7 @@ public class RumHowlerParser implements RumParser {
                             rum.getRatings().add(new RumProduct.Rating(PROVIDER, ratingValue));
 
                             synchronized (rumSet) {
-                                if (mergeIntoSet(rumSet, rum)) {
+                                if (mergeIntoCollection(rumSet, rum)) {
                                     count.incrementAndGet();
                                 }
                             }
@@ -96,7 +96,7 @@ public class RumHowlerParser implements RumParser {
         }
     }
 
-    private boolean mergeIntoSet(Set<RumProduct> rumSet, RumProduct incomingRum) {
+    private boolean mergeIntoCollection(Set<RumProduct> rumSet, RumProduct incomingRum) {
         for (RumProduct existingRum : rumSet) {
             if (existingRum.equals(incomingRum)) {
                 existingRum.mergeFrom(incomingRum);
@@ -104,7 +104,6 @@ public class RumHowlerParser implements RumParser {
             }
         }
 
-       
         RumProduct fuzzyMatch = RumNameMatcher.findBestFuzzyMatch(incomingRum, rumSet, FUZZY_THRESHOLD);
         if (fuzzyMatch != null) {
             fuzzyMatch.mergeFrom(incomingRum);
@@ -121,22 +120,5 @@ public class RumHowlerParser implements RumParser {
             return matcher.group(1);
         }
         return null;
-    }
-
-    private Document fetchWithRetry(Callable<Document> fetcher) throws Exception {
-        Exception lastError = null;
-        for (int attempt = 1; attempt <= MAX_FETCH_RETRIES; attempt++) {
-            try {
-                return fetcher.call();
-            } catch (Exception e) {
-                lastError = e;
-                if (attempt < MAX_FETCH_RETRIES) {
-                    try {
-                        Thread.sleep(500L * attempt);
-                    } catch (InterruptedException ignored) {}
-                }
-            }
-        }
-        throw lastError;
     }
 }
