@@ -100,6 +100,10 @@ public class HttpRetry {
                     long backoffMs = resolveBackoff(response, attempt);
                     System.out.println("HTTP " + statusCode + " for " + url
                             + " -- retry " + attempt + "/" + maxRetries + " after " + backoffMs + "ms");
+                    String body = response.body();
+                    System.out.println("--- Response body (first 500 chars) ---");
+                    System.out.println(body != null ? body.substring(0, Math.min(500, body.length())) : "null");
+                    System.out.println("--- End body ---");
                     Thread.sleep(backoffMs);
                     lastError = new RuntimeException("HTTP " + statusCode + " for " + url);
                     continue;

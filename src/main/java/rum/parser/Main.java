@@ -48,9 +48,9 @@ public class Main {
         System.out.println("Running rum parser...");
 
         List<RumParser> parsers = new ArrayList<>();
-        parsers.add(new RumHowlerParser());
-        parsers.add(new RumRatingsParser());
-        parsers.add(new SilpoParser());
+            //parsers.add(new RumHowlerParser());
+            parsers.add(new RumRatingsParser());
+            //parsers.add(new SilpoParser());
 
         for (RumParser parser : parsers) {
             try {

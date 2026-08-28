@@ -18,14 +18,14 @@ import java.util.regex.Pattern;
 
 public class RumRatingsParser implements RumParser {
 
-    private static final String LISTING_URL = "https://rumratings.com/brand_explorers";
+    private static final String LISTING_URL = "https://rumratings.com/rum";
     private static final double MIN_RATING = 7.0;
     private static final String USER_AGENT =
             "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36";
     private static final String PROVIDER = "RumRatings";
 
     private static final int THREAD_POOL_SIZE = 1;
-    private static final long MIN_REQUEST_INTERVAL_MS = 600;
+    private static final long MIN_REQUEST_INTERVAL_MS = 2000;
     private static final int MAX_RETRIES = 5;
     private static final long DETAILS_TTL_MS = 30L * 24 * 60 * 60 * 1000;
     private static final long BLOCK_WAIT_MS = 11 * 60 * 1000L;
@@ -57,7 +57,7 @@ public class RumRatingsParser implements RumParser {
 
             String html;
             try {
-                html = fetchHtml(LISTING_URL + "?order_by=average_rating&min_rating=30&page=" + page + "&format=turbo_stream");
+                html = fetchHtml(LISTING_URL + "?order_by=average_rating&min_rating=20&page=" + page + "&format=turbo_stream");
             } catch (Exception e) {
                 System.err.println("Error fetching listing page " + page + ": " + e.getMessage());
                 break;
@@ -173,7 +173,8 @@ public class RumRatingsParser implements RumParser {
         return httpRetry.fetch(url, builder -> builder
                 .timeout(Duration.ofSeconds(30))
                 .header("User-Agent", USER_AGENT)
-                .header("Accept", "text/html, application/xhtml+xml"));
+                .header("Accept", "text/vnd.turbo-stream.html, text/html, application/xhtml+xml")
+                .header("Referer", "https://rumratings.com/rum"));
     }
 
     private void enrichRumFromDetailPage(RumProduct rum, Document doc) {
