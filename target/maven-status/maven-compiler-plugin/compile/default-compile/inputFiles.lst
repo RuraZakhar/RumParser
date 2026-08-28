@@ -13,8 +13,10 @@
 /Users/zakhar/Downloads/RumParser/src/main/java/common/parser/util/JsonUtils.java
 /Users/zakhar/Downloads/RumParser/src/main/java/rum/parser/Main.java
 /Users/zakhar/Downloads/RumParser/src/main/java/rum/parser/model/RumProduct.java
+/Users/zakhar/Downloads/RumParser/src/main/java/rum/parser/parsers/RumHowlerFileLoader.java
 /Users/zakhar/Downloads/RumParser/src/main/java/rum/parser/parsers/RumHowlerParser.java
 /Users/zakhar/Downloads/RumParser/src/main/java/rum/parser/parsers/RumParser.java
+/Users/zakhar/Downloads/RumParser/src/main/java/rum/parser/parsers/RumRatingFileLoader.java
 /Users/zakhar/Downloads/RumParser/src/main/java/rum/parser/parsers/RumRatingsParser.java
 /Users/zakhar/Downloads/RumParser/src/main/java/rum/parser/parsers/SilpoParser.java
 /Users/zakhar/Downloads/RumParser/src/main/java/rum/parser/util/RumNameMatcher.java

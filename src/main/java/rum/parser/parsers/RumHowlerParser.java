@@ -7,7 +7,9 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import rum.parser.util.RumNameMatcher;
 import common.parser.http.HttpRetry;
+import common.parser.util.JsonExporter;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
@@ -26,9 +28,15 @@ public class RumHowlerParser implements RumParser {
     private static final int MAX_FETCH_RETRIES = 3;
     private static final Pattern RATING_PATTERN = Pattern.compile("\\b([789]\\d(\\.\\d)?|100)\\b");
 
+    // Snapshot for RumHowlerFileLoader (parser-conventions.md-style file-loader
+    // pattern, same as beer.parser's UntappdFileLoader) -- lets this source's refresh
+    // cadence be decoupled from the others.
+    private static final String RUM_HOWLER_FILE = "src/main/resources/rumhowler_file.json";
+
     @Override
     public void parse(Set<RumProduct> rumSet) {
         System.out.println("[1/3] Scanning first source (The Rum Howler Blog)...");
+        List<RumProduct> scrapedThisRun = Collections.synchronizedList(new ArrayList<>());
 
         try {
             Document mainPage = HttpRetry.retryWithBackoff(MAX_FETCH_RETRIES, () -> Jsoup.connect(BASE_URL)
@@ -72,6 +80,8 @@ public class RumHowlerParser implements RumParser {
                             rum.addSourceUrl("The Rum Howler Blog", rumUrl);
                             rum.getRatings().add(new RumProduct.Rating(PROVIDER, ratingValue));
 
+                            scrapedThisRun.add(rum);
+
                             synchronized (rumSet) {
                                 if (mergeIntoCollection(rumSet, rum)) {
                                     count.incrementAndGet();
@@ -91,12 +101,20 @@ public class RumHowlerParser implements RumParser {
 
             System.out.println("Finished Howler Blog. New items added: " + count.get());
 
+            // Guarded so a crash-free but empty run (e.g. site layout changed, zero
+            // links matched) never overwrites a good existing snapshot with nothing.
+            if (!scrapedThisRun.isEmpty()) {
+                new JsonExporter().exportToJson(scrapedThisRun, RUM_HOWLER_FILE);
+            }
+
         } catch (Exception e) {
             System.err.println("Critical error in RumHowlerParser: " + e.getMessage());
         }
     }
 
-    private boolean mergeIntoCollection(Set<RumProduct> rumSet, RumProduct incomingRum) {
+    // Package-private + static (no instance state used) so RumHowlerFileLoader can
+    // reuse this exact exact-match-then-fuzzy-match path instead of duplicating it.
+    static boolean mergeIntoCollection(Set<RumProduct> rumSet, RumProduct incomingRum) {
         for (RumProduct existingRum : rumSet) {
             if (existingRum.equals(incomingRum)) {
                 existingRum.mergeFrom(incomingRum);

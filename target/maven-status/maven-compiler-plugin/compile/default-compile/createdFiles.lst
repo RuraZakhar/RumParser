@@ -7,6 +7,7 @@ rum/parser/parsers/RumHowlerParser.class
 wine/parser/model/WineProduct.class
 beer/parser/parsers/SilpoBeerParser.class
 beer/parser/parsers/UntappdFileLoader.class
+rum/parser/parsers/RumHowlerFileLoader.class
 beer/parser/util/BeerNameMatcher.class
 wine/parser/Main.class
 rum/parser/model/RumProduct$SilpoMatch.class
@@ -23,6 +24,7 @@ beer/parser/parsers/FlaskerBeerParser.class
 wine/parser/utils/JsonUtils.class
 beer/parser/parsers/UntappdFileLoader$1.class
 beer/parser/Main$1.class
+rum/parser/parsers/RumRatingFileLoader$1.class
 wine/parser/parsers/SilpoParser.class
 common/parser/util/JsonExporter.class
 rum/parser/parsers/SilpoParser.class
@@ -32,5 +34,7 @@ rum/parser/Main$1.class
 wine/parser/parsers/WineParser.class
 wine/parser/parsers/ZakazParser.class
 wine/parser/parsers/OkwineParser.class
+rum/parser/parsers/RumHowlerFileLoader$1.class
 beer/parser/parsers/BeerParser.class
+rum/parser/parsers/RumRatingFileLoader.class
 rum/parser/model/RumProduct$Rating.class

@@ -5,15 +5,17 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import rum.parser.model.RumProduct;
 import rum.parser.parsers.RumHowlerParser;
+import rum.parser.parsers.RumHowlerFileLoader;
 import rum.parser.parsers.RumParser;
 import rum.parser.parsers.RumRatingsParser;
+import rum.parser.parsers.RumRatingFileLoader;
 import rum.parser.parsers.SilpoParser;
 import common.parser.util.JsonExporter;
 
 import java.io.File;
 import java.io.FileReader;
 import java.lang.reflect.Type;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -47,10 +49,13 @@ public class Main {
 
         System.out.println("Running rum parser...");
 
-        List<RumParser> parsers = new ArrayList<>();
-            //parsers.add(new RumHowlerParser());
-            parsers.add(new RumRatingsParser());
-            //parsers.add(new SilpoParser());
+        List<RumParser> parsers = Arrays.asList(
+                //new RumHowlerParser(),
+                new RumHowlerFileLoader(),
+                //new RumRatingsParser(),
+                new RumRatingFileLoader(),
+                new SilpoParser()
+        );
 
         for (RumParser parser : parsers) {
             try {

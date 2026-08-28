@@ -4,14 +4,24 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+
 import java.util.Locale;
 import java.util.Optional;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Consumer;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class HttpRetry {
+
+    // Fallback for APIs (e.g. Firecrawl) that put their 429 retry hint in a JSON
+    // "error" field instead of the standard Retry-After header, e.g. "please retry
+    // after 12s".
+    private static final Pattern BODY_RETRY_AFTER_PATTERN = Pattern.compile("retry after (\\d+)s", Pattern.CASE_INSENSITIVE);
 
     public interface BlockDetector {
         boolean isBlocked(int statusCode, String body);
@@ -177,7 +187,31 @@ public class HttpRetry {
                 return Long.parseLong(retryAfter.get().trim()) * 1000L;
             } catch (NumberFormatException ignored) {}
         }
+
+        Long bodyRetryAfterSeconds = extractRetryAfterFromBody(response.body());
+        if (bodyRetryAfterSeconds != null) {
+            return bodyRetryAfterSeconds * 1000L;
+        }
+
         return exponentialBackoffMs(attempt);
+    }
+
+    // Firecrawl (and possibly other JSON APIs) don't set Retry-After on 429s --
+    // the hint shows up as text inside the response body's "error" field instead.
+    private Long extractRetryAfterFromBody(String body) {
+        if (body == null) return null;
+        try {
+            JsonObject json = JsonParser.parseString(body).getAsJsonObject();
+            if (!json.has("error") || json.get("error").isJsonNull()) return null;
+
+            Matcher m = BODY_RETRY_AFTER_PATTERN.matcher(json.get("error").getAsString());
+            if (m.find()) {
+                return Long.parseLong(m.group(1));
+            }
+        } catch (Exception ignored) {
+            // Not JSON, no "error" field, or the field doesn't match -- fall through.
+        }
+        return null;
     }
 
     private static long exponentialBackoffMs(int attempt) {
