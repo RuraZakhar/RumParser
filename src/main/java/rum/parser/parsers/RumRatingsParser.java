@@ -30,33 +30,14 @@ public class RumRatingsParser implements RumParser {
     private static final long DETAILS_TTL_MS = 30L * 24 * 60 * 60 * 1000;
     private static final Pattern LEADING_NUMBER = Pattern.compile("[\\d.]+");
     private static final double FUZZY_THRESHOLD = 0.90;
-
-    // Hard backstop on top of the rating < MIN_RATING check: page 22 is the last page
-    // where rums with rating >= 7.0 still show up, and the rating check alone isn't
-    // reliable enough on its own to guarantee pagination stops.
     private static final int MAX_LISTING_PAGES = 22;
-
-    // Circuit breaker for the deep-scrape phase: N failures in a row (each already
-    // having exhausted its own 5 retries) means we're blocked again, not that a
-    // handful of unrelated items happen to be broken -- see fetchHtml/parse().
     private static final int MAX_CONSECUTIVE_FAILURES = 3;
+    private static final int ITEM_RETRY_ATTEMPTS = 2;
 
     // Snapshot for RumRatingFileLoader (same file-loader pattern as beer.parser's
     // UntappdFileLoader) -- lets this source's refresh cadence be decoupled from the others.
     private static final String RUM_RATING_FILE = "src/main/resources/rumrating_file.json";
 
-    // rumratings.com sits behind Cloudflare and only serves real content after a JS
-    // challenge that issues a cf_clearance cookie -- no plain HTTP client can obtain
-    // that cookie, no matter the headers (previously routed through paid Firecrawl API
-    // for this reason). Playwright drives a real headless Chromium instead: one
-    // page.navigate() establishes a genuine session/cookie once, then every subsequent
-    // fetch reuses that session via the lightweight context.request() API -- self-hosted,
-    // no per-request cost, no third-party rate limit.
-    //
-    // Single-threaded by construction (no ExecutorService here): Playwright's Java
-    // bindings require staying on the thread that created the Playwright/Page instances,
-    // so the old "1-thread executor for the deep-scrape phase" is now a plain sequential
-    // loop on the same thread as the listing phase, instead of a separate worker thread.
     private long lastRequestTime = 0;
 
     @Override
@@ -72,8 +53,11 @@ public class RumRatingsParser implements RumParser {
 
         try (Playwright playwright = Playwright.create();
              Browser browser = playwright.chromium().launch(new BrowserType.LaunchOptions()
-                     .setHeadless(true)
-                     .setArgs(List.of("--disable-blink-features=AutomationControlled")));
+                     .setHeadless(false)
+                     .setArgs(List.of(
+                             "--disable-blink-features=AutomationControlled",
+                             "--window-position=-32000,-32000",
+                             "--window-size=1280,800")));
              BrowserContext context = browser.newContext(new Browser.NewContextOptions().setLocale("en-US"))) {
 
             Page page = context.newPage();
@@ -185,9 +169,13 @@ public class RumRatingsParser implements RumParser {
                 try {
                     System.out.println("[" + current + "/" + topRumsToScrape.size() + "] Deep scraping: " + basicRum.getName());
 
-                    String detailHtml = fetchHtml(page, basicRum.getProductUrl());
-                    Document detailDoc = Jsoup.parse(detailHtml, "https://rumratings.com");
-                    enrichRumFromDetailPage(basicRum, detailDoc);
+
+                    HttpRetry.retryWithBackoff(ITEM_RETRY_ATTEMPTS, () -> {
+                        String detailHtml = fetchHtml(page, basicRum.getProductUrl());
+                        Document detailDoc = Jsoup.parse(detailHtml, "https://rumratings.com");
+                        enrichRumFromDetailPage(basicRum, detailDoc);
+                        return null;
+                    });
 
                     mergeIntoCollection(rumSet, basicRum);
                     deepScrapedCount++;
@@ -195,11 +183,6 @@ public class RumRatingsParser implements RumParser {
                 } catch (Exception e) {
                     System.err.println("Error extracting details for " + basicRum.getProductUrl() + ": " + e.getMessage());
                     consecutiveFailures++;
-                    // A single bad item shouldn't stop the run (hence per-item try/catch),
-                    // but several in a row -- each already having exhausted 5 retries with
-                    // backoff inside fetchHtml -- is a strong signal we're blocked again,
-                    // not that a few random items happen to be broken. Stop burning through
-                    // the remaining items uselessly once that's the likely explanation.
                     if (consecutiveFailures >= MAX_CONSECUTIVE_FAILURES) {
                         System.err.println(consecutiveFailures + " consecutive failures -- likely blocked again, stopping deep-scrape early ("
                                 + (topRumsToScrape.size() - current) + " items left unscraped this run).");
@@ -210,9 +193,6 @@ public class RumRatingsParser implements RumParser {
 
             System.out.println("Finished RumRatings. Total newly deep-scraped: " + deepScrapedCount);
 
-            // Guarded implicitly: both early-exit paths above (empty topRumsToScrape,
-            // or any exception caught below) skip this line, so a failed/empty run
-            // never overwrites a good existing snapshot.
             new JsonExporter().exportToJson(new ArrayList<>(topRumsToScrape.values()), RUM_RATING_FILE);
 
         } catch (Exception e) {
@@ -225,18 +205,6 @@ public class RumRatingsParser implements RumParser {
         product.getRatings().add(new RumProduct.Rating(provider, value));
     }
 
-    // Deliberately NOT context.request() -- that goes through Playwright's own
-    // driver-level HTTP client, not the browser's real network stack, and Cloudflare
-    // told them apart even with the right cookies attached (confirmed against the
-    // live site: page.navigate() got real content, context.request() got HTTP 403).
-    // Running fetch() from inside the page's own JS via page.evaluate() uses the
-    // browser's genuine fetch implementation instead -- same TLS/HTTP fingerprint as
-    // a real navigation, without the overhead of a full page load for every call.
-    // Retry/backoff still goes through the shared HttpRetry.retryWithBackoff
-    // (transport-agnostic, same helper RumHowlerParser uses for its Jsoup calls)
-    // rather than a hand-rolled loop. On a non-OK status or a detected block page,
-    // refreshes the session via a fresh navigate before the next retry attempt,
-    // since retrying the same request against a now-stale cookie would just fail again.
     private String fetchHtml(Page page, String url) throws Exception {
         return HttpRetry.retryWithBackoff(MAX_RETRIES, () -> {
             throttle();
@@ -336,8 +304,6 @@ public class RumRatingsParser implements RumParser {
         return result;
     }
 
-    // Package-private + static (no instance state used) so RumRatingFileLoader can
-    // reuse this exact exact-match-then-fuzzy-match path instead of duplicating it.
     static boolean mergeIntoCollection(Set<RumProduct> rumSet, RumProduct incomingRum) {
         for (RumProduct existingRum : rumSet) {
             if (existingRum.equals(incomingRum)) {
