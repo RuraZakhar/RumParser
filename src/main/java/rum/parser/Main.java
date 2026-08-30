@@ -53,7 +53,7 @@ public class Main {
                 //new RumHowlerParser(),
                 new RumHowlerFileLoader(),
                 new RumRatingsParser(),
-                new RumRatingFileLoader(),
+                //new RumRatingFileLoader(),
                 new SilpoParser()
         );
 
