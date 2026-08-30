@@ -529,20 +529,6 @@
     ]
   },
   {
-    "name": "lor De Caña Centenario 21 Commemorative Edition",
-    "category": "rum",
-    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/dark-rums/flor-de-cana-centenario-21-commemorative-edition/",
-    "sourceUrls": {
-      "The Rum Howler Blog": "https://therumhowlerblog.wordpress.com/rum-reviews/dark-rums/flor-de-cana-centenario-21-commemorative-edition/"
-    },
-    "ratings": [
-      {
-        "provider": "The Rum Howler Blog",
-        "rating": 9.75
-      }
-    ]
-  },
-  {
     "name": "Appleton Estate Joy Anniversary 25 Year Old Rum",
     "age": 25.0,
     "category": "rum",
@@ -13688,7 +13674,7 @@
     ]
   },
   {
-    "name": "F",
+    "name": "Foursquare 2010 ECS XXVII Equidem 14-Year",
     "description": "Foursquare 2010 ECS XXVII Equidem 14-Year rum - rated #258 of 15796 rums:  see 26 reviews, photos, other Foursquare rums, and similar Aged rums from Barbados",
     "abv": 61.0,
     "age": 14.0,
@@ -13697,7 +13683,7 @@
     "type": "Aged",
     "category": "rum",
     "imgUrl": "https://images.rumratings.com/uploads/brand/image/17922/medium_foursquare-2010-ecs-xxvii-equidem-14-year.webp?v=1741262109",
-    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/dark-rums/flor-de-cana-centenario-21-commemorative-edition/",
+    "productUrl": "https://rumratings.com/rum/17922-foursquare-2010-ecs-xxvii-equidem-14-year",
     "silpoMatch": {
       "silpo_title": "Ром Admiral Rodney HMS Formidable",
       "similarity_score": 1.0,
@@ -13706,7 +13692,6 @@
       "url": "https://silpo.ua/product/rom-admiral-rodney-hms-formidable-933208"
     },
     "sourceUrls": {
-      "The Rum Howler Blog": "https://therumhowlerblog.wordpress.com/rum-reviews/dark-rums/flor-de-cana-centenario-21-commemorative-edition/",
       "RumRatings": "https://rumratings.com/rum/17922-foursquare-2010-ecs-xxvii-equidem-14-year",
       "Silpo": "https://silpo.ua/product/rom-admiral-rodney-hms-formidable-933208"
     },
@@ -13718,12 +13703,22 @@
     "lastScrapedAt": 1788130151894,
     "ratings": [
       {
-        "provider": "The Rum Howler Blog",
-        "rating": 7.3
-      },
-      {
         "provider": "RumRatings",
         "rating": 7.0
+      }
+    ]
+  },
+  {
+    "name": "Flor De Caña Centenario 21 Commemorative Edition",
+    "category": "rum",
+    "productUrl": "https://therumhowlerblog.wordpress.com/rum-reviews/dark-rums/flor-de-cana-centenario-21-commemorative-edition/",
+    "sourceUrls": {
+      "The Rum Howler Blog": "https://therumhowlerblog.wordpress.com/rum-reviews/dark-rums/flor-de-cana-centenario-21-commemorative-edition/"
+    },
+    "ratings": [
+      {
+        "provider": "The Rum Howler Blog",
+        "rating": 9.75
       }
     ]
   },
