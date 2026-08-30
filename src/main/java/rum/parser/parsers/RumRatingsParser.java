@@ -38,6 +38,11 @@ public class RumRatingsParser implements RumParser {
     // reliable enough on its own to guarantee pagination stops.
     private static final int MAX_LISTING_PAGES = 22;
 
+    // Circuit breaker for the deep-scrape phase: N failures in a row (each already
+    // having exhausted its own 5 retries) means we're blocked again, not that a
+    // handful of unrelated items happen to be broken -- see fetchHtml/parse().
+    private static final int MAX_CONSECUTIVE_FAILURES = 3;
+
     // Snapshot for RumRatingFileLoader (same file-loader pattern as beer.parser's
     // UntappdFileLoader) -- lets this source's refresh cadence be decoupled from the others.
     private static final String RUM_RATING_FILE = "src/main/resources/rumrating_file.json";
@@ -176,6 +181,7 @@ public class RumRatingsParser implements RumParser {
 
             int current = 0;
             int deepScrapedCount = 0;
+            int consecutiveFailures = 0;
             for (RumProduct basicRum : topRumsToScrape.values()) {
                 current++;
                 try {
@@ -187,8 +193,20 @@ public class RumRatingsParser implements RumParser {
 
                     mergeIntoCollection(rumSet, basicRum);
                     deepScrapedCount++;
+                    consecutiveFailures = 0;
                 } catch (Exception e) {
                     System.err.println("Error extracting details for " + basicRum.getProductUrl() + ": " + e.getMessage());
+                    consecutiveFailures++;
+                    // A single bad item shouldn't stop the run (hence per-item try/catch),
+                    // but several in a row -- each already having exhausted 5 retries with
+                    // backoff inside fetchHtml -- is a strong signal we're blocked again,
+                    // not that a few random items happen to be broken. Stop burning through
+                    // the remaining items uselessly once that's the likely explanation.
+                    if (consecutiveFailures >= MAX_CONSECUTIVE_FAILURES) {
+                        System.err.println(consecutiveFailures + " consecutive failures -- likely blocked again, stopping deep-scrape early ("
+                                + (topRumsToScrape.size() - current) + " items left unscraped this run).");
+                        break;
+                    }
                 }
             }
 
