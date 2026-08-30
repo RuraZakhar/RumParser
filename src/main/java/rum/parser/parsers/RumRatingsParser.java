@@ -1,13 +1,11 @@
 package rum.parser.parsers;
 
-import com.microsoft.playwright.APIResponse;
 import com.microsoft.playwright.Browser;
 import com.microsoft.playwright.BrowserContext;
 import com.microsoft.playwright.BrowserType;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.Playwright;
 import com.microsoft.playwright.options.LoadState;
-import com.microsoft.playwright.options.RequestOptions;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -227,27 +225,37 @@ public class RumRatingsParser implements RumParser {
         product.getRatings().add(new RumProduct.Rating(provider, value));
     }
 
-    // Reuses the same session/cookies established by the one-time page.navigate() in
-    // parse() -- a lightweight request through the browser context, not a full page
-    // navigation, matching how Cloudflare's cf_clearance is meant to be reused. Retry/
-    // backoff still goes through the shared HttpRetry.retryWithBackoff (transport-
-    // agnostic, same helper RumHowlerParser uses for its Jsoup calls) rather than a
-    // hand-rolled loop. On a non-OK status or a detected block page, refreshes the
-    // session via a fresh navigate before the next retry attempt, since retrying the
-    // same request against a now-stale cookie would just fail again identically.
+    // Deliberately NOT context.request() -- that goes through Playwright's own
+    // driver-level HTTP client, not the browser's real network stack, and Cloudflare
+    // told them apart even with the right cookies attached (confirmed against the
+    // live site: page.navigate() got real content, context.request() got HTTP 403).
+    // Running fetch() from inside the page's own JS via page.evaluate() uses the
+    // browser's genuine fetch implementation instead -- same TLS/HTTP fingerprint as
+    // a real navigation, without the overhead of a full page load for every call.
+    // Retry/backoff still goes through the shared HttpRetry.retryWithBackoff
+    // (transport-agnostic, same helper RumHowlerParser uses for its Jsoup calls)
+    // rather than a hand-rolled loop. On a non-OK status or a detected block page,
+    // refreshes the session via a fresh navigate before the next retry attempt,
+    // since retrying the same request against a now-stale cookie would just fail again.
     private String fetchHtml(Page page, String url) throws Exception {
         return HttpRetry.retryWithBackoff(MAX_RETRIES, () -> {
             throttle();
 
-            APIResponse response = page.context().request().get(url, RequestOptions.create()
-                    .setHeader("Referer", LISTING_URL));
-            String body = response.text();
+            Object raw = page.evaluate(
+                    "async (url) => { const r = await fetch(url, { headers: { 'Referer': location.href } }); "
+                            + "const t = await r.text(); return { status: r.status, body: t }; }",
+                    url);
 
-            if (!response.ok() || HttpRetry.looksLikeBlockedPage(body)) {
-                System.err.println("HTTP " + response.status() + " or blocked page for " + url + " -- refreshing session and retrying...");
+            @SuppressWarnings("unchecked")
+            Map<String, Object> result = (Map<String, Object>) raw;
+            int status = ((Number) result.get("status")).intValue();
+            String body = (String) result.get("body");
+
+            if (status < 200 || status >= 300 || HttpRetry.looksLikeBlockedPage(body)) {
+                System.err.println("HTTP " + status + " or blocked page for " + url + " -- refreshing session and retrying...");
                 page.navigate(LISTING_URL);
                 page.waitForLoadState(LoadState.NETWORKIDLE);
-                throw new RuntimeException("HTTP " + response.status() + " or blocked page for " + url);
+                throw new RuntimeException("HTTP " + status + " or blocked page for " + url);
             }
 
             return body;

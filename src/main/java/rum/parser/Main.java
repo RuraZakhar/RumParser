@@ -52,7 +52,7 @@ public class Main {
         List<RumParser> parsers = Arrays.asList(
                 //new RumHowlerParser(),
                 new RumHowlerFileLoader(),
-                //new RumRatingsParser(),
+                new RumRatingsParser(),
                 new RumRatingFileLoader(),
                 new SilpoParser()
         );
